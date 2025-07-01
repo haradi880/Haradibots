@@ -1,0 +1,1264 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+/* Header Styling */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    padding: 15px 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+header:hover {
+    background-color: #f1f1f1; /* Slight hover effect on the header */
+}
+
+/* Logo Styling */
+header .logo a {
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0073e6;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+header .logo a:hover {
+    color: #005bb5;
+    transform: scale(1.1); /* Subtle zoom effect */
+}
+
+/* Navbar Styling */
+.navbar {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar > li {
+    position: relative;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.75rem;
+    display: flex;
+    font-weight: 450;
+    padding: 12px 18px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+    background-color: rgba(0, 115, 230, 0.08);
+    color: #0073e6;
+    box-shadow: 0 4px 12px rgba(0, 115, 230, 0.2);
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+/* Icon Styling */
+.navbar a i {
+    margin-right: 8px;
+    font-size: 1.1rem;
+    display: flex;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar a:hover i {
+    transform: rotate(10deg);
+    box-shadow: 2px 2px 5px rgba(0, 115, 230, 0.2);
+    color: #0073e6;
+}
+
+
+/* Dropdown Menu */
+.dropdown {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    min-width: 220px;
+    opacity: 0;
+    transform: translateY(-15px);
+    pointer-events: none;
+    transition: all 0.3s ease-out;
+    z-index: 999;
+}
+
+.navbar > li:hover > .dropdown {
+    display: flex;    
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Dropdown Menu Item Styling */
+.dropdown li {
+    list-style: none;
+}
+
+.dropdown a {
+    display: block;
+    padding: 12px 18px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown a:hover {
+    background-color: #eaf4ff;
+    color: #0073e6;
+    transform: translateX(5px); /* Slight slide effect */
+}
+
+/* Mobile Menu */
+.menu-toggle {
+    display: none;
+    position: relative;
+    left: 30%;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #0073e6;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.menu-toggle.active {
+    transform: rotate(90deg);
+}
+
+/* Responsive Navbar */
+@media (max-width: 850px) {
+    .navbar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #ffffff;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.5s ease-in-out;
+    }
+
+    .navbar.active {
+        max-height: 500px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .navbar li {
+        width: 100%;
+    }
+
+    .navbar a {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+
+    .navbar a i {
+        font-size: 1.4rem;
+    }
+
+    .dropdown {
+        position: relative;
+        top: 0;
+        border: none;
+        box-shadow: none;
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .dropdown a {
+        padding-left: 32px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+}
+
+/* Rotation Effect */
+.menu-toggle.rotated {
+    transform: rotate(360deg);  /* 360-degree rotation on click */
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Smooth cubic-bezier easing for rotation */
+}
+
+/* Animation for Dropdown Items */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Smooth Animation for Dropdown Links */
+.dropdown a {
+    animation: slideIn 0.3s ease-out;
+}
+
+
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@300;400;600&display=swap');
+
+
+/* Refresh Button Container */
+.refresh-container {
+    position: fixed; /* Fix it to the screen */
+    bottom: 20px; /* Position it at the bottom */
+    right: 20px; /* Position it on the right */
+    z-index: 9999; /* Ensures it's on top of other elements */
+    text-align: center;
+}
+
+/* Message Styling */
+#refresh-message {
+    display: none; /* Initially hide the message */
+    font-size: 0.9rem; /* Smaller font size */
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: normal;
+    opacity: 0; /* Make it invisible initially */
+    transition: opacity 0.3s ease; /* Smooth transition */
+}
+
+/* Refresh Button Styling */
+.refresh-btn {
+    background-color: #4CAF50; /* Green button */
+    color: white;
+    padding: 6px 12px; /* Very small padding */
+    font-size: 0.9rem; /* Small font size */
+    border: none;
+    border-radius: 50%; /* Round button */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for emphasis */
+}
+
+/* Icon Styling */
+.refresh-btn i {
+    font-size: 1rem; /* Small icon size */
+}
+
+/* Button Hover and Active States */
+.refresh-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.refresh-btn:active {
+    transform: scale(1); /* Return to normal size when clicked */
+}
+
+/* Mobile-Specific Adjustments */
+@media (max-width: 850px) {
+    .refresh-container p {
+        font-size: 0.8rem; /* Even smaller text on mobile */
+    }
+
+    .refresh-btn {
+        padding: 4px 8px; /* Smaller button size */
+        font-size: 0.8rem; /* Smaller text on button */
+    }
+}
+
+
+/* Hero Section */
+.hero {
+    width: 100%;
+    height: 100vh;
+    padding: 120px 20px;
+    text-align: center;
+    background: linear-gradient(to right, #6a7f99, #aabfcd);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+}
+
+/* Star crackle effect using asterisk */
+.star {
+    position: absolute;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+    border: white dotted 1.1px ;
+    border-radius: 100%;
+    width: 2px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: crackle 1s forwards;
+    z-index: 9999;
+}
+
+@keyframes crackle {
+    0% {
+        opacity: 1;
+        transform: scale(0.35) translateY(0) rotate(0deg);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(1) translateY(-25) rotate(250deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0) translateY(-50px) rotate(720deg);
+    }
+}
+
+
+/* Hero h1 */
+.hero h1 {
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeInUp 1.5s ease-in-out;
+}
+
+.hero{
+    background:url(pexels-simon-robben-55958-340779.jpg)no-repeat;
+    background-position: center;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* Hero paragraph */
+.hero p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #dfe3e8;
+    animation: fadeInUp 2s ease-in-out;
+}
+
+
+/* CTA Button Styling */
+.hero .cta-button {
+    text-decoration: none;
+    background-color: #ffffff;
+    color: #333333;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+
+.hero .cta-button:hover {
+    background-color: #3498db;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    .hero h1 {
+        font-size: 2.0rem;
+    }
+}
+
+
+/* Animations */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background: linear-gradient(to right, #6a7f99, #aabfcd);
+    }
+    50% {
+        background: linear-gradient(to right, #3498db65, #aabfcd); /* Light blue gradient */
+    }
+    100% {
+        background: linear-gradient(to right, #6a7f99, #aabfcd);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    .hero h1 {
+        font-size: 2.0rem; /* Slightly smaller font on mobile */
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+    }
+
+    .hero .cta-button {
+        font-size: 1rem; /* Adjust font size for mobile */
+        padding: 12px 25px; /* Adjust button padding */
+    }
+}
+
+/* Features Section */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 50px 20px;
+    background-color: #ffffff;
+}
+
+.feature {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature h3 {
+    font-size: 1.2rem;
+    color: #0073e6;
+    margin-bottom: 15px;
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.feature:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Courses Section */
+#courses {
+    background-color: #f4f4f9; /* Light background color */
+    padding: 50px 0; /* Add space at the top and bottom */
+    text-align: center; /* Center the text */
+}
+
+#courses h2 {
+    font-size: 2.0em;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.course-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 20px;
+}
+
+.course {
+    background-color: #fff; /* White background for each course card */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    max-width: 100%; /* Make it responsive */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.course h4 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.course p {
+    font-size: 1em;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.course a {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1em;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Hover effects */
+}
+
+.course a:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.course:hover {
+    transform: translateY(-10px); /* Lift the course card on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Deepen the shadow */
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    .course-list {
+        flex-direction: column; /* Stack courses vertically on smaller screens */
+        align-items: center;
+    }
+
+    .course {
+        width: 90%; /* Make course cards take up more width on small screens */
+    }
+}
+
+/* Form Styling */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f7f7f7;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Focus Effect with Animation */
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #00bcd4; /* Teal color */
+    box-shadow: 0 0 8px rgba(0, 188, 212, 0.3);
+    background-color: #fff;
+    animation: focusAnimation 0.5s ease-out forwards; /* Focus animation */
+}
+
+/* Floating Label Effect */
+input:focus + label, textarea:focus + label {
+    top: -18px;
+    left: 10px;
+    font-size: 0.9rem;
+    color: #00bcd4; /* Change label color to teal */
+}
+
+/* Animation for input focus */
+@keyframes focusAnimation {
+    0% {
+        transform: scale(1);
+        border-color: #ddd;
+    }
+    50% {
+        transform: scale(1.05);
+        border-color: #00bcd4;
+    }
+    100% {
+        transform: scale(1);
+        border-color: #00bcd4;
+    }
+}
+
+/* Submit Button Styling */
+button[type="submit"] {
+    background-color: #00bcd4; /* Teal color */
+    color: white;
+    padding: 14px 24px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0097a7; /* Darker teal for hover */
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(2px);
+}
+
+/* Contact Section */
+#contact {
+    background-color: #f2f2f2;
+    padding: 60px 20px;
+    text-align: center;
+    font-family: 'Poppins', 'Arial', sans-serif;
+}
+
+#contact h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Container */
+form {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 16px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group label {
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    background-color: white;
+    padding: 0 6px;
+    color: #333;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: 0.2s ease all;
+    z-index: 1;
+}
+
+/* When input is focused or not empty */
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label,
+.form-group textarea:focus + label,
+.form-group textarea:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 10px;
+    font-size: 0.85rem;
+    color: #0073e6;
+    z-index: 2;
+}
+
+/* Focus effect on fields */
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0073e6;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 8px rgba(0, 115, 230, 0.15);
+}
+
+
+.form-group textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+/* Submit Button */
+button[type="submit"] {
+    background-color: #00bcd4;
+    color: white;
+    padding: 14px 24px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0097a7;
+    transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+    transform: translateY(2px);
+}
+
+/* Mobile: Tablets and below */
+@media (max-width: 850px) {
+    form {
+        padding: 30px 20px;
+    }
+
+    #contact h2 {
+        font-size: 2rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 0.95rem;
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
+}
+
+/* Mobile: Small screens */
+@media (max-width: 480px) {
+    form {
+        padding: 20px 12px;
+    }
+
+    #contact h2 {
+        font-size: 1.8rem;
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+        padding: 10px 16px;
+    }
+}
+
+
+/* Robotics Section */
+#robotics {
+    background-color: #eef2f7; /* Light background for the section */
+    padding: 50px 20px; /* Spacing around the section */
+    text-align: center;
+}
+
+#robotics h2 {
+    font-size: 2.0em;
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+.robotic-topics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid layout */
+    gap: 30px; /* Spacing between items */
+    justify-items: center; /* Center items horizontally */
+}
+
+.topic {
+    background-color: #fff; /* White background for each topic card */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on hover */
+    width: 100%; /* Make sure the cards stretch across */
+}
+
+.topic:hover {
+    transform: translateY(-5px); /* Slight lift effect */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.topic h3 {
+    font-size: 1.3em;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.topic p {
+    font-size:0.9em;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.topic a {
+    font-size: 0.9em;
+    color: #007bff; /* Link color */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.topic a:hover {
+    color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    #robotics h2 {
+        font-size: 2em; /* Slightly smaller heading on small screens */
+    }
+
+    .robotic-topics {
+        grid-template-columns: 1fr; /* Stack topics in a single column on smaller screens */
+    }
+
+    .topic {
+        padding: 15px; /* Less padding on small screens */
+    }
+}
+
+/* About Section Styling */
+#about {
+    background: linear-gradient(135deg, #4d4d4d 0%, #000000 100%);
+    color: #fff;
+    padding: 80px 20px; /* Reduced padding */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 5px solid #fff;
+}
+
+#about .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px; /* Slightly smaller width */
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+
+#about .about-text {
+    flex: 1;
+    max-width: 500px; /* More compact text block */
+    margin-right: 30px;
+}
+
+#about h2 {
+    font-size: 2.2rem; /* Smaller heading size */
+    font-weight: 700;
+    margin-bottom: 15px; /* Reduced margin */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#about p {
+    font-size: 1rem; /* Smaller text size */
+    line-height: 1.5;
+    margin-bottom: 15px; /* Reduced margin */
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #e0e0e0;
+    padding: 0 10px;
+}
+
+#about .about-image {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 10px; /* Reduced border-radius */
+    max-width: 350px; /* Smaller image */
+    margin-top: 10px;
+    height: 250px; /* Reduced height */
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+#about .about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Lighter shadow */
+}
+
+#about .about-image:hover img {
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Social Media Icons */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Reduced gap */
+    margin-top: 20px; /* Reduced margin */
+}
+
+.social-icon {
+    font-size: 1.3rem; /* Smaller icon size */
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-bottom: 3px solid rgba(15, 15, 15, 0.226);
+    box-shadow: 2px 4px 8px rgba(63, 63, 63, 0.438);
+    border-radius: 8px; /* Less rounded */
+    background-color: rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icon:hover {
+    background-color: #9e34db;
+    transform: translateY(-3px);
+}
+
+/* Read More Button */
+.read-more-btn {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2)); /* Gradient with opacity for a smoky look */
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    backdrop-filter: blur(10px); /* Apply a blur effect to the background */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for a glowing effect */
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.4)); /* Increased opacity for hover effect */
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+    backdrop-filter: blur(15px); /* Stronger blur on hover for a more intense smoky effect */
+}
+
+
+/* Initially hide long description */
+.long-description {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 850px) {
+    #about {
+        padding: 60px 20px; /* Even smaller padding for mobile */
+    }
+
+    #about .container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #about .about-text {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    #about .about-image {
+        max-width: 100%;
+        height: 200px; /* Smaller height for mobile */
+    }
+
+    #about h2 {
+        font-size: 2rem; /* Smaller heading */
+    }
+
+    #about p {
+        font-size: 0.9rem; /* Smaller text on mobile */
+    }
+
+    .social-icons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .social-icon {
+        font-size: 1.2rem; /* Smaller icons */
+        padding: 6px 10px; /* Reduced padding */
+    }
+}
+
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2px;
+    margin-bottom: 5px;
+    color: #000000;
+    height: 40px;
+    font-size: 0.76rem;
+}
+
+footer a {
+    color: #000000;
+    text-decoration: underline;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #5d5a8a;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.message2 {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    background-color: rgba(255, 0, 0, 0.85); /* Strong red tone with transparency */
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeOut 5s ease-in-out forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Optional icon style inside message */
+.message2 i {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+/* Fade-out animation */
+@keyframes fadeOut {
+    0% {
+        opacity: 0;
+        scale: 0;
+        transform: translateY(-10px);
+    }
+    10% {
+        opacity: 1;
+        scale: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        scale: 1;
+    }
+    100% {
+        opacity: 0;
+        scale: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Style for the User Info Section */
+.user-info {
+    position: relative; /* This allows absolute positioning for the dropdown */
+}
+
+/* Style for the user name hover effect */
+.user-name:hover {
+    text-decoration: underline; /* Optional: Add underline effect to the hover */
+}
+
+/* The dropdown menu will initially be hidden */
+.dropdown-menu {
+    position: absolute;
+    top: 30px; /* Position the dropdown below the "Welcome" text */
+    left: 0;
+    display: none; /* Hide the dropdown initially */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100; /* Ensures the dropdown is above other elements */
+}
+
+/* Show the dropdown when hovering over the user name */
+.user-info:hover .dropdown-menu {
+    display: block; /* Show the dropdown */
+}
+
+/* Optional: Style the logout button */
+#logoutButton {
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #f44336; /* Red color for the logout button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Change the logout button color when hovered */
+#logoutButton:hover {
+    background-color: #d32f2f;
+}
+
+
+/* 
+
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.user-email {
+    position: absolute;
+    top: 50px;
+    background-color: #000000c4;
+    display: none;
+    margin-left: 10px;
+    font-size: 0.9em;
+    color: #777;
+}
+.user-id {
+    position: absolute;
+    top: 70px;
+    background-color: #000000c4;
+    display: none;
+    margin-left: 10px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+
+.user-name:hover + .user-id,
+.user-name:hover + .user-id + .user-email {
+    display: block;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+}
+
+#logoutBtn {
+    background-color: #ff5733;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+} 
+
+
+#logoutBtn:hover {
+    background-color: #ff2a00; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+
+#logoutBtn:hover::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    background: rgba(104, 212, 32, 0.048);
+    animation: glow 1.5s infinite;
+    transform: translate(-50%, -50%);
+}
+
+
+@keyframes glow {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+    }
+}
+
+
+#logoutBtn:active {
+    transform: scale(0.98); 
+}
+
+
+#logoutBtn {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+
+#logoutBtn:focus {
+    outline: none; 
+    box-shadow: 0 0 0 3px rgba(255, 87, 51, 0.6); 
+}
+
+
+

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Project - {{ project_name }}</title>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #121212;
+      color: #ffffff;
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background: #1a1a1a;
+      padding: 20px;
+      border-right: 1px solid #333;
+      overflow-y: auto;
+    }
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    textarea, input {
+      width: 100%;
+      font-family: monospace;
+      background-color: #1e1e1e;
+      color: #00ff00;
+      border: 1px solid #444;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    button {
+      margin: 10px 5px 10px 0;
+      padding: 10px 15px;
+      font-size: 14px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #444;
+    }
+    #outputBox {
+      background: #000;
+      color: #00ff00;
+      padding: 15px;
+      min-height: 150px;
+      white-space: pre-wrap;
+      border-radius: 8px;
+      font-family: monospace;
+      margin-top: 15px;
+    }
+    .file-item {
+      cursor: pointer;
+      color: #0ff;
+      padding: 5px 0;
+    }
+    .file-item:hover {
+      text-decoration: underline;
+    }
+    .dropzone {
+      border: 2px dashed #666;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      background: #222;
+      color: #ccc;
+    }
+    .dropzone.hover {
+      border-color: #0ff;
+      color: #0ff;
+    }
+    .save-buttons {
+      margin-top: 10px;
+    }
+    .context-menu {
+  position: absolute;
+  background-color: #222;
+  border: 1px solid #555;
+  border-radius: 5px;
+  list-style: none;
+  padding: 5px 0;
+  margin: 0;
+  width: 150px;
+  z-index: 1000;
+  display: none;
+}
+.context-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #eee;
+}
+.context-menu li:hover {
+  background-color: #444;
+}
+
+  </style>
+</head>
+<body>
+    <ul id="contextMenu" class="context-menu" style="display: none;">
+  <li onclick="openFile()">📂 Open</li>
+  <li onclick="deleteFile()">❌ Delete</li>
+  <li onclick="copyPath()">📋 Copy Path</li>
+</ul>
+
+  <div class="sidebar">
+    <h3>📂 Project Files</h3>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <div class="dropzone" id="dropzone">Drag & Drop to Upload</div>
+      <input type="file" id="fileInput" name="file" style="display:none">
+    </form>
+    <div style="margin-top: 15px;">
+  <button onclick="document.getElementById('fileInput').click()">📤 Upload File</button>
+  <button onclick="createNewFile()">📄 New File</button>
+  <button onclick="createNewFolder()">📁 New Folder</button>
+</div>
+
+<div class="file-list">
+  {% for file in files %}
+    <div class="file-item" ondblclick="loadFile('{{ file }}')">
+      {% if file.endswith('.py') %}
+        🐍 {{ file }}
+      {% elif file.endswith('.csv') %}
+        📊 {{ file }}
+      {% elif file.endswith('.json') %}
+        🧾 {{ file }}
+      {% else %}
+        📄 {{ file }}
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+  </div>
+
+  <div class="main">
+    <h2>Editing: {{ project_name }}</h2>
+    <form method="post">
+      <label><b>Title:</b></label>
+      <input name="title" value="{{ title }}">
+      <label><b>Description:</b></label>
+      <textarea name="description" rows="3">{{ description }}</textarea>
+      <label><b>File Content Editor:</b></label>
+      <textarea id="codeArea" name="code" rows="15">{{ code }}</textarea>
+      <div class="save-buttons">
+        <button type="submit">💾 Save Project</button>
+        <button type="button" onclick="saveEditedFile()">💾 Save File</button>
+      </div>
+    </form>
+
+    <button onclick="runCode()">▶️ Run Code in Browser (Safe)</button>
+    <button onclick="clearOutput()">🧹 Clear Output</button>
+
+    <h3>Output:</h3>
+    <pre id="outputBox">Ready to run code...</pre>
+
+    <br><a href="/dashboard" style="color:#0ff">← Back to Dashboard</a>
+  </div>
+
+<script>
+  let pyodideReady = false;
+  let pyodide;
+  let currentFilename = null;
+
+  async function loadPyodideAndPackages() {
+    document.getElementById("outputBox").innerText = "⏳ Loading Python...";
+    pyodide = await loadPyodide();
+    await pyodide.loadPackage('micropip');
+    pyodideReady = true;
+    document.getElementById("outputBox").innerText = "✅ Python loaded. You can now run code.";
+  }
+
+  loadPyodideAndPackages();
+
+  async function runCode() {
+    const outputBox = document.getElementById("outputBox");
+    if (!pyodideReady) {
+      outputBox.innerText = "⏳ Python not yet ready...";
+      return;
+    }
+    const code = document.getElementById("codeArea").value;
+    const lines = code.split('\n');
+    outputBox.innerText = "";
+    for (let line of lines) {
+      line = line.trim();
+      if (line.startsWith("!pip install")) {
+        const pkg = line.split("!pip install")[1].trim();
+        try {
+          outputBox.innerText += `📦 Installing ${pkg}...\n`;
+          await pyodide.runPythonAsync(`import micropip\nawait micropip.install('${pkg}')`);
+          outputBox.innerText += `✅ Installed ${pkg}\n`;
+        } catch (e) {
+          outputBox.innerText += `❌ Failed to install ${pkg}: ${e}\n`;
+        }
+      } else {
+        try {
+          pyodide.setStdout({ batched: (s) => outputBox.innerText += s });
+          await pyodide.runPythonAsync(line);
+        } catch (err) {
+          outputBox.innerText += `❌ Error: ${err}\n`;
+        }
+      }
+    }
+    if (!outputBox.innerText.trim()) {
+      outputBox.innerText = "✅ Ran successfully (no output)";
+    }
+  }
+
+  function clearOutput() {
+    document.getElementById("outputBox").innerText = "";
+  }
+
+  function loadFile(filename) {
+    fetch(`/get_file/{{ project_name }}/${filename}`)
+      .then(response => response.text())
+      .then(content => {
+        document.getElementById("codeArea").value = content;
+        currentFilename = filename;
+      });
+  }
+
+  function saveEditedFile() {
+    if (!currentFilename) {
+      alert("No file selected to save.");
+      return;
+    }
+    fetch(`/save_file/{{ project_name }}/${currentFilename}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ content: document.getElementById("codeArea").value })
+    }).then(() => alert("✅ File saved successfully!"));
+  }
+
+  function uploadFile(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(`/upload_file/{{ project_name }}`, {
+      method: "POST",
+      body: formData
+    }).then(() => location.reload());
+  }
+
+  window.onload = () => {
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.classList.add("hover");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("hover");
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("hover");
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        uploadFile(files[0]);
+      }
+    });
+
+    // Right-click context menu binding
+    document.querySelectorAll('.file-item').forEach(item => {
+      item.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        currentFilename = item.innerText.trim().substring(2).trim(); // remove emoji
+        const menu = document.getElementById('contextMenu');
+        menu.style.top = `${e.pageY}px`;
+        menu.style.left = `${e.pageX}px`;
+        menu.style.display = 'block';
+      });
+    });
+
+    // Hide context menu on left click or ESC
+    window.addEventListener('click', () => {
+      document.getElementById('contextMenu').style.display = 'none';
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.getElementById('contextMenu').style.display = 'none';
+      }
+    });
+  };
+
+  function openFile() {
+    if (currentFilename) loadFile(currentFilename);
+  }
+
+  function deleteFile() {
+    if (confirm(`Are you sure you want to delete ${currentFilename}?`)) {
+      fetch(`/delete_file/{{ project_name }}/${currentFilename}`, {
+        method: 'POST'
+      }).then(() => location.reload());
+    }
+  }
+
+  function copyPath() {
+    const fullPath = `/users/{{ session['user_id'] }}/{{ project_name }}/${currentFilename}`;
+    navigator.clipboard.writeText(fullPath).then(() => {
+      alert("📋 Path copied to clipboard!");
+    });
+  }
+
+
+    function createNewFile() {
+    const filename = prompt("Enter new file name (e.g., new.py):");
+    if (filename) {
+      fetch(`/create_file/{{ project_name }}/${filename}`, {
+        method: 'POST'
+      }).then(res => {
+        if (res.ok) location.reload();
+        else alert("Failed to create file.");
+      });
+    }
+  }
+
+  function createNewFolder() {
+    const foldername = prompt("Enter new folder name:");
+    if (foldername) {
+      fetch(`/create_folder/{{ project_name }}/${foldername}`, {
+        method: 'POST'
+      }).then(res => {
+        if (res.ok) location.reload();
+        else alert("Failed to create folder.");
+      });
+    }
+  }
+</script>
+
+
+</body>
+</html>

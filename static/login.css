@@ -1,0 +1,147 @@
+/* Reset & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('/static/dark1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+/* Container for login box */
+.login-box {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 30px 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  text-align: center;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Headings */
+.login-box h2 {
+  margin-bottom: 10px;
+  color: #f8f9fa;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.login-box .subtitle {
+  color: #cccccc;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Flash messages */
+.flash-messages {
+  list-style: none;
+  margin-bottom: 15px;
+  padding: 0;
+}
+
+.alert {
+  background-color: #ff4d4d;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+/* Form inputs */
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 15px;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: 1px solid #444;
+  transition: border-color 0.3s ease;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #222;
+}
+
+/* Submit button */
+.login-form button[type="submit"] {
+  padding: 12px;
+  width: 100%;
+  background-color: #3b82f6;
+  border: none;
+  color: white;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button[type="submit"]:hover {
+  background-color: #2563eb;
+}
+
+/* Additional links */
+.login-options {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+
+
+.link:hover {
+  color: #93c5fd;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 500px) {
+  body {
+    justify-content: center;
+    padding-left: 0;
+    padding: 20px;
+  }
+
+  .login-box {
+    width: 100%;
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+}

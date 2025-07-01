@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Haradi Bots - Learn Robotics, AI, Python, and more. Join the future.">
+    <meta property="og:title" content="Haradi Bots">
+    <meta property="og:image" content="{{ url_for('static', filename='img2.jpeg') }}">
+    <meta property="og:description" content="Free Robotics and AI Education by Aditya Yadav.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon and Styles -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img2.jpeg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='hosting.css') }}">
+    
+    <!-- Font Awesome & External Libraries -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+
+    <title>Haradi-Bots-Hosting</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="/dashboard">Home</a>
+            <a href="/dashboard#contact">Contacts</a>
+            <a href="/dashboard#about">Info</a>
+        </nav>
+    </header>
+
+<button id="stop" class="toggle-btn">
+    <span class="icon">😴</span> Stop
+</button>
+
+
+    <!-- carousel -->
+    <div class="carousel">
+        <!-- list item -->
+        <div class="list">
+            <div class="item">
+                <img src="static/pexels-alfinauzikri-4103259.jpg">
+                <div class="content">
+                    <div class="author">Haradi-Bots</div>
+                    <div class="title">Free Plan</div>
+                    <div class="topic">Free Web Hosting</div>
+                    <div class="des">
+                        ✅ 512 MB RAM<br>
+                        ✅ 512 MB SSD<br>
+                        ✅ 0 Bot Slot<br>
+                        ✅ Basic Support<br>
+                        ✅ 99.5% Uptime<br>
+                        Get started with zero cost and explore the possibilities!<br>
+                    </div>
+                    <div class="buttons">
+                        <button>SEE MORE</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/pexels-athena-2582932.jpg">
+                <div class="content">
+                    <div class="author">Haradi-Bots</div>
+                    <div class="title">Starter</div>
+                    <div class="topic">₹19 / month</div>
+                    <div class="des">
+                        ✅ 1 GB RAM<br>
+                        ✅ 5 GB SSD<br>
+                        ✅ 1 Bot Slot<br>
+                        ✅ Basic Support<br>
+                        ✅ 99.5% Uptime<br>
+                        Ideal for beginners at an affordable price <br>
+                        At just ₹19/month.
+                    </div>
+                    <div class="buttons">
+                        <button>SEE MORE</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/img3.jpg">
+                <div class="content">
+                    <div class="author">Haradi-Bots</div>
+                    <div class="title">Developer</div>
+                    <div class="topic">₹99 / month</div>
+                    <div class="des">
+                        ✅ 2 GB RAM<br>
+                        ✅ 10 GB SSD Storage<br>
+                        ✅ 3 Bot Slots<br>
+                        ✅ Free SSL<br>
+                        ✅ Priority Support<br>
+                        Ideal for developers and small businesses <br>
+                        ₹99/month.
+                    </div>
+                    <div class="buttons">
+                        <button>SEE MORE</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/img4.jpg">
+                <div class="content">
+                    <div class="author">Haradi-Bots</div>
+                    <div class="title">Pro</div>
+                    <div class="topic">₹199 / month</div>
+                    <div class="des">
+                        ✅ 2 GB RAM<br>
+                        ✅ 20 GB SSD Storage<br>
+                        ✅ 5 Bot Slots<br>
+                        ✅ Daily Backups<br>
+                        ✅ Free Domain<br>
+                        Ideal for professionals and businesses requiring advanced features <br>
+                        ₹199/month.
+                    </div>
+                    <div class="buttons">
+                        <button>SEE MORE</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/pexels-athena-2582936.jpg">
+                <div class="content">
+                    <div class="author">Haradi-Bots</div>
+                    <div class="title">Enterprise</div>
+                    <div class="topic">₹299 / month</div>
+                    <div class="des">
+                        ✅ 4 GB RAM<br>
+                        ✅ 50 GB SSD Storage<br>
+                        ✅ 10 Bots<br>
+                        ✅ Dedicated Resources<br>
+                        ✅ 24/7 Premium Support<br>
+                        Ideal for enterprises requiring robust and scalable hosting solutions <br>
+                        ₹299/month.
+                    </div>
+                    <div class="buttons">
+                        <button>SEE MORE</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/pexels-divinetechygirl-1181354.jpg">
+                <div class="content">
+                    <div class="author">Haradi-Bots</div>
+                    <div class="title">Ultimate</div>
+                    <div class="topic">₹499 / mo</div>
+                    <div class="des">
+                        ✅ 8 GB RAM<br>
+                        ✅ 100 GB SSD<br>
+                        ✅ Unlimited Bots<br>
+                        ✅ Premium Support<br>
+                        ✅ Free Domain & SSL<br>
+                        ₹499/month. <br>
+                        Ideal for large-scale projects requiring. Top-tier performance and reliability.
+                    </div>
+                    <div class="buttons">
+                        <button>SEE MORE</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- list thumnail -->
+        <div class="thumbnail">
+            <div class="item">
+                <img src="static/pexels-alfinauzikri-4103259.jpg">
+                <div class="content">
+                    <div class="title">
+                        Name Slider
+                    </div>
+                    <div class="dis">
+                        Discription
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/pexels-athena-2582932.jpg">
+                <div class="content">
+                    <div class="title">
+                        Name Slider
+                    </div>
+                    <div class="dis">
+                        Discription
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/img3.jpg">
+                <div class="content">
+                    <div class="title">
+                        Name Slider
+                    </div>
+                    <div class="dis">
+                        Discription
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/img4.jpg">
+                <div class="content">
+                    <div class="title">
+                        Name Slider
+                    </div>
+                    <div class="dis">
+                        Discription
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/pexels-athena-2582936.jpg">
+                <div class="content">
+                    <div class="title">
+                        Name Slider
+                    </div>
+                    <div class="dis">
+                        Discription
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="static/pexels-divinetechygirl-1181354.jpg">
+                <div class="content">
+                    <div class="title">
+                        Name Slider
+                    </div>
+                    <div class="dis">
+                        Discription
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- next prev -->
+
+        <div class="arrows">
+            <button id="prev"><</button>
+            <button id="next">></button>
+        </div>
+        <!-- time running -->
+        <div class="time"></div>
+    </div>
+
+    <script src="/static/hosting.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body with background image */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('/static/dark1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+/* Signup box styling */
+.signup-box {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 30px 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+/* Heading */
+.signup-box h2 {
+  margin-bottom: 20px;
+  color: #f0f0f0;
+}
+
+/* Flash messages */
+.flash-messages {
+  list-style: none;
+  margin-bottom: 15px;
+  padding: 0;
+  font-size: 14px;
+  color: #ff6b6b;
+}
+
+/* Form inputs */
+.signup-box form input[type="text"],
+.signup-box form input[type="email"],
+.signup-box form input[type="password"] {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 6px;
+  width: 100%;
+  font-size: 15px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #444;
+}
+
+.signup-box form input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+/* Submit button */
+.signup-box button[type="submit"] {
+  padding: 12px;
+  width: 100%;
+  background-color: #3b82f6;
+  border: none;
+  color: white;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-box button[type="submit"]:hover {
+  background-color: #2563eb;
+}
+
+/* Login link */
+.login-link {
+  display: block;
+  margin-top: 18px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.login-link:hover {
+  color: #93c5fd;
+}

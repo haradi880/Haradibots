@@ -1,0 +1,249 @@
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4646469c;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        nav a:hover {
+            color: #ffd700;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .project-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .project-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .project-card:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .project-card:hover {
+            transform: scale(1.02);
+        }
+
+        .project-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .project-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .project-description {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .project-image {
+            width: 95dvh;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .project-actions {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .colab-btn {
+            background-color: #ff6f00;
+        }
+
+        .colab-btn:hover {
+            background-color: #e65100;
+        }
+
+        .output-preview {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 120px;
+            overflow: hidden;
+            font-family: monospace;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .hidden-output {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 0;
+            overflow: hidden;
+            font-family: monospace;
+            color: #2c3e50;
+            transition: max-height 0.5s ease;
+        }
+
+        .read-more-btn {
+            background-color: #27ae60;
+        }
+
+        .read-more-btn:hover {
+            background-color: #1e8449;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            height: 15px;
+            background-color: #4646469c;
+            color: white;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .download-btn {
+            background-color: #9b59b6;
+        }
+
+        .download-btn:hover {
+            background-color: #8e44ad;
+        }
+
+        .download-code-btn {
+            background-color: #e67e22;
+        }
+
+        .download-code-btn:hover {
+            background-color: #d35400;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .project-card {
+                flex-direction: column !important;
+            }
+
+            .project-image {
+                width: 100%;
+            }
+
+            nav {
+                flex-direction: column;
+                display: none;
+                background-color: #333;
+                position: absolute;
+                top: 60px;
+                right: 20px;
+                border-radius: 8px;
+                padding: 10px 0;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                padding: 10px 20px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }

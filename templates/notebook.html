@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="description" content="Haradi Bots - Learn Robotics, AI, Python, and more. Join the future.">
+    <meta property="og:title" content="Haradi Bots">
+    <meta property="og:image" content="img2.jpeg">
+    <meta property="og:description" content="Free Robotics and AI Education by Aditya Yadav.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaradiBots - Notebooks & Resources</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='notebook.css') }}">
+    <link rel="icon" type="image/png" href="static/img2.jpeg">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <header>
+        <div class="logo">Haradi Bots</div>
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav id="navbar">
+            <a href="/dashboard#contact">Home</a>
+            <a href="/hosting">Hosting</a>
+            <a href="/dashboard#contact">Contact</a>
+            <a href="/dashboard#about">Info</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="intro" data-aos="fade-down">
+            <h1>📂 Project Resources & Notebooks</h1>
+            <p>Explore my projects, open them in Google Colab, or download the notebooks and datasets.</p>
+        </section>
+
+        <div class="project-container">
+
+            <!-- Project 1 -->
+            <section class="project-card" data-aos="fade-up">
+                <img src="static/project_1.PNG" alt="Project 1 Screenshot" class="project-image">
+
+                <div class="project-content">
+                    <p>1</p>
+
+                    <h5 class="Done_work_1">Complited 100%</h5>
+
+                    <h2 class="project-title">Intents Classification ChatBot</h2>
+                    <p class="project-description">Build a chatbot that can classify user intents using machine
+                        learning.</p>
+
+                    <div class="project-actions">
+                        <a href="https://colab.research.google.com/drive/1zjHBhd6PQRopUexO84M5JbAwTWoHRyUt?usp=sharing"
+                            target="_blank" class="btn colab-btn">
+                            <i class="fab fa-google"></i> Open in Google Colab
+                        </a>
+                    </div>
+
+                    <h4>Training Output</h4>
+                    <p class="output-preview">
+                        Epoch 1/100<br>
+                        193/193 ━━━━━━━━━━━━━━━━━━━━ 1s 1ms/step - accuracy: 0.1254 - loss: 3.1394<br>
+                        Epoch 2/100<br>
+                        193/193 ━━━━━━━━━━━━━━━━━━━━ 1s 1ms/step - accuracy: 0.1927 - loss: 2.6894<br>
+                        ...
+                    </p>
+
+                    <div class="button-group">
+                        <button class="btn read-more-btn" onclick="toggleOutput(this)">Read More</button>
+
+                        <a href="datasets/intents.json" download class="btn download-btn">
+                            <i class="fas fa-download"></i> Download Data
+                        </a>
+
+                        <a href="code/code1.py" download class="btn download-code-btn">
+                            <i class="fas fa-download"></i> Download Code
+                        </a>
+                    </div>
+
+                    <div class="hidden-output">
+                        <p>
+                            Epoch 100/100<br>
+                            193/193 ━━━━━━━━━━━━━━━━━━━━ 0s 1ms/step - accuracy: 0.9927 - loss: 0.0266<br><br>
+                            ChatBot: Hello! How can I assist you today?<br>
+                            User: hi<br>
+                            ChatBot: Greetings! How can I assist you on this fine day?<br>
+                            User: what is your name<br>
+                            ChatBot: Hey there! It's Harnidh, your friendly virtual assistant.<br>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project 2 -->
+            <section class="project-card" data-aos="fade-up">
+                <img src="static/project2.PNG" alt="Project 2 Screenshot" class="project-image">
+
+                <div class="project-content">
+                    <p>2</p>
+
+                    <h5 class="Done_work_2">Complited 75%</h5>
+
+                    <h2 class="project-title">Train a Simple Seq2Seq Chatbot Model</h2>
+                    <p class="project-description">This chatbot is built using a Sequence-to-Sequence (Seq2Seq) model
+                        with LSTM layers to learn conversational patterns from a small, custom QnA dataset.</p>
+
+                    <div class="project-actions">
+                        <a href="https://colab.research.google.com/drive/1oQ3KE9X-8C5OW5RUpkOgSaAb9fp5znA0?usp=sharing"
+                            target="_blank" class="btn colab-btn">
+                            <i class="fab fa-google"></i> Open in Google Colab
+                        </a>
+                    </div>
+
+                    <h4>🔹 How It Works:</h4>
+                    <p class="output-preview">
+                        Encoder: Converts the user’s input question into a context vector.<br>
+                        Decoder: Takes the context vector and generates an answer word by word.<br>
+                        ...
+                    </p>
+
+                    <div class="button-group">
+                        <button class="btn read-more-btn" onclick="toggleOutput(this)">Read More</button>
+
+                        <a href="datasets/combined_qna.csv" download class="btn download-btn">
+                            <i class="fas fa-download"></i> Download Data
+                        </a>
+
+                        <a href="code/code2.py" download class="btn download-code-btn">
+                            <i class="fas fa-download"></i> Download Code
+                        </a>
+                    </div>
+
+                    <div class="hidden-output">
+                        <p>
+                            Training: Model is trained on input/output QnA pairs using
+                            sparse_categorical_crossentropy.<br><br>
+                            Inference: Encoder understands the question, decoder generates new responses.<br><br>
+                            🔹 Key Features:<br>
+                            ✅ Trained on custom QnA dataset in desi style.<br>
+                            ✅ Supports word-by-word generation.<br>
+                            ✅ Lightweight and CPU-friendly.<br>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- Project 3 -->
+            <section class="project-card" data-aos="fade-up">
+                <img src="static/project3.PNG" alt="Snake Game Screenshot" class="project-image">
+
+                <div class="project-content">
+                    <p>3</p>
+
+                    <h5 class="Done_work_3">Completed 100%</h5>
+
+                    <h2 class="project-title">Snake Game with Deep Q-Learning (DQN)</h2>
+                    <p class="project-description">
+                        This project uses Deep Q-Learning (DQN) to train an AI agent to play the classic Snake game. The
+                        agent learns by interacting with the environment and improving its performance over time.
+                    </p>
+                    <h3>Need Traning Codes:</h3>
+
+                    <div class="project-actions">
+                        <a href="https://colab.research.google.com/drive/1zjHBhd6PQRopUexO84M5JbAwTWoHRyUt?usp=sharing"
+                            target="_blank" class="btn colab-btn">
+                            <i class="fab fa-google"></i> Open in Google Colab
+                        </a>
+                    </div>
+
+                    <h4>🔹 How It Works:</h4>
+                    <p class="output-preview">
+                        DQN Agent: Uses a neural network to approximate Q-values.<br>
+                        Replay Memory: Stores past experiences for stable learning.<br>
+                        Epsilon-Greedy: Balances exploration and exploitation.<br>
+                        ...
+                    </p>
+
+                    <div class="button-group">
+                        <button class="btn read-more-btn" onclick="toggleOutput(this)">Read More</button>
+
+                        <a href="datasets/dqn_snake.pth" download class="btn download-btn">
+                            <i class="fas fa-download"></i> Download Model
+                        </a>
+
+                        <a href="code/code3.py" download class="btn download-code-btn">
+                            <i class="fas fa-download"></i> Download Code
+                        </a>
+                    </div>
+
+                    <div class="hidden-output">
+                        <p>
+                            Training: The agent is trained over multiple episodes using the DQN algorithm with
+                            experience replay.<br><br>
+                            Inference: The trained model plays the game by selecting actions based on learned
+                            Q-values.<br><br>
+                            🔹 Key Features:<br>
+                            ✅ Trained using Deep Q-Learning with epsilon decay.<br>
+                            ✅ Includes visual snake with gradient color and border.<br>
+                            ✅ Supports custom training and real-time game play.<br>
+                            ✅ Optimized for CPU and GPU.<br>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Data links -->
+
+            <section id="Data_36" class="Data_36"
+                style="max-width: 800px; margin: 50px auto; font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+                <h2 style="color: #333;">📂 Dataset: 3.6 Million Lines of Raw Text</h2>
+
+                <p style="font-size: 16px; color: #555;">
+                    This dataset contains <strong>1.4 GB</strong> of raw, unstructured text data with <strong>36 lakh
+                        lines (3.6 million rows)</strong>.
+                    It has been specifically curated for training deep learning models, especially
+                    <strong>conversational chatbots</strong> capable of handling natural, human-like conversations.
+                </p>
+
+                <h3 style="color: #333; margin-top: 30px;">📄 Sample Data:</h3>
+                <pre
+                    style="background-color: #eaeaea; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px;">
+Hi there, how can I help you today?
+I need assistance with my account.
+Sure, let me check that for you.
+Thank you, I appreciate it.
+You're welcome! Have a great day.
+    </pre>
+
+                <a href="https://www.dropbox.com/scl/fi/mpce76i59cw787qt0zngt/train.csv?rlkey=dl486y31vfmov8xwx4ewcu22d&st=0jriewk5&dl=1"
+                    download>
+                    <button
+                        style="padding: 12px 25px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 20px;">
+                        Download Dataset (1.4 GB)
+                    </button>
+                </a>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Haradi Bots | All rights reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        function toggleMenu() {
+            const nav = document.getElementById('navbar');
+            nav.classList.toggle('active');
+        }
+
+        function toggleOutput(button) {
+            const output = button.parentElement.nextElementSibling;
+            if (output.style.maxHeight && output.style.maxHeight !== '0px') {
+                output.style.maxHeight = '0px';
+            } else {
+                output.style.maxHeight = output.scrollHeight + 'px';
+            }
+        }
+
+        // Fetch username from Flask session
+        fetch('/user')
+            .then(response => response.json())
+            .then(data => {
+                if (data.name) {
+                    document.getElementById('username').innerText = data.name;
+                } else {
+                    document.getElementById('username').innerText = 'Guest';
+                }
+            })
+            .catch(() => {
+                document.getElementById('username').innerText = 'Guest';
+            });
+
+        // Logout functionality
+        document.getElementById('logoutButton').onclick = async () => {
+            await fetch('/logout');
+            window.location.href = '/';
+        };
+    </script>
+
+</body>
+
+</html>
