@@ -2,290 +2,862 @@
 <html lang="en">
 
 <head>
-    <meta name="description" content="Haradi Bots - Learn Robotics, AI, Python, and more. Join the future.">
-    <meta property="og:title" content="Haradi Bots">
-    <meta property="og:image" content="img2.jpeg">
-    <meta property="og:description" content="Free Robotics and AI Education by Aditya Yadav.">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HaradiBots - Notebooks & Resources</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='notebook.css') }}">
-    <link rel="icon" type="image/png" href="static/img2.jpeg">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Haradi Bots | AI & Robotics Projects</title>
+    <meta name="description" content="Explore cutting-edge AI and robotics projects by Aditya Yadav">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Color Scheme */
+            --primary: #6C63FF;
+            --primary-light: #8B85FF;
+            --primary-dark: #4A42D1;
+            --secondary: #FF6584;
+            --accent: #00C9A7;
+            --dark: #1E1E2C;
+            --darker: #161622;
+            --light: #F6F6F9;
+            --lighter: #FFFFFF;
+            --gray: #A1A1B5;
+            --dark-gray: #2D2D3A;
+            
+            /* Typography */
+            --font-main: 'Poppins', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            /* Spacing */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+            
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 999px;
+        }
 
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: var(--space-sm);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: var(--space-sm) 0;
+            background: rgba(30, 30, 44, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .logo i {
+            font-size: 1.2em;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        nav a {
+            position: relative;
+            padding: var(--space-xs) 0;
+            font-weight: 500;
+            color: var(--gray);
+        }
+
+        nav a:hover {
+            color: var(--light);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition-normal);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: var(--space-xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, rgba(108, 99, 255, 0) 70%);
+            z-index: -1;
+            animation: pulse 15s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.1; }
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: var(--space-xl) 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            display: inline-block;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            margin: var(--space-sm) auto 0;
+            border-radius: var(--radius-full);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .project-card {
+            background: var(--dark);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition-normal);
+            border: 1px solid var(--dark-gray);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .project-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 1px solid var(--dark-gray);
+        }
+
+        .project-badge {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+            background: var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .project-badge.completed {
+            background: var(--accent);
+        }
+
+        .project-badge.in-progress {
+            background: var(--secondary);
+        }
+
+        .project-content {
+            padding: var(--space-md);
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-xs);
+            color: var(--light);
+        }
+
+        .project-description {
+            color: var(--gray);
+            margin-bottom: var(--space-md);
+            font-size: 0.95rem;
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .project-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition-normal);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--dark-gray);
+            color: var(--light);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--dark-gray);
+            color: var(--light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Dataset Section */
+        .dataset-section {
+            background: linear-gradient(135deg, var(--dark), var(--darker));
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+            border: 1px solid var(--dark-gray);
+            box-shadow: var(--shadow-md);
+        }
+
+        .dataset-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .dataset-icon {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .dataset-title {
+            font-size: 1.75rem;
+        }
+
+        .dataset-description {
+            color: var(--gray);
+            margin-bottom: var(--space-md);
+        }
+
+        .dataset-stats {
+            display: flex;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-md);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .stat-icon {
+            color: var(--primary);
+        }
+
+        .sample-data {
+            background: var(--dark);
+            border-radius: var(--radius-sm);
+            padding: var(--space-md);
+            margin: var(--space-md) 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            border: 1px solid var(--dark-gray);
+            overflow-x: auto;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            padding: var(--space-xl) 0;
+            border-top: 1px solid var(--dark-gray);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .footer-links a {
+            color: var(--gray);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-normal);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: var(--space-lg);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .project-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: var(--dark);
+                flex-direction: column;
+                align-items: center;
+                padding: var(--space-md) 0;
+                gap: var(--space-md);
+                clip-path: circle(0% at 90% -10%);
+                transition: clip-path 0.5s ease;
+            }
+            
+            nav.active {
+                clip-path: circle(150% at 50% 50%);
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .dataset-stats {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Header -->
     <header>
-        <div class="logo">Haradi Bots</div>
-        <button class="menu-toggle" onclick="toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </button>
-        <nav id="navbar">
-            <a href="/dashboard#contact">Home</a>
-            <a href="/hosting">Hosting</a>
-            <a href="/dashboard#contact">Contact</a>
-            <a href="/dashboard#about">Info</a>
-        </nav>
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <i class="fas fa-robot"></i>
+                <span>Haradi Bots</span>
+            </a>
+            
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="navbar">
+                <a href="/dashboard#contact">Home</a>
+                <a href="/hosting">Hosting</a>
+                <a href="/dashboard#contact">Contact</a>
+                <a href="/dashboard#about">Info</a>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="intro" data-aos="fade-down">
-            <h1>📂 Project Resources & Notebooks</h1>
-            <p>Explore my projects, open them in Google Colab, or download the notebooks and datasets.</p>
-        </section>
-
-        <div class="project-container">
-
-            <!-- Project 1 -->
-            <section class="project-card" data-aos="fade-up">
-                <img src="static/project_1.PNG" alt="Project 1 Screenshot" class="project-image">
-
-                <div class="project-content">
-                    <p>1</p>
-
-                    <h5 class="Done_work_1">Complited 100%</h5>
-
-                    <h2 class="project-title">Intents Classification ChatBot</h2>
-                    <p class="project-description">Build a chatbot that can classify user intents using machine
-                        learning.</p>
-
-                    <div class="project-actions">
-                        <a href="https://colab.research.google.com/drive/1zjHBhd6PQRopUexO84M5JbAwTWoHRyUt?usp=sharing"
-                            target="_blank" class="btn colab-btn">
-                            <i class="fab fa-google"></i> Open in Google Colab
-                        </a>
-                    </div>
-
-                    <h4>Training Output</h4>
-                    <p class="output-preview">
-                        Epoch 1/100<br>
-                        193/193 ━━━━━━━━━━━━━━━━━━━━ 1s 1ms/step - accuracy: 0.1254 - loss: 3.1394<br>
-                        Epoch 2/100<br>
-                        193/193 ━━━━━━━━━━━━━━━━━━━━ 1s 1ms/step - accuracy: 0.1927 - loss: 2.6894<br>
-                        ...
-                    </p>
-
-                    <div class="button-group">
-                        <button class="btn read-more-btn" onclick="toggleOutput(this)">Read More</button>
-
-                        <a href="datasets/intents.json" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download Data
-                        </a>
-
-                        <a href="code/code1.py" download class="btn download-code-btn">
-                            <i class="fas fa-download"></i> Download Code
-                        </a>
-                    </div>
-
-                    <div class="hidden-output">
-                        <p>
-                            Epoch 100/100<br>
-                            193/193 ━━━━━━━━━━━━━━━━━━━━ 0s 1ms/step - accuracy: 0.9927 - loss: 0.0266<br><br>
-                            ChatBot: Hello! How can I assist you today?<br>
-                            User: hi<br>
-                            ChatBot: Greetings! How can I assist you on this fine day?<br>
-                            User: what is your name<br>
-                            ChatBot: Hey there! It's Harnidh, your friendly virtual assistant.<br>
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Project 2 -->
-            <section class="project-card" data-aos="fade-up">
-                <img src="static/project2.PNG" alt="Project 2 Screenshot" class="project-image">
-
-                <div class="project-content">
-                    <p>2</p>
-
-                    <h5 class="Done_work_2">Complited 75%</h5>
-
-                    <h2 class="project-title">Train a Simple Seq2Seq Chatbot Model</h2>
-                    <p class="project-description">This chatbot is built using a Sequence-to-Sequence (Seq2Seq) model
-                        with LSTM layers to learn conversational patterns from a small, custom QnA dataset.</p>
-
-                    <div class="project-actions">
-                        <a href="https://colab.research.google.com/drive/1oQ3KE9X-8C5OW5RUpkOgSaAb9fp5znA0?usp=sharing"
-                            target="_blank" class="btn colab-btn">
-                            <i class="fab fa-google"></i> Open in Google Colab
-                        </a>
-                    </div>
-
-                    <h4>🔹 How It Works:</h4>
-                    <p class="output-preview">
-                        Encoder: Converts the user’s input question into a context vector.<br>
-                        Decoder: Takes the context vector and generates an answer word by word.<br>
-                        ...
-                    </p>
-
-                    <div class="button-group">
-                        <button class="btn read-more-btn" onclick="toggleOutput(this)">Read More</button>
-
-                        <a href="datasets/combined_qna.csv" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download Data
-                        </a>
-
-                        <a href="code/code2.py" download class="btn download-code-btn">
-                            <i class="fas fa-download"></i> Download Code
-                        </a>
-                    </div>
-
-                    <div class="hidden-output">
-                        <p>
-                            Training: Model is trained on input/output QnA pairs using
-                            sparse_categorical_crossentropy.<br><br>
-                            Inference: Encoder understands the question, decoder generates new responses.<br><br>
-                            🔹 Key Features:<br>
-                            ✅ Trained on custom QnA dataset in desi style.<br>
-                            ✅ Supports word-by-word generation.<br>
-                            ✅ Lightweight and CPU-friendly.<br>
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-
-
-            <!-- Project 3 -->
-            <section class="project-card" data-aos="fade-up">
-                <img src="static/project3.PNG" alt="Snake Game Screenshot" class="project-image">
-
-                <div class="project-content">
-                    <p>3</p>
-
-                    <h5 class="Done_work_3">Completed 100%</h5>
-
-                    <h2 class="project-title">Snake Game with Deep Q-Learning (DQN)</h2>
-                    <p class="project-description">
-                        This project uses Deep Q-Learning (DQN) to train an AI agent to play the classic Snake game. The
-                        agent learns by interacting with the environment and improving its performance over time.
-                    </p>
-                    <h3>Need Traning Codes:</h3>
-
-                    <div class="project-actions">
-                        <a href="https://colab.research.google.com/drive/1zjHBhd6PQRopUexO84M5JbAwTWoHRyUt?usp=sharing"
-                            target="_blank" class="btn colab-btn">
-                            <i class="fab fa-google"></i> Open in Google Colab
-                        </a>
-                    </div>
-
-                    <h4>🔹 How It Works:</h4>
-                    <p class="output-preview">
-                        DQN Agent: Uses a neural network to approximate Q-values.<br>
-                        Replay Memory: Stores past experiences for stable learning.<br>
-                        Epsilon-Greedy: Balances exploration and exploitation.<br>
-                        ...
-                    </p>
-
-                    <div class="button-group">
-                        <button class="btn read-more-btn" onclick="toggleOutput(this)">Read More</button>
-
-                        <a href="datasets/dqn_snake.pth" download class="btn download-btn">
-                            <i class="fas fa-download"></i> Download Model
-                        </a>
-
-                        <a href="code/code3.py" download class="btn download-code-btn">
-                            <i class="fas fa-download"></i> Download Code
-                        </a>
-                    </div>
-
-                    <div class="hidden-output">
-                        <p>
-                            Training: The agent is trained over multiple episodes using the DQN algorithm with
-                            experience replay.<br><br>
-                            Inference: The trained model plays the game by selecting actions based on learned
-                            Q-values.<br><br>
-                            🔹 Key Features:<br>
-                            ✅ Trained using Deep Q-Learning with epsilon decay.<br>
-                            ✅ Includes visual snake with gradient color and border.<br>
-                            ✅ Supports custom training and real-time game play.<br>
-                            ✅ Optimized for CPU and GPU.<br>
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-
-            <!-- Data links -->
-
-            <section id="Data_36" class="Data_36"
-                style="max-width: 800px; margin: 50px auto; font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
-                <h2 style="color: #333;">📂 Dataset: 3.6 Million Lines of Raw Text</h2>
-
-                <p style="font-size: 16px; color: #555;">
-                    This dataset contains <strong>1.4 GB</strong> of raw, unstructured text data with <strong>36 lakh
-                        lines (3.6 million rows)</strong>.
-                    It has been specifically curated for training deep learning models, especially
-                    <strong>conversational chatbots</strong> capable of handling natural, human-like conversations.
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content" data-aos="fade-right">
+                <h1 class="hero-title">AI & Robotics Projects</h1>
+                <p class="hero-subtitle">
+                    Explore cutting-edge projects in artificial intelligence, machine learning, and robotics.
+                    Download notebooks, datasets, and models to kickstart your own AI journey.
                 </p>
-
-                <h3 style="color: #333; margin-top: 30px;">📄 Sample Data:</h3>
-                <pre
-                    style="background-color: #eaeaea; padding: 15px; border-radius: 5px; overflow-x: auto; font-size: 14px;">
-Hi there, how can I help you today?
-I need assistance with my account.
-Sure, let me check that for you.
-Thank you, I appreciate it.
-You're welcome! Have a great day.
-    </pre>
-
-                <a href="https://www.dropbox.com/scl/fi/mpce76i59cw787qt0zngt/train.csv?rlkey=dl486y31vfmov8xwx4ewcu22d&st=0jriewk5&dl=1"
-                    download>
-                    <button
-                        style="padding: 12px 25px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 20px;">
-                        Download Dataset (1.4 GB)
-                    </button>
-                </a>
-            </section>
-
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">
+                        <i class="fas fa-laptop-code"></i> View Projects
+                    </a>
+                    <a href="#datasets" class="btn btn-outline">
+                        <i class="fas fa-database"></i> Browse Datasets
+                    </a>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
 
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Featured Projects</h2>
+            </div>
+            
+            <div class="project-grid">
+                <!-- Project 1 -->
+                <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                    <img src="static/project_1.PNG" alt="Intents Classification ChatBot" class="project-image">
+                    <div class="project-badge completed">100%</div>
+                    
+                    <div class="project-content">
+                        <h3 class="project-title">Intents Classification ChatBot</h3>
+                        <p class="project-description">
+                            A machine learning chatbot that classifies user intents and provides appropriate responses.
+                            Built with TensorFlow and trained on custom datasets.
+                        </p>
+                        
+                        <div class="project-meta">
+                            <span><i class="fas fa-tag"></i> NLP</span>
+                            <span><i class="fas fa-calendar-alt"></i> May 2023</span>
+                        </div>
+                        
+                        <div class="project-actions">
+                            <a href="https://colab.research.google.com/drive/1zjHBhd6PQRopUexO84M5JbAwTWoHRyUt?usp=sharing" 
+                               target="_blank" class="btn btn-primary">
+                                <i class="fab fa-google"></i> Colab
+                            </a>
+                            <a href="code/code1.py" download class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Code
+                            </a>
+                            <a href="datasets/intents.json" download class="btn btn-outline">
+                                <i class="fas fa-database"></i> Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="project-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="static/project2.PNG" alt="Seq2Seq Chatbot Model" class="project-image">
+                    <div class="project-badge in-progress">75%</div>
+                    
+                    <div class="project-content">
+                        <h3 class="project-title">Seq2Seq Chatbot Model</h3>
+                        <p class="project-description">
+                            Sequence-to-Sequence model with LSTM layers trained on custom QnA dataset.
+                            Generates human-like responses in conversational style.
+                        </p>
+                        
+                        <div class="project-meta">
+                            <span><i class="fas fa-tag"></i> Deep Learning</span>
+                            <span><i class="fas fa-calendar-alt"></i> July 2023</span>
+                        </div>
+                        
+                        <div class="project-actions">
+                            <a href="https://colab.research.google.com/drive/1oQ3KE9X-8C5OW5RUpkOgSaAb9fp5znA0?usp=sharing" 
+                               target="_blank" class="btn btn-primary">
+                                <i class="fab fa-google"></i> Colab
+                            </a>
+                            <a href="code/code2.py" download class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Code
+                            </a>
+                            <a href="datasets/combined_qna.csv" download class="btn btn-outline">
+                                <i class="fas fa-database"></i> Data
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="project-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="static/project3.PNG" alt="Snake Game AI" class="project-image">
+                    <div class="project-badge completed">100%</div>
+                    
+                    <div class="project-content">
+                        <h3 class="project-title">Snake Game AI (DQN)</h3>
+                        <p class="project-description">
+                            Deep Q-Learning agent that learns to play Snake through reinforcement learning.
+                            Implements experience replay and epsilon-greedy policy.
+                        </p>
+                        
+                        <div class="project-meta">
+                            <span><i class="fas fa-tag"></i> Reinforcement Learning</span>
+                            <span><i class="fas fa-calendar-alt"></i> August 2023</span>
+                        </div>
+                        
+                        <div class="project-actions">
+                            <a href="https://colab.research.google.com/drive/1zjHBhd6PQRopUexO84M5JbAwTWoHRyUt?usp=sharing" 
+                               target="_blank" class="btn btn-primary">
+                                <i class="fab fa-google"></i> Colab
+                            </a>
+                            <a href="code/code3.py" download class="btn btn-secondary">
+                                <i class="fas fa-download"></i> Code
+                            </a>
+                            <a href="datasets/dqn_snake.pth" download class="btn btn-outline">
+                                <i class="fas fa-database"></i> Model
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dataset Section -->
+    <section id="datasets" class="dataset-section" data-aos="fade-up">
+        <div class="container">
+            <div class="dataset-header">
+                <div class="dataset-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <div>
+                    <h2 class="dataset-title">3.6 Million Text Lines Dataset</h2>
+                    <p class="dataset-description">
+                        Curated dataset for training natural language models with diverse conversational patterns.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="dataset-stats">
+                <div class="stat-item">
+                    <i class="fas fa-file-alt stat-icon"></i>
+                    <span>1.4GB Size</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-list-ol stat-icon"></i>
+                    <span>3.6M Lines</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-tags stat-icon"></i>
+                    <span>50+ Categories</span>
+                </div>
+            </div>
+            
+            <div class="sample-data">
+                <pre>User: What's the weather like today?
+Bot: Currently sunny with a high of 28°C
+User: Should I bring an umbrella?
+Bot: No need, rain isn't expected today</pre>
+            </div>
+            
+            <a href="https://www.dropbox.com/scl/fi/mpce76i59cw787qt0zngt/train.csv?rlkey=dl486y31vfmov8xwx4ewcu22d&st=0jriewk5&dl=1" 
+               download class="btn btn-primary">
+                <i class="fas fa-cloud-download-alt"></i> Download Dataset
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Haradi Bots | All rights reserved.</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <i class="fas fa-robot"></i>
+                        <span>Haradi Bots</span>
+                    </a>
+                    <p class="footer-tagline">Building the future with AI and robotics</p>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="/privacy">Privacy</a>
+                    <a href="/terms">Terms</a>
+                    <a href="/contact">Contact</a>
+                    <a href="/about">About</a>
+                </div>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Haradi Bots. All rights reserved.
+            </div>
+        </div>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init();
-
+        // Initialize AOS animations
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-quad',
+            once: true
+        });
+        
+        // Mobile menu toggle
         function toggleMenu() {
             const nav = document.getElementById('navbar');
             nav.classList.toggle('active');
         }
-
-        function toggleOutput(button) {
-            const output = button.parentElement.nextElementSibling;
-            if (output.style.maxHeight && output.style.maxHeight !== '0px') {
-                output.style.maxHeight = '0px';
-            } else {
-                output.style.maxHeight = output.scrollHeight + 'px';
-            }
-        }
-
-        // Fetch username from Flask session
-        fetch('/user')
-            .then(response => response.json())
-            .then(data => {
-                if (data.name) {
-                    document.getElementById('username').innerText = data.name;
-                } else {
-                    document.getElementById('username').innerText = 'Guest';
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const nav = document.getElementById('navbar');
+                    nav.classList.remove('active');
                 }
-            })
-            .catch(() => {
-                document.getElementById('username').innerText = 'Guest';
             });
-
-        // Logout functionality
-        document.getElementById('logoutButton').onclick = async () => {
-            await fetch('/logout');
-            window.location.href = '/';
-        };
+        });
+        
+        // Add shadow to header on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.2)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+        
+        // Project card hover effect enhancement
+        const projectCards = document.querySelectorAll('.project-card');
+        projectCards.forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const angleX = (y - centerY) / 10;
+                const angleY = (centerX - x) / 10;
+                
+                this.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-10px)`;
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+        });
     </script>
-
 </body>
-
 </html>

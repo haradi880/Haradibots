@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Reinforcement Learning Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6e48aa;
+            --secondary-color: #9d50bb;
+            --accent-color: #ff8a65;
+            --bg-color: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --text-color: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --highlight: #ff8a65;
+            --success: #4caf50;
+            --danger: #f44336;
+            --info: #2196f3;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --border-radius: 15px;
+            --transition: all 0.3s ease;
+            --glass-blur: blur(12px);
+            --header-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .light-theme {
+            --primary-color: #5e35b1;
+            --secondary-color: #3949ab;
+            --accent-color: #ff7043;
+            --bg-color: #f5f5f5;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --text-color: #333333;
+            --text-muted: #666666;
+            --highlight: #ff7043;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --border: 1px solid rgba(0, 0, 0, 0.08);
+            --header-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(110, 72, 170, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(157, 80, 187, 0.08) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: var(--border);
+            position: relative;
+        }
+
+        .header-content {
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            color: var(--text-muted);
+            max-width: 700px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 30px;
+            padding: 0.3rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        .theme-toggle span {
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle .dark {
+            background: var(--header-gradient);
+            color: white;
+        }
+
+        .theme-toggle .light {
+            color: var(--text-color);
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: var(--glass-blur);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110, 72, 170, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        h2 i {
+            color: var(--accent-color);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1.2rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            height: 1.5rem;
+            width: 5px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+
+        li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: -1rem;
+        }
+
+        /* Highlight */
+        .highlight {
+            color: var(--highlight);
+            font-weight: 600;
+            background: rgba(255, 138, 101, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        /* Diagrams and Visuals */
+        .diagram {
+            width: 100%;
+            max-width: 800px;
+            margin: 2.5rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--header-gradient);
+        }
+
+        .graph-container {
+            height: 400px;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        /* Examples */
+        .example {
+            background: rgba(110, 72, 170, 0.08);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            position: relative;
+        }
+
+        .example::before {
+            content: '🛈';
+            position: absolute;
+            left: -0.8rem;
+            top: -0.8rem;
+            background: var(--primary-color);
+            color: white;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .example-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tables */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2.5rem 0;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1.2rem;
+            text-align: left;
+            border: var(--border);
+        }
+
+        .comparison-table th {
+            background: rgba(110, 72, 170, 0.3);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(110, 72, 170, 0.1);
+        }
+
+        /* Algorithm Cards */
+        .algorithm-card {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .algorithm-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .algorithm-header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1.2rem 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .algorithm-content {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border: var(--border);
+            border-top: none;
+        }
+
+        /* Formulas */
+        .formula {
+            font-family: 'Courier New', Courier, monospace;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .formula::before {
+            content: 'Formula';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 0 0 0 5px;
+            font-family: sans-serif;
+        }
+
+        /* Interactive Demo */
+        .interactive-demo {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin: 3rem 0;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-demo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            background: var(--header-gradient);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button.secondary {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        select, input {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: var(--border);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .slider-container label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            min-width: 100px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            flex-grow: 1;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .demo-visualization {
+            height: 350px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: var(--border);
+        }
+
+        .demo-visualization::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .agent {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 0 4px rgba(255, 138, 101, 0.3);
+            z-index: 2;
+        }
+
+        .agent::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .reward {
+            width: 20px;
+            height: 20px;
+            background: var(--success);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 15px var(--success);
+            animation: pulse 2s infinite;
+            z-index: 1;
+        }
+
+        .penalty {
+            width: 20px;
+            height: 20px;
+            background: var(--danger);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 15px var(--danger);
+            animation: pulse 2s infinite;
+            z-index: 1;
+        }
+
+        .wall {
+            background: rgba(255, 255, 255, 0.1);
+            position: absolute;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1;
+        }
+
+        .demo-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--header-gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 1rem;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.7rem;
+            top: 0.3rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: 3px solid var(--card-bg);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: var(--border);
+            opacity: 0.8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .card, .diagram, .interactive-demo {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .demo-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .slider-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card {
+                padding: 1.8rem;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--text-muted);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.8rem;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .tab.active {
+            color: var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin: 1.5rem 0;
+        }
+
+        .accordion-item {
+            border: var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1.2rem;
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .accordion-content {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            border-top: var(--border);
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 1.2rem;
+            max-height: 1000px;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-primary {
+            background: rgba(110, 72, 170, 0.2);
+            color: var(--primary-color);
+        }
+
+        .badge-secondary {
+            background: rgba(157, 80, 187, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .badge-accent {
+            background: rgba(255, 138, 101, 0.2);
+            color: var(--accent-color);
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> Reinforcement Learning</h1>
+                <p class="subtitle">Teaching machines to make optimal decisions through trial and error interactions with their environment</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+                <span class="dark"><i class="fas fa-moon"></i> Dark</span>
+                <span class="light"><i class="fas fa-sun"></i> Light</span>
+            </div>
+        </header>
+
+        <div class="card">
+            <h2><i class="fas fa-question-circle"></i> What is Reinforcement Learning?</h2>
+            <p>Reinforcement Learning (RL) is a <span class="highlight">machine learning paradigm</span> where an agent learns to make decisions by performing actions in an environment to maximize some notion of cumulative reward. Unlike supervised learning, RL doesn't require labeled input/output pairs, and unlike unsupervised learning, it focuses on maximizing rewards through interactions.</p>
+            
+            <div class="example">
+                <div class="example-title"><i class="fas fa-lightbulb"></i> Real-world Example</div>
+                <p>Consider training a dog to fetch: when it brings back the ball, you give it a treat (positive reward). When it doesn't, you might withhold the treat (negative reward). Over time, the dog learns which behaviors lead to rewards. Similarly, RL agents learn through this trial-and-error process with numerical rewards as feedback.</p>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="definition">Definition</div>
+                <div class="tab" data-tab="characteristics">Characteristics</div>
+                <div class="tab" data-tab="history">History</div>
+            </div>
+
+            <div class="tab-content active" id="definition">
+                <p>Formally, reinforcement learning is a framework for solving <span class="highlight">Markov Decision Processes (MDPs)</span> where:</p>
+                <ul>
+                    <li>An <strong>agent</strong> interacts with an <strong>environment</strong> over discrete time steps</li>
+                    <li>At each step, the agent receives a <strong>state</strong> and selects an <strong>action</strong></li>
+                    <li>The environment transitions to a new state and provides a <strong>reward</strong></li>
+                    <li>The agent's goal is to learn a <strong>policy</strong> that maximizes expected cumulative reward</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="characteristics">
+                <ul>
+                    <li><strong>Trial-and-error learning:</strong> The agent discovers which actions yield the most reward by trying them</li>
+                    <li><strong>Delayed reward:</strong> Actions may affect not just immediate rewards but also future situations</li>
+                    <li><strong>Trade-off between exploration and exploitation:</strong> The agent must balance trying new things vs. sticking with what works</li>
+                    <li><strong>Sequential decision making:</strong> Current actions affect future states and opportunities</li>
+                    <li><strong>No supervisor:</strong> Only a reward signal indicating "good" or "bad" events</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="history">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">1950s</div>
+                        <div class="timeline-title">Early Foundations</div>
+                        <p>Richard Bellman develops dynamic programming and the Bellman equation</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1980s</div>
+                        <div class="timeline-title">Temporal Difference Learning</div>
+                        <p>Sutton develops TD learning, combining Monte Carlo and DP ideas</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1992</div>
+                        <div class="timeline-title">Q-Learning</div>
+                        <p>Watkins introduces Q-learning, a model-free RL algorithm</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2013</div>
+                        <div class="timeline-title">Deep Q-Networks</div>
+                        <p>DeepMind combines Q-learning with deep neural networks</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2016</div>
+                        <div class="timeline-title">AlphaGo</div>
+                        <p>DeepMind's AlphaGo defeats world champion Lee Sedol using RL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-puzzle-piece"></i> Key Components of RL</h2>
+            
+            <div class="diagram">
+                <h3>Reinforcement Learning Framework</h3>
+                <div class="graph-container">
+                    <div class="graph-placeholder">
+                        <svg width="100%" height="100%" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Environment Box -->
+                            <rect x="300" y="50" width="200" height="200" rx="10" ry="10" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-dasharray="5,5"/>
+                            <text x="400" y="80" text-anchor="middle" fill="var(--primary-color)" font-size="16" font-weight="bold">Environment</text>
+                            
+                            <!-- Agent Box -->
+                            <rect x="50" y="100" width="150" height="100" rx="10" ry="10" fill="none" stroke="var(--secondary-color)" stroke-width="2"/>
+                            <text x="125" y="150" text-anchor="middle" fill="var(--secondary-color)" font-size="16" font-weight="bold">Agent</text>
+                            
+                            <!-- Arrows -->
+                            <path d="M 200 150 L 300 150" stroke="var(--accent-color)" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                            <text x="250" y="140" text-anchor="middle" fill="var(--accent-color)" font-size="14">Action (a)</text>
+                            
+                            <path d="M 500 150 L 600 150" stroke="var(--success)" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                            <text x="550" y="140" text-anchor="middle" fill="var(--success)" font-size="14">Reward (r)</text>
+                            
+                            <path d="M 500 180 L 600 180" stroke="var(--info)" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                            <text x="550" y="190" text-anchor="middle" fill="var(--info)" font-size="14">State (s)</text>
+                            
+                            <!-- Arrowhead marker definition -->
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="var(--accent-color)"/>
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>1. Agent</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The learner or decision-maker that interacts with the environment. The agent:</p>
+                        <ul>
+                            <li>Receives states from the environment</li>
+                            <li>Selects actions based on its policy</li>
+                            <li>Receives rewards as feedback</li>
+                            <li>Updates its policy to maximize future rewards</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>2. Environment</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The world in which the agent operates. The environment:</p>
+                        <ul>
+                            <li>Receives actions from the agent</li>
+                            <li>Transitions to new states</li>
+                            <li>Generates rewards based on state-action pairs</li>
+                            <li>May be fully or partially observable</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>3. State (s)</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>A representation of the current situation of the environment. States can be:</p>
+                        <ul>
+                            <li><strong>Fully observable:</strong> The agent sees the complete state (e.g., chess board)</li>
+                            <li><strong>Partially observable:</strong> The agent only sees part of the state (e.g., poker game)</li>
+                            <li><strong>Continuous:</strong> Infinite possible states (e.g., robot position)</li>
+                            <li><strong>Discrete:</strong> Finite set of states (e.g., board game positions)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>4. Action (a)</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>The set of possible moves the agent can make. Actions can be:</p>
+                        <ul>
+                            <li><strong>Discrete:</strong> Finite set of choices (e.g., left/right/up/down)</li>
+                            <li><strong>Continuous:</strong> Infinite possible actions (e.g., steering angle)</li>
+                            <li><strong>Deterministic:</strong> Same action always has same effect</li>
+                            <li><strong>Stochastic:</strong> Actions may have probabilistic outcomes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>5. Reward (r)</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Feedback from the environment indicating how good the action was. Key aspects:</p>
+                        <ul>
+                            <li><strong>Delayed:</strong> Rewards may come many steps after important actions</li>
+                            <li><strong>Sparse:</strong> Many states/actions may have zero reward</li>
+                            <li><strong>Credit assignment:</strong> Determining which actions led to rewards</li>
+                            <li><strong>Reward shaping:</strong> Designing rewards to guide learning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-balance-scale"></i> RL vs Other Machine Learning Paradigms</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Reinforcement Learning</th>
+                        <th>Supervised Learning</th>
+                        <th>Unsupervised Learning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Learning Signal</td>
+                        <td>Rewards/Penalties</td>
+                        <td>Labeled examples</td>
+                        <td>No labels</td>
+                    </tr>
+                    <tr>
+                        <td>Feedback</td>
+                        <td>Delayed, evaluative</td>
+                        <td>Immediate, instructive</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td>Goal</td>
+                        <td>Maximize cumulative reward</td>
+                        <td>Minimize prediction error</td>
+                        <td>Discover patterns</td>
+                    </tr>
+                    <tr>
+                        <td>Time Dimension</td>
+                        <td>Sequential decisions</td>
+                        <td>Independent data points</td>
+                        <td>Independent data points</td>
+                    </tr>
+                    <tr>
+                        <td>Data Requirements</td>
+                        <td>Interaction with environment</td>
+                        <td>Labeled datasets</td>
+                        <td>Unlabeled data</td>
+                    </tr>
+                    <tr>
+                        <td>Example Applications</td>
+                        <td>Game playing, robotics, recommendation systems</td>
+                        <td>Image classification, spam detection</td>
+                        <td>Clustering, dimensionality reduction</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Supervised Learning</span>
+                    <span>75%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Unsupervised Learning</span>
+                    <span>15%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 15%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Reinforcement Learning</span>
+                    <span>10%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            
+            <p><small><i class="fas fa-info-circle"></i> Approximate distribution of machine learning approaches in current applications</small></p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-project-diagram"></i> Types of Reinforcement Learning</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-robot"></i> Model-Based RL</div>
+                <div class="algorithm-content">
+                    <p>The agent learns a model of the environment (how states transition and rewards are generated) and uses this model to plan its actions.</p>
+                    <div class="formula">
+                        P(s'|s,a) = Probability of transitioning to state s' from state s after action a<br>
+                        R(s,a) = Expected reward for taking action a in state s
+                    </div>
+                    <p><strong class="highlight">Pros:</strong> More sample efficient, can plan ahead, better for safety-critical applications</p>
+                    <p><strong class="highlight">Cons:</strong> Model may be inaccurate, complex to implement, computational cost of planning</p>
+                    <p><strong class="highlight">Examples:</strong> Dyna-Q, Monte Carlo Tree Search (MCTS), Model Predictive Control</p>
+                    <div class="badges">
+                        <span class="badge badge-primary">Planning</span>
+                        <span class="badge badge-secondary">Simulation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-magic"></i> Model-Free RL</div>
+                <div class="algorithm-content">
+                    <p>The agent learns directly from experience without building a model of the environment.</p>
+                    <p><strong class="highlight">Pros:</strong> Simpler implementation, works when environment is complex or unknown</p>
+                    <p><strong class="highlight">Cons:</strong> Less sample efficient, may require many interactions</p>
+                    <p><strong class="highlight">Examples:</strong> Q-Learning, SARSA, Deep Q Networks (DQN), Policy Gradients</p>
+                    <div class="badges">
+                        <span class="badge badge-primary">Direct Learning</span>
+                        <span class="badge badge-accent">Experience</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chart-line"></i> Value-Based Methods</div>
+                <div class="algorithm-content">
+                    <p>The agent learns a value function that estimates how good each state or state-action pair is.</p>
+                    <div class="formula">
+                        V(s) = 𝔼[∑γᵗrₜ|s₀=s]  (State-value function)<br>
+                        Q(s,a) = 𝔼[∑γᵗrₜ|s₀=s,a₀=a]  (Action-value function)
+                    </div>
+                    <p><strong class="highlight">Pros:</strong> Stable learning, good convergence properties</p>
+                    <p><strong class="highlight">Cons:</strong> Limited to discrete actions, may be sample inefficient</p>
+                    <p><strong class="highlight">Examples:</strong> Q-Learning, Deep Q Networks (DQN), SARSA, Double DQN</p>
+                    <div class="badges">
+                        <span class="badge badge-primary">Value Function</span>
+                        <span class="badge badge-secondary">Bellman Equation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-sliders-h"></i> Policy-Based Methods</div>
+                <div class="algorithm-content">
+                    <p>The agent learns a policy directly, mapping states to actions, without estimating value functions.</p>
+                    <div class="formula">
+                        π(a|s) = Probability of taking action a in state s<br>
+                        J(θ) = 𝔼[∑γᵗrₜ]  (Policy objective function)
+                    </div>
+                    <p><strong class="highlight">Pros:</strong> Better for continuous actions, can learn stochastic policies</p>
+                    <p><strong class="highlight">Cons:</strong> High variance, may converge to local optima</p>
+                    <p><strong class="highlight">Examples:</strong> REINFORCE, Proximal Policy Optimization (PPO), Trust Region Policy Optimization (TRPO)</p>
+                    <div class="badges">
+                        <span class="badge badge-primary">Policy Gradient</span>
+                        <span class="badge badge-accent">Direct Optimization</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-users"></i> Actor-Critic Methods</div>
+                <div class="algorithm-content">
+                    <p>Combines value-based and policy-based approaches, with an actor (policy) and a critic (value function).</p>
+                    <div class="formula">
+                        Actor: π(a|s) (Policy)<br>
+                        Critic: V(s) or Q(s,a) (Value function)<br>
+                        Update both using TD errors: δ = r + γV(s') - V(s)
+                    </div>
+                    <p><strong class="highlight">Pros:</strong> Combines strengths of both approaches, lower variance than pure policy gradients</p>
+                    <p><strong class="highlight">Cons:</strong> More complex, two function approximators to tune</p>
+                    <p><strong class="highlight">Examples:</strong> A2C, A3C, Soft Actor-Critic (SAC), TD3</p>
+                    <div class="badges">
+                        <span class="badge badge-primary">Hybrid</span>
+                        <span class="badge badge-secondary">Stable</span>
+                        <span class="badge badge-accent">Efficient</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-key"></i> Key Concepts in RL</h2>
+            
+            <h3>Exploration vs Exploitation</h3>
+            <p>The fundamental trade-off in RL between:</p>
+            <ul>
+                <li><strong class="highlight">Exploration:</strong> Trying new actions to discover their effects (e.g., ε-greedy, Boltzmann exploration)</li>
+                <li><strong class="highlight">Exploitation:</strong> Using known actions that yield good rewards (e.g., greedy policy)</li>
+            </ul>
+            
+            <div class="example">
+                <div class="example-title"><i class="fas fa-seedling"></i> Exploration Strategies</div>
+                <p><strong>ε-greedy:</strong> With probability ε, take a random action; otherwise take the best-known action.</p>
+                <p><strong>Boltzmann/Softmax:</strong> Select actions with probability proportional to their estimated values.</p>
+                <p><strong>Optimism in the face of uncertainty:</strong> Prefer actions with uncertain outcomes.</p>
+                <p><strong>Thompson sampling:</strong> Sample from posterior distribution of action values.</p>
+            </div>
+            
+            <h3>Discount Factor (γ)</h3>
+            <p>Determines how much the agent cares about future rewards compared to immediate rewards (between 0 and 1).</p>
+            <div class="formula">
+                Gₜ = rₜ + γrₜ₊₁ + γ²rₜ₊₂ + ... = ∑ₖ γᵏrₜ₊ₖ
+            </div>
+            <ul>
+                <li><strong>γ ≈ 0:</strong> "Myopic" agent that only cares about immediate rewards</li>
+                <li><strong>γ ≈ 1:</strong> "Far-sighted" agent that considers future rewards strongly</li>
+                <li><strong>γ = 1:</strong> Only valid for episodic tasks with finite returns</li>
+            </ul>
+            
+            <h3>Markov Decision Process (MDP)</h3>
+            <p>A mathematical framework for modeling decision making defined by:</p>
+            <div class="formula">
+                MDP = (S, A, P, R, γ)<br>
+                S: Set of states<br>
+                A: Set of actions<br>
+                P: Transition probabilities P(s'|s,a)<br>
+                R: Reward function R(s,a,s')<br>
+                γ: Discount factor
+            </div>
+            <p>The <span class="tooltip">Markov property<span class="tooltiptext">The future depends only on the current state, not the history</span></span> means the future depends only on the current state, not the history:</p>
+            <div class="formula">
+                P(sₜ₊₁|sₜ,aₜ) = P(sₜ₊₁|s₀,a₀,...,sₜ,aₜ)
+            </div>
+            
+            <h3>Bellman Equation</h3>
+            <p>Fundamental equation in RL that decomposes the value function into immediate reward plus discounted future value.</p>
+            <div class="formula">
+                V(s) = maxₐ [R(s,a) + γΣₛ' P(s'|s,a)V(s')]  (Optimal value function)<br>
+                Q(s,a) = R(s,a) + γΣₛ' P(s'|s,a)maxₐ' Q(s',a')  (Optimal Q-function)
+            </div>
+            <p>The Bellman equation is the basis for many RL algorithms through <span class="tooltip">dynamic programming<span class="tooltiptext">Breaking problems into smaller subproblems and solving them recursively</span></span> and <span class="tooltip">temporal difference learning<span class="tooltiptext">Updating estimates based on other learned estimates</span></span>.</p>
+        </div>
+
+        <div class="interactive-demo">
+            <h2><i class="fas fa-gamepad"></i> Interactive RL Demo</h2>
+            <p>Experiment with a simple reinforcement learning scenario where an agent learns to navigate to rewards while avoiding penalties.</p>
+            
+            <div class="demo-controls">
+                <button id="startDemo"><i class="fas fa-play"></i> Start Learning</button>
+                <button id="resetDemo" class="secondary"><i class="fas fa-redo"></i> Reset</button>
+                <div class="slider-container">
+                    <label for="algorithmSelect"><i class="fas fa-code-branch"></i> Algorithm:</label>
+                    <select id="algorithmSelect">
+                        <option value="qlearning">Q-Learning</option>
+                        <option value="sarsa">SARSA</option>
+                        <option value="dqn">Deep Q-Network</option>
+                        <option value="policygradient">Policy Gradient</option>
+                    </select>
+                </div>
+                <div class="slider-container">
+                    <label for="learningRate"><i class="fas fa-tachometer-alt"></i> Learning Rate (α):</label>
+                    <input type="range" id="learningRate" min="0" max="1" step="0.01" value="0.5">
+                    <span id="learningRateValue">0.5</span>
+                </div>
+                <div class="slider-container">
+                    <label for="discountFactor"><i class="fas fa-percentage"></i> Discount (γ):</label>
+                    <input type="range" id="discountFactor" min="0" max="0.99" step="0.01" value="0.9">
+                    <span id="discountFactorValue">0.9</span>
+                </div>
+                <div class="slider-container">
+                    <label for="explorationRate"><i class="fas fa-binoculars"></i> Exploration (ε):</label>
+                    <input type="range" id="explorationRate" min="0" max="1" step="0.05" value="0.2">
+                    <span id="explorationRateValue">0.2</span>
+                </div>
+            </div>
+            
+            <div class="demo-visualization" id="demoVisualization">
+                <div class="agent" id="agent"></div>
+                <div class="reward" style="top: 50px; left: 200px;"></div>
+                <div class="reward" style="top: 250px; left: 400px;"></div>
+                <div class="penalty" style="top: 150px; left: 300px;"></div>
+                <div class="penalty" style="top: 300px; left: 100px;"></div>
+                <div class="wall" style="top: 100px; left: 200px; width: 200px; height: 20px;"></div>
+                <div class="wall" style="top: 200px; left: 400px; width: 20px; height: 100px;"></div>
+                <p id="demoMessage">Click "Start Learning" to begin the simulation</p>
+            </div>
+            
+            <div class="demo-stats">
+                <div class="stat-card">
+                    <h4><i class="fas fa-history"></i> Episode</h4>
+                    <p id="episodeCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-shoe-prints"></i> Steps</h4>
+                    <p id="stepCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-coins"></i> Total Reward</h4>
+                    <p id="totalReward">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-bolt"></i> Avg Reward</h4>
+                    <p id="avgReward">0</p>
+                </div>
+            </div>
+            
+            <div id="qTableContainer" style="margin-top: 1.5rem; overflow-x: auto;">
+                <h4><i class="fas fa-table"></i> Q-Table (Partial View)</h4>
+                <div id="qTable" style="font-family: monospace; font-size: 0.8rem; background: var(--card-bg); padding: 0.8rem; border-radius: 5px; border: var(--border);">
+                    Q-values will appear here during learning...
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-rocket"></i> Applications of Reinforcement Learning</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chess"></i> Game Playing</div>
+                <div class="algorithm-content">
+                    <p>RL has achieved superhuman performance in complex games:</p>
+                    <ul>
+                        <li><strong>AlphaGo/AlphaZero:</strong> Defeated world champions in Go, Chess, and Shogi</li>
+                        <li><strong>Atari Games:</strong> DQN learned to play many Atari games from pixels</li>
+                        <li><strong>StarCraft II:</strong> AlphaStar reached Grandmaster level</li>
+                        <li><strong>Poker:</strong> Libratus and Pluribus defeated top human players</li>
+                    </ul>
+                    <p>Games provide ideal testbeds with clear rules and objectives.</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-robot"></i> Robotics</div>
+                <div class="algorithm-content">
+                    <p>Teaching robots complex behaviors through trial and error:</p>
+                    <ul>
+                        <li><strong>Locomotion:</strong> Walking, running, and climbing</li>
+                        <li><strong>Manipulation:</strong> Grasping objects, assembly tasks</li>
+                        <li><strong>Navigation:</strong> Moving through complex environments</li>
+                        <li><strong>Sim-to-Real:</strong> Training in simulation then transferring to real robots</li>
+                    </ul>
+                    <p>RL enables robots to adapt to new situations without explicit programming.</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-car"></i> Autonomous Systems</div>
+                <div class="algorithm-content">
+                    <p>Decision making for autonomous vehicles and drones:</p>
+                    <ul>
+                        <li><strong>Self-driving cars:</strong> Lane changing, intersection navigation</li>
+                        <li><strong>Drone racing:</strong> High-speed navigation through courses</li>
+                        <li><strong>Traffic control:</strong> Optimizing traffic light timing</li>
+                        <li><strong>Logistics:</strong> Warehouse automation and routing</li>
+                    </ul>
+                    <p>RL can handle complex, dynamic environments better than rule-based systems.</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-shopping-cart"></i> Recommendation Systems</div>
+                <div class="algorithm-content">
+                    <p>Personalized recommendations that adapt to user feedback:</p>
+                    <ul>
+                        <li><strong>Content recommendation:</strong> Videos, news, products</li>
+                        <li><strong>Ad placement:</strong> Optimizing ad selection and timing</li>
+                        <li><strong>Playlist generation:</strong> Music and video playlists</li>
+                        <li><strong>Dynamic pricing:</strong> Adjusting prices based on demand</li>
+                    </ul>
+                    <p>RL models user preferences over time for better engagement.</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chart-line"></i> Finance</div>
+                <div class="algorithm-content">
+                    <p>Applications in trading and portfolio management:</p>
+                    <ul>
+                        <li><strong>Algorithmic trading:</strong> Learning optimal trading strategies</li>
+                        <li><strong>Portfolio optimization:</strong> Asset allocation over time</li>
+                        <li><strong>Fraud detection:</strong> Adaptive systems for spotting fraud</li>
+                        <li><strong>Option pricing:</strong> Learning optimal exercise policies</li>
+                    </ul>
+                    <p>RL can adapt to changing market conditions better than static models.</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-medkit"></i> Healthcare</div>
+                <div class="algorithm-content">
+                    <p>Personalized treatment and medical decision making:</p>
+                    <ul>
+                        <li><strong>Treatment plans:</strong> Optimizing drug dosing over time</li>
+                        <li><strong>Medical imaging:</strong> Adaptive scan protocols</li>
+                        <li><strong>Robot-assisted surgery:</strong> Learning surgical techniques</li>
+                        <li><strong>Mental health:</strong> Adaptive therapy chatbots</li>
+                    </ul>
+                    <p>RL can personalize treatments based on patient responses.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-exclamation-triangle"></i> Challenges in Reinforcement Learning</h2>
+            
+            <h3>1. Sample Efficiency</h3>
+            <p>RL often requires many interactions with the environment to learn good policies, making it impractical for real-world applications with costly interactions.</p>
+            <p><strong>Solutions:</strong> Model-based RL, imitation learning, transfer learning, better exploration strategies</p>
+            
+            <h3>2. Credit Assignment</h3>
+            <p>Determining which actions led to rewards when feedback is delayed over long sequences of actions.</p>
+            <p><strong>Solutions:</strong> Temporal difference learning, eligibility traces, reward shaping</p>
+            
+            <h3>3. Exploration</h3>
+            <p>Finding the right balance between exploring new actions and exploiting known good actions, especially in sparse reward settings.</p>
+            <p><strong>Solutions:</strong> Intrinsic motivation, curiosity-driven exploration, hierarchical RL</p>
+            
+            <h3>4. Generalization</h3>
+            <p>Applying learned policies to new, unseen situations beyond the training environment.</p>
+            <p><strong>Solutions:</strong> Domain randomization, meta-learning, representation learning</p>
+            
+            <h3>5. Safety</h3>
+            <p>Ensuring the agent doesn't learn harmful behaviors while exploring, especially in real-world applications.</p>
+            <p><strong>Solutions:</strong> Constrained RL, safe exploration, human-in-the-loop training</p>
+            
+            <h3>6. Reward Design</h3>
+            <p>Creating reward functions that lead to desired behaviors without unintended consequences or reward hacking.</p>
+            <p><strong>Solutions:</strong> Inverse RL, preference learning, multi-objective RL</p>
+            
+            <h3>7. Reproducibility</h3>
+            <p>RL results can be highly sensitive to hyperparameters and random seeds, making reproduction difficult.</p>
+            <p><strong>Solutions:</strong> Better benchmarking, standardized environments, reporting practices</p>
+            
+            <h3>8. Scaling</h3>
+            <p>Applying RL to problems with high-dimensional state and action spaces remains challenging.</p>
+            <p><strong>Solutions:</strong> Better function approximators, hierarchical approaches, curriculum learning</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-graduation-cap"></i> Learning Resources</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-book"></i> Books</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>Reinforcement Learning: An Introduction</strong> by Sutton and Barto (the RL bible)</li>
+                        <li><strong>Deep Reinforcement Learning</strong> by Graesser and Keng</li>
+                        <li><strong>Algorithms for Reinforcement Learning</strong> by Szepesvári</li>
+                        <li><strong>Reinforcement Learning: State-of-the-Art</strong> by Wiering and van Otterlo</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-video"></i> Courses</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>David Silver's RL Course</strong> (DeepMind/UCL)</li>
+                        <li><strong>Berkeley CS 285</strong> (Deep Reinforcement Learning)</li>
+                        <li><strong>Stanford CS 234</strong> (Reinforcement Learning)</li>
+                        <li><strong>Udacity Deep RL Nanodegree</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-laptop-code"></i> Frameworks</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>OpenAI Gym</strong>: Standardized environments for RL</li>
+                        <li><strong>Stable Baselines3</strong>: Reliable implementations of RL algorithms</li>
+                        <li><strong>Ray RLlib</strong>: Scalable RL for production</li>
+                        <li><strong>TensorFlow Agents</strong>: RL with TensorFlow</li>
+                        <li><strong>PyTorch RL</strong>: RL with PyTorch</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>Reinforcement Learning Guide</h3>
+            <p>An interactive introduction to the fascinating world of reinforcement learning</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p>© 2023 RL Guide | Created with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for AI enthusiasts</p>
+            <p><small>This content is for educational purposes only</small></p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            
+            // Save preference to localStorage
+            const isLight = body.classList.contains('light-theme');
+            localStorage.setItem('themePreference', isLight ? 'light' : 'dark');
+            
+            // Update icon
+            const moonIcon = themeToggle.querySelector('.fa-moon');
+            const sunIcon = themeToggle.querySelector('.fa-sun');
+            if (isLight) {
+                moonIcon.classList.remove('fa-moon');
+                moonIcon.classList.add('fa-sun');
+                sunIcon.classList.remove('fa-sun');
+                sunIcon.classList.add('fa-moon');
+            } else {
+                moonIcon.classList.remove('fa-sun');
+                moonIcon.classList.add('fa-moon');
+                sunIcon.classList.remove('fa-moon');
+                sunIcon.classList.add('fa-sun');
+            }
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('themePreference');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            const moonIcon = themeToggle.querySelector('.fa-moon');
+            const sunIcon = themeToggle.querySelector('.fa-sun');
+            moonIcon.classList.remove('fa-moon');
+            moonIcon.classList.add('fa-sun');
+            sunIcon.classList.remove('fa-sun');
+            sunIcon.classList.add('fa-moon');
+        }
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.accordion-header i').classList.remove('fa-chevron-up');
+                    i.querySelector('.accordion-header i').classList.add('fa-chevron-down');
+                });
+                
+                // Open clicked item if it was closed
+                if (!isActive) {
+                    item.classList.add('active');
+                    header.querySelector('i').classList.remove('fa-chevron-down');
+                    header.querySelector('i').classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Demo functionality
+        const startDemoBtn = document.getElementById('startDemo');
+        const resetDemoBtn = document.getElementById('resetDemo');
+        const agent = document.getElementById('agent');
+        const demoMessage = document.getElementById('demoMessage');
+        const learningRateInput = document.getElementById('learningRate');
+        const discountFactorInput = document.getElementById('discountFactor');
+        const explorationRateInput = document.getElementById('explorationRate');
+        const learningRateValue = document.getElementById('learningRateValue');
+        const discountFactorValue = document.getElementById('discountFactorValue');
+        const explorationRateValue = document.getElementById('explorationRateValue');
+        const episodeCount = document.getElementById('episodeCount');
+        const stepCount = document.getElementById('stepCount');
+        const totalReward = document.getElementById('totalReward');
+        const avgReward = document.getElementById('avgReward');
+        const qTable = document.getElementById('qTable');
+        
+        // Update slider values
+        learningRateInput.addEventListener('input', () => {
+            learningRateValue.textContent = learningRateInput.value;
+        });
+        
+        discountFactorInput.addEventListener('input', () => {
+            discountFactorValue.textContent = discountFactorInput.value;
+        });
+        
+        explorationRateInput.addEventListener('input', () => {
+            explorationRateValue.textContent = explorationRateInput.value;
+        });
+        
+        // Simple demo animation with Q-learning simulation
+        let demoInterval;
+        let currentEpisode = 0;
+        let currentStep = 0;
+        let currentReward = 0;
+        let totalRewardSum = 0;
+        let qValues = {};
+        let visitedStates = new Set();
+        
+        // Initialize Q-values for demo
+        function initializeQValues() {
+            const gridSize = 10;
+            const actions = ['up', 'down', 'left', 'right'];
+            
+            for (let x = 0; x < gridSize; x++) {
+                for (let y = 0; y < gridSize; y++) {
+                    const state = `${x},${y}`;
+                    qValues[state] = {};
+                    actions.forEach(action => {
+                        qValues[state][action] = 0;
+                    });
+                }
+            }
+        }
+        
+        // Update Q-table display
+        function updateQTableDisplay() {
+            if (visitedStates.size === 0) return;
+            
+            let tableHTML = '<table style="width: 100%; border-collapse: collapse;">';
+            tableHTML += '<tr><th>State</th><th>Up</th><th>Down</th><th>Left</th><th>Right</th></tr>';
+            
+            // Show a few sample states
+            const sampleStates = Array.from(visitedStates).slice(0, 5);
+            
+            sampleStates.forEach(state => {
+                tableHTML += `<tr><td>${state}</td>`;
+                ['up', 'down', 'left', 'right'].forEach(action => {
+                    const value = qValues[state]?.[action]?.toFixed(2) || '0.00';
+                    tableHTML += `<td>${value}</td>`;
+                });
+                tableHTML += '</tr>';
+            });
+            
+            tableHTML += '</table>';
+            qTable.innerHTML = tableHTML;
+        }
+        
+        // Get current grid position
+        function getGridPosition() {
+            const top = parseInt(agent.style.top || '10');
+            const left = parseInt(agent.style.left || '10');
+            const gridX = Math.min(9, Math.floor(left / 60));
+            const gridY = Math.min(9, Math.floor(top / 30));
+            return `${gridX},${gridY}`;
+        }
+        
+        // Choose action based on Q-values and exploration rate
+        function chooseAction(state) {
+            const epsilon = parseFloat(explorationRateInput.value);
+            
+            if (Math.random() < epsilon) {
+                // Explore: random action
+                const actions = ['up', 'down', 'left', 'right'];
+                return actions[Math.floor(Math.random() * actions.length)];
+            } else {
+                // Exploit: best known action
+                let maxValue = -Infinity;
+                let bestAction = 'right';
+                
+                for (const action in qValues[state]) {
+                    if (qValues[state][action] > maxValue) {
+                        maxValue = qValues[state][action];
+                        bestAction = action;
+                    }
+                }
+                
+                return bestAction;
+            }
+        }
+        
+        // Perform Q-learning update
+        function updateQValue(state, action, reward, nextState) {
+            const alpha = parseFloat(learningRateInput.value);
+            const gamma = parseFloat(discountFactorInput.value);
+            
+            // Find maximum Q-value for next state
+            let maxNextQ = -Infinity;
+            for (const a in qValues[nextState]) {
+                if (qValues[nextState][a] > maxNextQ) {
+                    maxNextQ = qValues[nextState][a];
+                }
+            }
+            
+            // Q-learning update
+            qValues[state][action] = (1 - alpha) * qValues[state][action] + 
+                                     alpha * (reward + gamma * maxNextQ);
+        }
+        
+        // Get reward for position
+        function getReward(top, left) {
+            // Check rewards
+            const rewards = document.querySelectorAll('.reward');
+            for (const reward of rewards) {
+                const rewardTop = parseInt(reward.style.top);
+                const rewardLeft = parseInt(reward.style.left);
+                if (Math.abs(top - rewardTop) < 20 && Math.abs(left - rewardLeft) < 20) {
+                    return 10; // Positive reward
+                }
+            }
+            
+            // Check penalties
+            const penalties = document.querySelectorAll('.penalty');
+            for (const penalty of penalties) {
+                const penaltyTop = parseInt(penalty.style.top);
+                const penaltyLeft = parseInt(penalty.style.left);
+                if (Math.abs(top - penaltyTop) < 20 && Math.abs(left - penaltyLeft) < 20) {
+                    return -5; // Negative reward
+                }
+            }
+            
+            // Small negative reward for time step
+            return -0.1;
+        }
+        
+        // Check wall collision
+        function checkWallCollision(newTop, newLeft) {
+            const walls = document.querySelectorAll('.wall');
+            for (const wall of walls) {
+                const wallTop = parseInt(wall.style.top);
+                const wallLeft = parseInt(wall.style.left);
+                const wallWidth = parseInt(wall.style.width);
+                const wallHeight = parseInt(wall.style.height);
+                
+                if (newLeft + 20 > wallLeft && 
+                    newLeft < wallLeft + wallWidth && 
+                    newTop + 20 > wallTop && 
+                    newTop < wallTop + wallHeight) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        startDemoBtn.addEventListener('click', () => {
+            if (demoInterval) clearInterval(demoInterval);
+            
+            // Initialize Q-values if first episode
+            if (currentEpisode === 0) {
+                initializeQValues();
+            }
+            
+            // Reset agent position
+            agent.style.top = '10px';
+            agent.style.left = '10px';
+            
+            currentEpisode++;
+            currentStep = 0;
+            currentReward = 0;
+            
+            episodeCount.textContent = currentEpisode;
+            stepCount.textContent = currentStep;
+            totalReward.textContent = currentReward;
+            demoMessage.textContent = "Learning in progress...";
+            
+            demoInterval = setInterval(() => {
+                currentStep++;
+                stepCount.textContent = currentStep;
+                
+                // Get current state
+                const currentState = getGridPosition();
+                visitedStates.add(currentState);
+                
+                // Choose action
+                const action = chooseAction(currentState);
+                
+                // Move agent based on action
+                let newTop = parseInt(agent.style.top || '10');
+                let newLeft = parseInt(agent.style.left || '10');
+                
+                switch(action) {
+                    case 'up': newTop = Math.max(10, newTop - 20); break;
+                    case 'down': newTop = Math.min(330, newTop + 20); break;
+                    case 'left': newLeft = Math.max(10, newLeft - 20); break;
+                    case 'right': newLeft = Math.min(570, newLeft + 20); break;
+                }
+                
+                // Check for wall collision
+                if (checkWallCollision(newTop, newLeft)) {
+                    // Undo movement if wall collision
+                    switch(action) {
+                        case 'up': newTop += 20; break;
+                        case 'down': newTop -= 20; break;
+                        case 'left': newLeft += 20; break;
+                        case 'right': newLeft -= 20; break;
+                    }
+                }
+                
+                agent.style.top = newTop + 'px';
+                agent.style.left = newLeft + 'px';
+                
+                // Get reward
+                const reward = getReward(newTop, newLeft);
+                currentReward += reward;
+                totalReward.textContent = currentReward.toFixed(1);
+                
+                // Get new state
+                const newState = getGridPosition();
+                
+                // Update Q-value
+                updateQValue(currentState, action, reward, newState);
+                
+                // Update Q-table display every 5 steps
+                if (currentStep % 5 === 0) {
+                    updateQTableDisplay();
+                }
+                
+                // End episode after 50 steps or if agent gets stuck
+                if (currentStep >= 50 || (currentStep > 10 && currentReward < -20)) {
+                    clearInterval(demoInterval);
+                    totalRewardSum += currentReward;
+                    avgReward.textContent = (totalRewardSum / currentEpisode).toFixed(1);
+                    demoMessage.textContent = `Episode ${currentEpisode} complete. Total reward: ${currentReward.toFixed(1)}`;
+                    updateQTableDisplay();
+                }
+            }, 300);
+        });
+        
+        resetDemoBtn.addEventListener('click', () => {
+            clearInterval(demoInterval);
+            agent.style.top = '10px';
+            agent.style.left = '10px';
+            currentEpisode = 0;
+            currentStep = 0;
+            currentReward = 0;
+            totalRewardSum = 0;
+            visitedStates = new Set();
+            episodeCount.textContent = currentEpisode;
+            stepCount.textContent = currentStep;
+            totalReward.textContent = currentReward;
+            avgReward.textContent = '0';
+            demoMessage.textContent = "Click \"Start Learning\" to begin the simulation";
+            qTable.innerHTML = "Q-values will appear here during learning...";
+        });
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                const opacity = Math.random() * 0.3 + 0.1;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = opacity;
+                particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                // Random animation
+                const keyframes = `
+                    @keyframes float {
+                        0% { transform: translate(0, 0); }
+                        25% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        50% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        75% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        100% { transform: translate(0, 0); }
+                    }
+                `;
+                
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document.head.appendChild(style);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize particles
+        createParticles();
+    </script>
+</body>
+</html>

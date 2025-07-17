@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Deep Learning Tutorial</title>
+    <style>
+        :root {
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #f0f0f0;
+            --glass: rgba(20, 20, 30, 0.85);
+            --glow: 0 0 20px rgba(110, 72, 170, 0.6);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        @font-face {
+            font-family: 'Inter';
+            src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        }
+        
+        body {
+            background: radial-gradient(circle at 10% 20%, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        
+        ::selection {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            animation: fadeIn 1.5s ease-out;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.5rem;
+            text-shadow: var(--glow);
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+        }
+        
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+            animation: slideUp 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(110,72,170,0.1) 0%, rgba(110,72,170,0) 70%);
+            transform: rotate(30deg);
+            z-index: -1;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(157, 80, 187, 0.3);
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 4px;
+        }
+        
+        p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+        
+        .concept-card {
+            background: var(--glass);
+            border-radius: 18px;
+            padding: 2rem;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            animation: fadeIn 1s ease-out;
+            animation-fill-mode: backwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .concept-card:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .concept-card:nth-child(1) { animation-delay: 0.1s; }
+        .concept-card:nth-child(2) { animation-delay: 0.2s; }
+        .concept-card:nth-child(3) { animation-delay: 0.3s; }
+        .concept-card:nth-child(4) { animation-delay: 0.4s; }
+        .concept-card:nth-child(5) { animation-delay: 0.5s; }
+        .concept-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        .concept-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--glow);
+            border-color: rgba(157, 80, 187, 0.3);
+        }
+        
+        .concept-card h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .concept-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            opacity: 0.8;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(110, 72, 170, 0.3);
+            font-size: 1.1rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(110, 72, 170, 0.5);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            color: white;
+        }
+        
+        .neural-network {
+            width: 100%;
+            height: 400px;
+            margin: 3rem 0;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(10, 10, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .neuron {
+            position: absolute;
+            width: 36px;
+            height: 36px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--secondary);
+            animation: pulse 2s infinite;
+            z-index: 2;
+            transition: all 0.3s ease;
+            cursor: grab;
+        }
+        
+        .neuron:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 25px var(--secondary);
+        }
+        
+        .neuron:active {
+            cursor: grabbing;
+        }
+        
+        .connection {
+            position: absolute;
+            background: linear-gradient(to right, rgba(157, 80, 187, 0.3), rgba(71, 118, 230, 0.3));
+            transform-origin: left center;
+            z-index: 1;
+        }
+        
+        .demo-container {
+            display: flex;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-card {
+            flex: 1;
+            min-width: 300px;
+            background: var(--glass);
+            border-radius: 18px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: var(--transition);
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+        
+        .demo-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .demo-visual {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 6rem;
+            padding: 3rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: transparent;
+            color: var(--light);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: rgba(110, 72, 170, 0.2);
+            color: var(--secondary);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .math-formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 3px solid var(--primary);
+        }
+        
+        canvas {
+            display: block;
+            background: var(--dark);
+            border-radius: 10px;
+        }
+        
+        .demo-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border-radius: 5px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .demo-controls select, .demo-controls button {
+            background: var(--dark);
+            color: var(--light);
+            border: 1px solid var(--primary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .demo-controls button {
+            background: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .demo-controls button:hover {
+            background: var(--accent);
+        }
+        
+        .slider-container {
+            margin: 1rem 0;
+        }
+        
+        .slider-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .slider-container input[type="range"] {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 15px var(--secondary); }
+            50% { transform: scale(1.1); box-shadow: 0 0 25px var(--secondary); }
+            100% { transform: scale(1); box-shadow: 0 0 15px var(--secondary); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Deep Learning</h1>
+            <p class="subtitle">Explore neural networks through interactive visualizations and hands-on demonstrations</p>
+            <div class="tabs">
+                <button class="tab active" onclick="openTab(event, 'overview')">Overview</button>
+                <button class="tab" onclick="openTab(event, 'demos')">Demos</button>
+                <button class="tab" onclick="openTab(event, 'concepts')">Concepts</button>
+                <button class="tab" onclick="openTab(event, 'resources')">Resources</button>
+            </div>
+        </header>
+        
+        <div id="overview" class="tab-content active">
+            <div class="card">
+                <h2>Understanding Neural Networks</h2>
+                <p>Neural networks are computing systems inspired by biological neural networks. They consist of interconnected nodes (neurons) that process information using dynamic state responses to external inputs.</p>
+                
+                <div class="math-formula">
+                    <h4>Neuron Activation</h4>
+                    <p>a = σ(w·x + b)</p>
+                    <p>Where σ is the activation function, w are weights, x are inputs, and b is bias</p>
+                </div>
+                
+                <p>Drag the neurons in the visualization below to explore how connections change. Click the "Fire Neuron" button to see activation propagation.</p>
+                <button class="btn" onclick="fireNetwork()">Fire Network</button>
+            </div>
+            
+            <div class="neural-network" id="network-visualization">
+                <!-- Neural network visualization will be added with JavaScript -->
+            </div>
+            
+            <div class="card">
+                <h2>How Deep Learning Works</h2>
+                <p>Deep learning models learn by adjusting weights to minimize the difference between predicted and actual outputs through backpropagation:</p>
+                
+                <div class="math-formula">
+                    <h4>Backpropagation</h4>
+                    <p>∂L/∂w = ∂L/∂a · ∂a/∂z · ∂z/∂w</p>
+                    <p>Where L is loss, a is activation, z is weighted input, w is weight</p>
+                </div>
+                
+                <p>This process allows neural networks to automatically learn hierarchical representations from data, with deeper layers learning more abstract features.</p>
+            </div>
+        </div>
+        
+        <div id="demos" class="tab-content">
+            <div class="card">
+                <h2>Interactive Demonstrations</h2>
+                <p>Explore these working demonstrations of key deep learning concepts. Adjust parameters to see how they affect model behavior.</p>
+                
+                <div class="demo-container">
+                    <div class="demo-card">
+                        <h3>Gradient Descent</h3>
+                        <p>Visualize how optimization algorithms navigate loss landscapes to find optimal parameters.</p>
+                        <div class="demo-visual" id="gradient-demo">
+                            <!-- Will be filled by JS -->
+                        </div>
+                        <div class="slider-container">
+                            <label for="learning-rate">Learning Rate: <span id="lr-value">0.1</span></label>
+                            <input type="range" id="learning-rate" min="0.01" max="1" step="0.01" value="0.1" oninput="updateLearningRate()">
+                        </div>
+                        <div class="slider-container">
+                            <label for="optimizer">Optimizer:</label>
+                            <select id="optimizer" onchange="resetGradientDemo()">
+                                <option value="sgd">SGD</option>
+                                <option value="momentum">Momentum</option>
+                                <option value="adam">Adam</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="resetGradientDemo()">Reset Demo</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>Activation Functions</h3>
+                        <p>Compare different activation functions used in neural networks.</p>
+                        <div class="demo-visual" id="activation-demo">
+                            <!-- Will be filled by JS -->
+                        </div>
+                        <div class="slider-container">
+                            <label for="activation-function">Function:</label>
+                            <select id="activation-function" onchange="updateActivationDemo()">
+                                <option value="sigmoid">Sigmoid</option>
+                                <option value="relu">ReLU</option>
+                                <option value="tanh">Tanh</option>
+                                <option value="leaky-relu">Leaky ReLU</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="updateActivationDemo()">Update</button>
+                    </div>
+                </div>
+                
+                <div class="demo-container">
+                    <div class="demo-card">
+                        <h3>CNN Feature Visualization</h3>
+                        <p>See how convolutional layers extract features from images.</p>
+                        <div class="demo-visual" id="cnn-demo">
+                            <!-- Will be filled by JS -->
+                        </div>
+                        <div class="slider-container">
+                            <label for="cnn-layer">Layer: <span id="layer-value">1</span></label>
+                            <input type="range" id="cnn-layer" min="1" max="3" step="1" value="1" oninput="updateCNNDemo()">
+                        </div>
+                        <button class="btn" onclick="nextCNNImage()">Next Image</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>Neural Network Playground</h3>
+                        <p>Build and train a simple neural network in real-time.</p>
+                        <div class="demo-visual" id="playground-demo">
+                            <!-- Will be filled by JS -->
+                        </div>
+                        <div class="slider-container">
+                            <label for="nn-layers">Hidden Layers: <span id="layers-value">1</span></label>
+                            <input type="range" id="nn-layers" min="1" max="3" step="1" value="1" oninput="updatePlayground()">
+                        </div>
+                        <button class="btn" onclick="trainNetwork()">Train Network</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="concepts" class="tab-content">
+            <div class="card">
+                <h2>Core Concepts</h2>
+                <p>Master these fundamental deep learning concepts through interactive explanations.</p>
+                
+                <div class="grid">
+                    <div class="concept-card">
+                        <div class="icon">🧠</div>
+                        <h3>Neural Network Basics</h3>
+                        <p>Understand neurons, layers, weights, biases, and activation functions that form the building blocks of neural networks.</p>
+                        <button class="btn-outline" onclick="showConceptDemo('neural-basics')">View Demo</button>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="icon">📊</div>
+                        <h3>Loss Functions</h3>
+                        <p>Explore how different loss functions measure prediction error and guide learning.</p>
+                        <button class="btn-outline" onclick="showConceptDemo('loss-functions')">View Demo</button>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="icon">⚙️</div>
+                        <h3>Optimization</h3>
+                        <p>Learn about gradient descent, SGD, Adam and other optimization algorithms.</p>
+                        <button class="btn-outline" onclick="showConceptDemo('optimization')">View Demo</button>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="icon">🛡️</div>
+                        <h3>Regularization</h3>
+                        <p>Techniques like dropout and L2 regularization that prevent overfitting.</p>
+                        <button class="btn-outline" onclick="showConceptDemo('regularization')">View Demo</button>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="icon">🔍</div>
+                        <h3>Convolutional Networks</h3>
+                        <p>How CNNs process spatial data through convolutional layers.</p>
+                        <button class="btn-outline" onclick="showConceptDemo('cnn')">View Demo</button>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <div class="icon">🔄</div>
+                        <h3>Recurrent Networks</h3>
+                        <p>RNNs and LSTMs for sequential data processing with memory.</p>
+                        <button class="btn-outline" onclick="showConceptDemo('rnn')">View Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="resources" class="tab-content">
+            <div class="card">
+                <h2>Learning Resources</h2>
+                <p>Curated collection of resources to continue your deep learning journey.</p>
+                
+                <div class="grid">
+                    <div class="concept-card">
+                        <h3>Online Courses</h3>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;">Deep Learning Specialization (Coursera)</li>
+                            <li style="margin-bottom: 0.5rem;">Fast.ai Practical Deep Learning</li>
+                            <li>MIT Intro to Deep Learning</li>
+                        </ul>
+                        <a href="#" class="btn-outline">Explore Courses</a>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h3>Books</h3>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;">"Deep Learning" by Goodfellow</li>
+                            <li style="margin-bottom: 0.5rem;">"Neural Networks and Deep Learning"</li>
+                            <li>"Hands-On Machine Learning"</li>
+                        </ul>
+                        <a href="#" class="btn-outline">View Books</a>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h3>Frameworks</h3>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;">TensorFlow & Keras</li>
+                            <li style="margin-bottom: 0.5rem;">PyTorch</li>
+                            <li>JAX</li>
+                        </ul>
+                        <a href="#" class="btn-outline">Explore Frameworks</a>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h3>Datasets</h3>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;">MNIST</li>
+                            <li style="margin-bottom: 0.5rem;">CIFAR-10/100</li>
+                            <li>ImageNet</li>
+                        </ul>
+                        <a href="#" class="btn-outline">Find Datasets</a>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h3>Research Papers</h3>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;">Attention Is All You Need</li>
+                            <li style="margin-bottom: 0.5rem;">ResNet</li>
+                            <li>GANs</li>
+                        </ul>
+                        <a href="#" class="btn-outline">Read Papers</a>
+                    </div>
+                    
+                    <div class="concept-card">
+                        <h3>Communities</h3>
+                        <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li style="margin-bottom: 0.5rem;">Kaggle</li>
+                            <li style="margin-bottom: 0.5rem;">arXiv</li>
+                            <li>GitHub</li>
+                        </ul>
+                        <a href="#" class="btn-outline">Join Community</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 Interactive Deep Learning Tutorial | Dark Glass Theme</p>
+        <p style="margin-top: 0.5rem;">All demonstrations are running in real-time using JavaScript</p>
+    </footer>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Initialize demos when tab is opened
+            if (tabName === 'demos') {
+                initGradientDemo();
+                initActivationDemo();
+                initCNNDemo();
+                initPlayground();
+            }
+        }
+        
+        // Enhanced neural network visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            initNeuralNetwork();
+            initGradientDemo();
+            initActivationDemo();
+            initCNNDemo();
+            initPlayground();
+        });
+        
+        // Neural Network Visualization
+        function initNeuralNetwork() {
+            const container = document.getElementById('network-visualization');
+            container.innerHTML = '';
+            const width = container.offsetWidth;
+            const height = container.offsetHeight;
+            
+            // Create layers with different neuron counts
+            const layers = [
+                {count: 4, label: "Input", color: "#4776E6"},
+                {count: 6, label: "Hidden 1", color: "#6e48aa"},
+                {count: 5, label: "Hidden 2", color: "#9d50bb"},
+                {count: 4, label: "Hidden 3", color: "#6e48aa"},
+                {count: 3, label: "Hidden 4", color: "#4776E6"},
+                {count: 2, label: "Output", color: "#4776E6"}
+            ];
+            
+            const neurons = [];
+            
+            // Create neurons
+            layers.forEach((layer, layerIndex) => {
+                for (let n = 0; n < layer.count; n++) {
+                    const neuron = document.createElement('div');
+                    neuron.className = 'neuron';
+                    neuron.style.background = layer.color;
+                    neuron.style.boxShadow = `0 0 15px ${layer.color}`;
+                    
+                    // Position neurons with aesthetic spacing
+                    const xPos = width * (layerIndex + 1) / (layers.length + 1);
+                    const yPos = height * (n + 1) / (layer.count + 1);
+                    
+                    // Center vertically for layers with fewer neurons
+                    if (layer.count < layers[0].count) {
+                        const offset = (layers[0].count - layer.count) * height / (layers[0].count * 2);
+                        neuron.style.top = `${offset + yPos}px`;
+                    } else {
+                        neuron.style.top = `${yPos}px`;
+                    }
+                    
+                    neuron.style.left = `${xPos}px`;
+                    neuron.style.animationDelay = `${layerIndex * 0.2 + n * 0.05}s`;
+                    
+                    // Add tooltip
+                    neuron.title = layer.label;
+                    
+                    container.appendChild(neuron);
+                    neurons.push({
+                        element: neuron,
+                        layer: layerIndex,
+                        activation: 0
+                    });
+                }
+            });
+            
+            // Create connections between layers with gradient
+            const connections = [];
+            
+            neurons.forEach((neuron, index) => {
+                const rect = neuron.element.getBoundingClientRect();
+                const x1 = rect.left + rect.width / 2;
+                const y1 = rect.top + rect.height / 2;
+                
+                // Connect to next layer's neurons
+                let currentLayer = 0;
+                let neuronCount = 0;
+                
+                // Find which layer this neuron belongs to
+                for (let i = 0; i < layers.length; i++) {
+                    if (index < neuronCount + layers[i].count) {
+                        currentLayer = i;
+                        break;
+                    }
+                    neuronCount += layers[i].count;
+                }
+                
+                if (currentLayer < layers.length - 1) {
+                    const nextLayerStart = layers.slice(0, currentLayer + 1).reduce((sum, layer) => sum + layer.count, 0);
+                    const nextLayerCount = layers[currentLayer + 1].count;
+                    
+                    for (let i = 0; i < nextLayerCount; i++) {
+                        const nextNeuron = neurons[nextLayerStart + i];
+                        const nextRect = nextNeuron.element.getBoundingClientRect();
+                        const x2 = nextRect.left + nextRect.width / 2;
+                        const y2 = nextRect.top + nextRect.height / 2;
+                        
+                        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                        
+                        const connection = document.createElement('div');
+                        connection.className = 'connection';
+                        connection.style.width = `${length}px`;
+                        connection.style.height = '2px';
+                        connection.style.left = `${x1 - container.getBoundingClientRect().left}px`;
+                        connection.style.top = `${y1 - container.getBoundingClientRect().top}px`;
+                        connection.style.transform = `rotate(${angle}deg)`;
+                        
+                        // Color connection based on layer colors
+                        const fromColor = layers[currentLayer].color;
+                        const toColor = layers[currentLayer + 1].color;
+                        connection.style.background = `linear-gradient(to right, ${fromColor}aa, ${toColor}aa)`;
+                        
+                        // Randomize opacity slightly
+                        connection.style.opacity = 0.2 + (0.2 * Math.random());
+                        
+                        container.appendChild(connection);
+                        connections.push({
+                            element: connection,
+                            from: index,
+                            to: nextLayerStart + i,
+                            weight: Math.random() * 2 - 1
+                        });
+                    }
+                }
+            });
+            
+            // Make neurons draggable for interactive exploration
+            makeDraggable(neurons, connections, container);
+        }
+        
+        function makeDraggable(neurons, connections, container) {
+            neurons.forEach(neuron => {
+                let isDragging = false;
+                let offsetX, offsetY;
+                
+                neuron.element.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    offsetX = e.clientX - neuron.element.getBoundingClientRect().left;
+                    offsetY = e.clientY - neuron.element.getBoundingClientRect().top;
+                    neuron.element.style.cursor = 'grabbing';
+                    neuron.element.style.zIndex = '10';
+                    e.preventDefault();
+                });
+                
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const containerRect = container.getBoundingClientRect();
+                    let x = e.clientX - offsetX - containerRect.left;
+                    let y = e.clientY - offsetY - containerRect.top;
+                    
+                    // Constrain to container
+                    x = Math.max(0, Math.min(x, containerRect.width - neuron.element.offsetWidth));
+                    y = Math.max(0, Math.min(y, containerRect.height - neuron.element.offsetHeight));
+                    
+                    neuron.element.style.left = `${x}px`;
+                    neuron.element.style.top = `${y}px`;
+                    
+                    // Update connections
+                    updateConnections(neuron, neurons, connections, container);
+                });
+                
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    neuron.element.style.cursor = 'grab';
+                    neuron.element.style.zIndex = '2';
+                });
+            });
+        }
+        
+        function updateConnections(movedNeuron, neurons, connections, container) {
+            const neuronIndex = neurons.indexOf(movedNeuron);
+            const containerRect = container.getBoundingClientRect();
+            
+            connections.forEach(conn => {
+                if (conn.from === neuronIndex || conn.to === neuronIndex) {
+                    const fromNeuron = neurons[conn.from];
+                    const toNeuron = neurons[conn.to];
+                    
+                    const fromRect = fromNeuron.element.getBoundingClientRect();
+                    const toRect = toNeuron.element.getBoundingClientRect();
+                    
+                    const x1 = fromRect.left + fromRect.width / 2 - containerRect.left;
+                    const y1 = fromRect.top + fromRect.height / 2 - containerRect.top;
+                    const x2 = toRect.left + toRect.width / 2 - containerRect.left;
+                    const y2 = toRect.top + toRect.height / 2 - containerRect.top;
+                    
+                    const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                    
+                    conn.element.style.width = `${length}px`;
+                    conn.element.style.left = `${x1}px`;
+                    conn.element.style.top = `${y1}px`;
+                    conn.element.style.transform = `rotate(${angle}deg)`;
+                }
+            });
+        }
+        
+        function fireNetwork() {
+            const container = document.getElementById('network-visualization');
+            const neurons = Array.from(container.querySelectorAll('.neuron'));
+            
+            // Reset all neurons
+            neurons.forEach(neuron => {
+                neuron.style.transform = 'scale(1)';
+                neuron.style.boxShadow = `0 0 15px ${neuron.style.backgroundColor}`;
+            });
+            
+            // Animate activation from input to output
+            const layers = [
+                Array.from(container.querySelectorAll('.neuron')).slice(0, 4), // Input layer
+                Array.from(container.querySelectorAll('.neuron')).slice(4, 10), // Hidden 1
+                Array.from(container.querySelectorAll('.neuron')).slice(10, 15), // Hidden 2
+                Array.from(container.querySelectorAll('.neuron')).slice(15, 19), // Hidden 3
+                Array.from(container.querySelectorAll('.neuron')).slice(19, 22) // Output
+            ];
+            
+            // Random input activation
+            layers[0].forEach(neuron => {
+                const activation = Math.random();
+                setTimeout(() => {
+                    neuron.style.transform = `scale(${1 + activation * 0.3})`;
+                    neuron.style.boxShadow = `0 0 25px ${neuron.style.backgroundColor}`;
+                }, 100);
+            });
+            
+            // Propagate through layers
+            for (let i = 1; i < layers.length; i++) {
+                setTimeout(() => {
+                    layers[i].forEach(neuron => {
+                        const activation = Math.random();
+                        neuron.style.transform = `scale(${1 + activation * 0.3})`;
+                        neuron.style.boxShadow = `0 0 25px ${neuron.style.backgroundColor}`;
+                    });
+                }, 300 * i);
+            }
+        }
+        
+        // Gradient Descent Demo
+        function initGradientDemo() {
+            const demo = document.getElementById('gradient-demo');
+            demo.innerHTML = '<canvas id="gradientCanvas"></canvas>';
+            
+            const canvas = demo.querySelector('#gradientCanvas');
+            canvas.width = demo.offsetWidth;
+            canvas.height = demo.offsetHeight;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw loss landscape
+            drawLossLandscape(ctx, canvas.width, canvas.height);
+            
+            // Initial position
+            const startX = canvas.width * 0.2;
+            const startY = canvas.height * 0.8;
+            let currentX = startX;
+            let currentY = startY;
+            
+            // Draw initial point
+            drawPoint(ctx, currentX, currentY);
+            
+            // Store for animation
+            gradientDemo = {
+                ctx: ctx,
+                canvas: canvas,
+                currentX: currentX,
+                currentY: currentY,
+                path: [{x: currentX, y: currentY}],
+                animationId: null
+            };
+        }
+        
+        function drawLossLandscape(ctx, width, height) {
+            // Create gradient for background
+            const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+            bgGradient.addColorStop(0, '#121212');
+            bgGradient.addColorStop(1, '#0a0a0a');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Draw contour lines
+            ctx.strokeStyle = 'rgba(110, 72, 170, 0.3)';
+            ctx.lineWidth = 1;
+            
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                const radius = width * 0.3 * (i + 1) / 5;
+                const centerX = width * 0.7;
+                const centerY = height * 0.3;
+                
+                // Draw elliptical contours
+                ctx.ellipse(centerX, centerY, radius, radius * 0.7, 0, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Add text labels
+                if (i % 2 === 0) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.font = '12px Arial';
+                    ctx.fillText(`Loss = ${5 - i}`, centerX + radius + 10, centerY);
+                }
+            }
+            
+            // Add labels
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.font = '14px Arial';
+            ctx.fillText('Weight 1', width - 50, height - 10);
+            ctx.fillText('Weight 2', 10, 20);
+            
+            // Mark global minimum
+            ctx.fillStyle = '#4776E6';
+            ctx.beginPath();
+            ctx.arc(width * 0.7, height * 0.3, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.font = '12px Arial';
+            ctx.fillText('Global Minimum', width * 0.7 + 10, height * 0.3 - 10);
+        }
+        
+        function drawPoint(ctx, x, y) {
+            ctx.fillStyle = '#9d50bb';
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Add glow
+            ctx.shadowColor = '#9d50bb';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowColor = 'transparent';
+        }
+        
+        function drawPath(ctx, path) {
+            if (path.length < 2) return;
+            
+            ctx.strokeStyle = 'rgba(157, 80, 187, 0.7)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(path[0].x, path[0].y);
+            
+            for (let i = 1; i < path.length; i++) {
+                ctx.lineTo(path[i].x, path[i].y);
+            }
+            
+            ctx.stroke();
+        }
+        
+        function updateLearningRate() {
+            const lrValue = document.getElementById('learning-rate').value;
+            document.getElementById('lr-value').textContent = lrValue;
+        }
+        
+        function resetGradientDemo() {
+            if (gradientDemo.animationId) {
+                cancelAnimationFrame(gradientDemo.animationId);
+            }
+            
+            const canvas = gradientDemo.canvas;
+            const ctx = gradientDemo.ctx;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Redraw landscape
+            drawLossLandscape(ctx, canvas.width, canvas.height);
+            
+            // Reset position
+            gradientDemo.currentX = canvas.width * 0.2;
+            gradientDemo.currentY = canvas.height * 0.8;
+            gradientDemo.path = [{x: gradientDemo.currentX, y: gradientDemo.currentY}];
+            
+            // Draw initial point
+            drawPoint(ctx, gradientDemo.currentX, gradientDemo.currentY);
+            
+            // Get selected optimizer
+            const optimizer = document.getElementById('optimizer').value;
+            const learningRate = parseFloat(document.getElementById('learning-rate').value);
+            
+            // Start animation based on optimizer
+            if (optimizer === 'sgd') {
+                animateSGD(learningRate);
+            } else if (optimizer === 'momentum') {
+                animateMomentum(learningRate);
+            } else if (optimizer === 'adam') {
+                animateAdam(learningRate);
+            }
+        }
+        
+        function animateSGD(learningRate) {
+            const ctx = gradientDemo.ctx;
+            const canvas = gradientDemo.canvas;
+            
+            // Calculate next position (simplified gradient descent)
+            const centerX = canvas.width * 0.7;
+            const centerY = canvas.height * 0.3;
+            
+            const dx = gradientDemo.currentX - centerX;
+            const dy = (gradientDemo.currentY - centerY) * 0.7; // Account for elliptical shape
+            
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const scale = distance / (canvas.width * 0.3);
+            
+            // Add some noise to make it more realistic
+            const noiseX = (Math.random() - 0.5) * 10;
+            const noiseY = (Math.random() - 0.5) * 10;
+            
+            gradientDemo.currentX -= (dx / distance * scale * learningRate * 10 + noiseX);
+            gradientDemo.currentY -= (dy / distance * scale * learningRate * 10 + noiseY);
+            
+            // Add to path
+            gradientDemo.path.push({
+                x: gradientDemo.currentX,
+                y: gradientDemo.currentY
+            });
+            
+            // Redraw
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawLossLandscape(ctx, canvas.width, canvas.height);
+            drawPath(ctx, gradientDemo.path);
+            drawPoint(ctx, gradientDemo.currentX, gradientDemo.currentY);
+            
+            // Continue animation if not too close to minimum
+            if (distance > 5) {
+                gradientDemo.animationId = requestAnimationFrame(() => animateSGD(learningRate));
+            }
+        }
+        
+        function animateMomentum(learningRate) {
+            const ctx = gradientDemo.ctx;
+            const canvas = gradientDemo.canvas;
+            
+            // Calculate next position with momentum
+            const centerX = canvas.width * 0.7;
+            const centerY = canvas.height * 0.3;
+            
+            const dx = gradientDemo.currentX - centerX;
+            const dy = (gradientDemo.currentY - centerY) * 0.7;
+            
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const scale = distance / (canvas.width * 0.3);
+            
+            // Initialize momentum if not exists
+            if (!gradientDemo.momentum) {
+                gradientDemo.momentum = { x: 0, y: 0 };
+            }
+            
+            // Update momentum (gamma = 0.9)
+            gradientDemo.momentum.x = 0.9 * gradientDemo.momentum.x + dx / distance * scale * learningRate * 5;
+            gradientDemo.momentum.y = 0.9 * gradientDemo.momentum.y + dy / distance * scale * learningRate * 5;
+            
+            // Add some noise
+            const noiseX = (Math.random() - 0.5) * 5;
+            const noiseY = (Math.random() - 0.5) * 5;
+            
+            gradientDemo.currentX -= (gradientDemo.momentum.x + noiseX);
+            gradientDemo.currentY -= (gradientDemo.momentum.y + noiseY);
+            
+            // Add to path
+            gradientDemo.path.push({
+                x: gradientDemo.currentX,
+                y: gradientDemo.currentY
+            });
+            
+            // Redraw
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawLossLandscape(ctx, canvas.width, canvas.height);
+            drawPath(ctx, gradientDemo.path);
+            drawPoint(ctx, gradientDemo.currentX, gradientDemo.currentY);
+            
+            // Continue animation if not too close to minimum
+            if (distance > 5) {
+                gradientDemo.animationId = requestAnimationFrame(() => animateMomentum(learningRate));
+            } else {
+                gradientDemo.momentum = null;
+            }
+        }
+        
+        function animateAdam(learningRate) {
+            const ctx = gradientDemo.ctx;
+            const canvas = gradientDemo.canvas;
+            
+            // Calculate next position with Adam optimizer
+            const centerX = canvas.width * 0.7;
+            const centerY = canvas.height * 0.3;
+            
+            const dx = gradientDemo.currentX - centerX;
+            const dy = (gradientDemo.currentY - centerY) * 0.7;
+            
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const scale = distance / (canvas.width * 0.3);
+            
+            // Initialize Adam parameters if not exists
+            if (!gradientDemo.adamState) {
+                gradientDemo.adamState = {
+                    m: { x: 0, y: 0 },
+                    v: { x: 0, y: 0 },
+                    t: 0
+                };
+            }
+            
+            const beta1 = 0.9;
+            const beta2 = 0.999;
+            const epsilon = 1e-8;
+            
+            // Increment timestep
+            gradientDemo.adamState.t += 1;
+            
+            // Update biased first moment estimate
+            gradientDemo.adamState.m.x = beta1 * gradientDemo.adamState.m.x + (1 - beta1) * dx / distance * scale;
+            gradientDemo.adamState.m.y = beta1 * gradientDemo.adamState.m.y + (1 - beta1) * dy / distance * scale;
+            
+            // Update biased second raw moment estimate
+            gradientDemo.adamState.v.x = beta2 * gradientDemo.adamState.v.x + (1 - beta2) * Math.pow(dx / distance * scale, 2);
+            gradientDemo.adamState.v.y = beta2 * gradientDemo.adamState.v.y + (1 - beta2) * Math.pow(dy / distance * scale, 2);
+            
+            // Compute bias-corrected first moment estimate
+            const mHatX = gradientDemo.adamState.m.x / (1 - Math.pow(beta1, gradientDemo.adamState.t));
+            const mHatY = gradientDemo.adamState.m.y / (1 - Math.pow(beta1, gradientDemo.adamState.t));
+            
+            // Compute bias-corrected second raw moment estimate
+            const vHatX = gradientDemo.adamState.v.x / (1 - Math.pow(beta2, gradientDemo.adamState.t));
+            const vHatY = gradientDemo.adamState.v.y / (1 - Math.pow(beta2, gradientDemo.adamState.t));
+            
+            // Update parameters
+            gradientDemo.currentX -= learningRate * mHatX / (Math.sqrt(vHatX) + epsilon);
+            gradientDemo.currentY -= learningRate * mHatY / (Math.sqrt(vHatY) + epsilon);
+            
+            // Add to path
+            gradientDemo.path.push({
+                x: gradientDemo.currentX,
+                y: gradientDemo.currentY
+            });
+            
+            // Redraw
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawLossLandscape(ctx, canvas.width, canvas.height);
+            drawPath(ctx, gradientDemo.path);
+            drawPoint(ctx, gradientDemo.currentX, gradientDemo.currentY);
+            
+            // Continue animation if not too close to minimum
+            if (distance > 5) {
+                gradientDemo.animationId = requestAnimationFrame(() => animateAdam(learningRate));
+            } else {
+                gradientDemo.adamState = null;
+            }
+        }
+        
+        // Activation Functions Demo
+        function initActivationDemo() {
+            const demo = document.getElementById('activation-demo');
+            demo.innerHTML = '<canvas id="activationCanvas"></canvas>';
+            
+            const canvas = demo.querySelector('#activationCanvas');
+            canvas.width = demo.offsetWidth;
+            canvas.height = demo.offsetHeight;
+            
+            updateActivationDemo();
+        }
+        
+        function updateActivationDemo() {
+            const canvas = document.getElementById('activationCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw axes
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+            
+            // X axis
+            ctx.beginPath();
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.stroke();
+            
+            // Y axis
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.font = '12px Arial';
+            ctx.fillText('0', width / 2 - 10, height / 2 + 15);
+            ctx.fillText('1', width / 2 - 10, 15);
+            ctx.fillText('-1', width / 2 - 15, height - 5);
+            ctx.fillText('-5', 5, height / 2 + 15);
+            ctx.fillText('5', width - 15, height / 2 + 15);
+            
+            // Get selected activation function
+            const activationFunc = document.getElementById('activation-function').value;
+            
+            // Draw activation function
+            ctx.strokeStyle = '#9d50bb';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            
+            for (let x = 0; x < width; x++) {
+                const input = (x - width / 2) / (width / 10); // Scale to ~-5 to 5
+                let output;
+                
+                switch (activationFunc) {
+                    case 'sigmoid':
+                        output = 1 / (1 + Math.exp(-input));
+                        break;
+                    case 'relu':
+                        output = Math.max(0, input);
+                        break;
+                    case 'tanh':
+                        output = Math.tanh(input);
+                        break;
+                    case 'leaky-relu':
+                        output = input >= 0 ? input : 0.01 * input;
+                        break;
+                }
+                
+                const y = height / 2 - output * (height / 2.5);
+                
+                if (x === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+            
+            // Add title
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = '16px Arial';
+            ctx.fillText(activationFunc.toUpperCase() + ' Activation Function', 20, 30);
+        }
+        
+        // CNN Demo
+        function initCNNDemo() {
+            const demo = document.getElementById('cnn-demo');
+            demo.innerHTML = `
+                <div style="position:relative; width:100%; height:100%;">
+                    <canvas id="cnnCanvas"></canvas>
+                    <div class="demo-controls">
+                        <div style="text-align:center;">
+                            <div style="display:flex; justify-content:center; margin-bottom:5px;">
+                                <div style="width:20px; height:20px; background:#4776E6; margin-right:5px;"></div>
+                                <div style="width:20px; height:20px; background:#6e48aa;"></div>
+                            </div>
+                            <small>Input</small>
+                        </div>
+                        <div style="text-align:center; margin:0 15px;">
+                            <div style="display:flex; justify-content:center; margin-bottom:5px;">
+                                <div style="width:20px; height:20px; background:#9d50bb;"></div>
+                            </div>
+                            <small>Feature Map</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const canvas = demo.querySelector('#cnnCanvas');
+            canvas.width = demo.offsetWidth;
+            canvas.height = demo.offsetHeight;
+            
+            updateCNNDemo();
+        }
+        
+        function updateCNNDemo() {
+            const layer = parseInt(document.getElementById('cnn-layer').value);
+            document.getElementById('layer-value').textContent = layer;
+            
+            const canvas = document.getElementById('cnnCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw input image (simplified)
+            const inputSize = Math.min(width, height) * 0.4;
+            const inputX = width * 0.3 - inputSize / 2;
+            const inputY = height / 2 - inputSize / 2;
+            
+            // Draw random input pattern
+            const cellSize = inputSize / 8;
+            for (let i = 0; i < 8; i++) {
+                for (let j = 0; j < 8; j++) {
+                    const value = Math.random() * 255;
+                    ctx.fillStyle = `rgb(${value}, ${value}, ${value})`;
+                    ctx.fillRect(inputX + i * cellSize, inputY + j * cellSize, cellSize, cellSize);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                    ctx.strokeRect(inputX + i * cellSize, inputY + j * cellSize, cellSize, cellSize);
+                }
+            }
+            
+            // Draw convolutional filter
+            const filterSize = inputSize * 0.5;
+            const filterX = width * 0.7 - filterSize / 2;
+            const filterY = height / 2 - filterSize / 2;
+            
+            // Draw random filter pattern
+            const filterCellSize = filterSize / 3;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    const value = Math.random() * 200 - 100; // Between -100 and 100
+                    const color = value > 0 ? 
+                        `rgba(110, 72, 170, ${value / 100})` : 
+                        `rgba(71, 118, 230, ${-value / 100})`;
+                    ctx.fillStyle = color;
+                    ctx.fillRect(filterX + i * filterCellSize, filterY + j * filterCellSize, filterCellSize, filterCellSize);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                    ctx.strokeRect(filterX + i * filterCellSize, filterY + j * filterCellSize, filterCellSize, filterCellSize);
+                    
+                    // Draw filter value
+                    ctx.fillStyle = 'white';
+                    ctx.font = '10px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(value.toFixed(1), filterX + i * filterCellSize + filterCellSize / 2, filterY + j * filterCellSize + filterCellSize / 2 + 3);
+                }
+            }
+            
+            // Draw feature map based on layer
+            const featureSize = inputSize * 0.6;
+            const featureX = width / 2 - featureSize / 2;
+            const featureY = height / 2 - featureSize / 2;
+            
+            // Draw random feature map (would be convolution in real implementation)
+            const featureCellSize = featureSize / (8 - layer);
+            for (let i = 0; i < (8 - layer); i++) {
+                for (let j = 0; j < (8 - layer); j++) {
+                    const activation = Math.random();
+                    ctx.fillStyle = `rgba(157, 80, 187, ${activation})`;
+                    ctx.fillRect(featureX + i * featureCellSize, featureY + j * featureCellSize, featureCellSize, featureCellSize);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+                    ctx.strokeRect(featureX + i * featureCellSize, featureY + j * featureCellSize, featureCellSize, featureCellSize);
+                }
+            }
+            
+            // Add arrows
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 2;
+            
+            // Input to feature map
+            ctx.beginPath();
+            ctx.moveTo(inputX + inputSize + 5, inputY + inputSize / 2);
+            ctx.lineTo(featureX - 5, featureY + featureSize / 2);
+            ctx.stroke();
+            
+            // Filter to feature map
+            ctx.beginPath();
+            ctx.moveTo(filterX - 5, filterY + filterSize / 2);
+            ctx.lineTo(featureX + featureSize + 5, featureY + featureSize / 2);
+            ctx.stroke();
+            
+            // Add titles
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Input Image', inputX + inputSize / 2, inputY + inputSize + 20);
+            ctx.fillText('Convolutional Filter', filterX + filterSize / 2, filterY + filterSize + 20);
+            ctx.fillText(`Layer ${layer} Feature Map`, featureX + featureSize / 2, featureY + featureSize + 20);
+        }
+        
+        function nextCNNImage() {
+            updateCNNDemo();
+        }
+        
+        // Neural Network Playground
+        function initPlayground() {
+            const demo = document.getElementById('playground-demo');
+            demo.innerHTML = `
+                <div style="position:relative; width:100%; height:100%;">
+                    <canvas id="playgroundCanvas"></canvas>
+                    <div class="demo-controls">
+                        <button onclick="trainNetwork()">Train Network</button>
+                        <button onclick="resetPlayground()" style="margin-left:10px;">Reset</button>
+                    </div>
+                </div>
+            `;
+            
+            const canvas = demo.querySelector('#playgroundCanvas');
+            canvas.width = demo.offsetWidth;
+            canvas.height = demo.offsetHeight;
+            
+            resetPlayground();
+        }
+        
+        function resetPlayground() {
+            const canvas = document.getElementById('playgroundCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw initial network
+            const layers = parseInt(document.getElementById('nn-layers').value) + 2; // + input and output
+            const neuronRadius = 15;
+            const layerSpacing = width / (layers + 1);
+            
+            // Draw neurons
+            for (let l = 0; l < layers; l++) {
+                const neuronCount = l === 0 ? 2 : (l === layers - 1 ? 1 : 3); // Input:2, Hidden:3, Output:1
+                const neuronSpacing = height / (neuronCount + 1);
+                
+                for (let n = 0; n < neuronCount; n++) {
+                    const x = (l + 1) * layerSpacing;
+                    const y = (n + 1) * neuronSpacing;
+                    
+                    ctx.fillStyle = l === 0 ? '#4776E6' : (l === layers - 1 ? '#9d50bb' : '#6e48aa');
+                    ctx.beginPath();
+                    ctx.arc(x, y, neuronRadius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Add glow
+                    ctx.shadowColor = l === 0 ? '#4776E6' : (l === layers - 1 ? '#9d50bb' : '#6e48aa');
+                    ctx.shadowBlur = 10;
+                    ctx.fill();
+                    ctx.shadowColor = 'transparent';
+                }
+            }
+            
+            // Draw connections
+            ctx.strokeStyle = 'rgba(157, 80, 187, 0.3)';
+            ctx.lineWidth = 1;
+            
+            for (let l = 0; l < layers - 1; l++) {
+                const fromCount = l === 0 ? 2 : 3;
+                const toCount = l === layers - 2 ? 1 : 3;
+                
+                const fromSpacing = height / (fromCount + 1);
+                const toSpacing = height / (toCount + 1);
+                
+                for (let f = 0; f < fromCount; f++) {
+                    const fromX = (l + 1) * layerSpacing + neuronRadius;
+                    const fromY = (f + 1) * fromSpacing;
+                    
+                    for (let t = 0; t < toCount; t++) {
+                        const toX = (l + 2) * layerSpacing - neuronRadius;
+                        const toY = (t + 1) * toSpacing;
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(fromX, fromY);
+                        ctx.lineTo(toX, toY);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Add title
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.font = '16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Neural Network Playground', width / 2, 30);
+            
+            // Store initial state
+            playgroundState = {
+                ctx: ctx,
+                canvas: canvas,
+                layers: layers,
+                training: false
+            };
+        }
+        
+        function trainNetwork() {
+            if (playgroundState.training) return;
+            playgroundState.training = true;
+            
+            const ctx = playgroundState.ctx;
+            const canvas = playgroundState.canvas;
+            const width = canvas.width;
+            const height = canvas.height;
+            const layers = playgroundState.layers;
+            const neuronRadius = 15;
+            const layerSpacing = width / (layers + 1);
+            
+            // Animate training by randomly activating neurons
+            function animateTraining(iteration) {
+                if (iteration >= 30) { // Stop after 30 iterations
+                    playgroundState.training = false;
+                    return;
+                }
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Redraw connections with some random updates
+                ctx.strokeStyle = 'rgba(157, 80, 187, 0.3)';
+                ctx.lineWidth = 1;
+                
+                for (let l = 0; l < layers - 1; l++) {
+                    const fromCount = l === 0 ? 2 : 3;
+                    const toCount = l === layers - 2 ? 1 : 3;
+                    
+                    const fromSpacing = height / (fromCount + 1);
+                    const toSpacing = height / (toCount + 1);
+                    
+                    for (let f = 0; f < fromCount; f++) {
+                        for (let t = 0; t < toCount; t++) {
+                            // Randomly adjust some weights
+                            if (Math.random() > 0.7) {
+                                ctx.strokeStyle = `rgba(157, 80, 187, ${0.3 + Math.random() * 0.5})`;
+                                ctx.lineWidth = 1 + Math.random();
+                            } else {
+                                ctx.strokeStyle = 'rgba(157, 80, 187, 0.3)';
+                                ctx.lineWidth = 1;
+                            }
+                            
+                            const fromX = (l + 1) * layerSpacing + neuronRadius;
+                            const fromY = (f + 1) * fromSpacing;
+                            const toX = (l + 2) * layerSpacing - neuronRadius;
+                            const toY = (t + 1) * toSpacing;
+                            
+                            ctx.beginPath();
+                            ctx.moveTo(fromX, fromY);
+                            ctx.lineTo(toX, toY);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                // Draw neurons with some random activations
+                for (let l = 0; l < layers; l++) {
+                    const neuronCount = l === 0 ? 2 : (l === layers - 1 ? 1 : 3);
+                    const neuronSpacing = height / (neuronCount + 1);
+                    
+                    for (let n = 0; n < neuronCount; n++) {
+                        const x = (l + 1) * layerSpacing;
+                        const y = (n + 1) * neuronSpacing;
+                        
+                        // Random activation
+                        const activation = l === 0 ? 1 : Math.random();
+                        const scale = 1 + activation * 0.3;
+                        
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.scale(scale, scale);
+                        
+                        ctx.fillStyle = l === 0 ? '#4776E6' : (l === layers - 1 ? '#9d50bb' : '#6e48aa');
+                        ctx.beginPath();
+                        ctx.arc(0, 0, neuronRadius, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        // Add glow
+                        ctx.shadowColor = l === 0 ? '#4776E6' : (l === layers - 1 ? '#9d50bb' : '#6e48aa');
+                        ctx.shadowBlur = 10 + activation * 10;
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                }
+                
+                // Add title
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Training... Epoch ${iteration + 1}/30`, width / 2, 30);
+                
+                // Continue animation
+                setTimeout(() => {
+                    requestAnimationFrame(() => animateTraining(iteration + 1));
+                }, 200);
+            }
+            
+            animateTraining(0);
+        }
+        
+        function updatePlayground() {
+            const layers = parseInt(document.getElementById('nn-layers').value);
+            document.getElementById('layers-value').textContent = layers;
+            resetPlayground();
+        }
+        
+        // Concept Demos
+        function showConceptDemo(concept) {
+            alert(`In a full implementation, this would show an interactive demo about ${concept.replace('-', ' ')}.`);
+        }
+    </script>
+</body>
+</html>

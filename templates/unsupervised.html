@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsupervised Learning Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --accent-color: #ff9a56;
+            --bg-color: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --text-color: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --highlight: #ff9a56;
+            --success: #4caf50;
+            --danger: #f44336;
+            --info: #2196f3;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --border-radius: 15px;
+            --transition: all 0.3s ease;
+            --glass-blur: blur(12px);
+            --header-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .light-theme {
+            --primary-color: #3d5a80;
+            --secondary-color: #4d7ea8;
+            --accent-color: #ff7b25;
+            --bg-color: #f5f5f5;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --text-color: #333333;
+            --text-muted: #666666;
+            --highlight: #ff7b25;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --border: 1px solid rgba(0, 0, 0, 0.08);
+            --header-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 111, 165, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(107, 140, 174, 0.08) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: var(--border);
+            position: relative;
+        }
+
+        .header-content {
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            color: var(--text-muted);
+            max-width: 700px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 30px;
+            padding: 0.3rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        .theme-toggle span {
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle .dark {
+            background: var(--header-gradient);
+            color: white;
+        }
+
+        .theme-toggle .light {
+            color: var(--text-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: var(--glass-blur);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(74, 111, 165, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        h2 i {
+            color: var(--accent-color);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1.2rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            height: 1.5rem;
+            width: 5px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+
+        li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: -1rem;
+        }
+
+        .highlight {
+            color: var(--highlight);
+            font-weight: 600;
+            background: rgba(255, 154, 86, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .diagram {
+            width: 100%;
+            max-width: 800px;
+            margin: 2.5rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--header-gradient);
+        }
+
+        .graph-container {
+            height: 400px;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .example {
+            background: rgba(74, 111, 165, 0.08);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            position: relative;
+        }
+
+        .example::before {
+            content: '🛈';
+            position: absolute;
+            left: -0.8rem;
+            top: -0.8rem;
+            background: var(--primary-color);
+            color: white;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .example-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2.5rem 0;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1.2rem;
+            text-align: left;
+            border: var(--border);
+        }
+
+        .comparison-table th {
+            background: rgba(74, 111, 165, 0.3);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(74, 111, 165, 0.1);
+        }
+
+        .algorithm-card {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .algorithm-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .algorithm-header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1.2rem 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .algorithm-content {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border: var(--border);
+            border-top: none;
+        }
+
+        .formula {
+            font-family: 'Courier New', Courier, monospace;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .formula::before {
+            content: 'Formula';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 0 0 0 5px;
+            font-family: sans-serif;
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin: 3rem 0;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-demo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            background: var(--header-gradient);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button.secondary {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        select, input {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: var(--border);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .slider-container label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            min-width: 100px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            flex-grow: 1;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .demo-visualization {
+            height: 350px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: var(--border);
+        }
+
+        .demo-visualization::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .data-point {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+
+        .cluster-center {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            position: absolute;
+            border: 2px solid white;
+            box-shadow: 0 0 0 3px var(--accent-color);
+            z-index: 2;
+        }
+
+        .demo-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--header-gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 1rem;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.7rem;
+            top: 0.3rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: 3px solid var(--card-bg);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: var(--border);
+            opacity: 0.8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .card, .diagram, .interactive-demo {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--text-muted);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.8rem;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .tab.active {
+            color: var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .accordion {
+            margin: 1.5rem 0;
+        }
+
+        .accordion-item {
+            border: var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1.2rem;
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .accordion-content {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            border-top: var(--border);
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 1.2rem;
+            max-height: 1000px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-primary {
+            background: rgba(74, 111, 165, 0.2);
+            color: var(--primary-color);
+        }
+
+        .badge-secondary {
+            background: rgba(107, 140, 174, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .badge-accent {
+            background: rgba(255, 154, 86, 0.2);
+            color: var(--accent-color);
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .demo-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .slider-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card {
+                padding: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-project-diagram"></i> Unsupervised Learning</h1>
+                <p class="subtitle">Discovering hidden patterns and structures in unlabeled data</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+                <span class="dark"><i class="fas fa-moon"></i> Dark</span>
+                <span class="light"><i class="fas fa-sun"></i> Light</span>
+            </div>
+        </header>
+
+        <div class="card">
+            <h2><i class="fas fa-question-circle"></i> What is Unsupervised Learning?</h2>
+            <p>Unsupervised Learning is a type of <span class="highlight">machine learning</span> that finds patterns in data without pre-existing labels. Unlike supervised learning, the system isn't told the "right answer" - it must discover structure in the data on its own.</p>
+            
+            <div class="example">
+                <div class="example-title"><i class="fas fa-lightbulb"></i> Real-world Example</div>
+                <p>Imagine you're given a collection of different fruits without any labels. By examining their characteristics (size, color, texture), you might naturally group similar fruits together. This is essentially what clustering algorithms do in unsupervised learning - they find natural groupings in data.</p>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="definition">Definition</div>
+                <div class="tab" data-tab="characteristics">Characteristics</div>
+                <div class="tab" data-tab="history">History</div>
+            </div>
+
+            <div class="tab-content active" id="definition">
+                <p>Formally, unsupervised learning algorithms work with datasets containing only features (X) without corresponding labels (y). The main goals are:</p>
+                <ul>
+                    <li><strong>Clustering:</strong> Grouping similar data points together</li>
+                    <li><strong>Dimensionality Reduction:</strong> Reducing the number of variables while preserving structure</li>
+                    <li><strong>Density Estimation:</strong> Determining the distribution of data</li>
+                    <li><strong>Anomaly Detection:</strong> Identifying unusual data points</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="characteristics">
+                <ul>
+                    <li><strong>No labels required:</strong> Works with completely unlabeled data</li>
+                    <li><strong>Discovery-oriented:</strong> Finds hidden patterns rather than predicting known outcomes</li>
+                    <li><strong>Feature extraction:</strong> Can reveal important underlying features</li>
+                    <li><strong>Preprocessing:</strong> Often used to prepare data for other algorithms</li>
+                    <li><strong>Evaluation challenges:</strong> Harder to assess performance without ground truth</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="history">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">1950s</div>
+                        <div class="timeline-title">Early Clustering</div>
+                        <p>First clustering algorithms developed in statistics and psychology</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1980s</div>
+                        <div class="timeline-title">Expectation-Maximization</div>
+                        <p>Formalization of EM algorithm for mixture models</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1990s</div>
+                        <div class="timeline-title">Kernel Methods</div>
+                        <p>Introduction of kernel PCA and other nonlinear techniques</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2000s</div>
+                        <div class="timeline-title">Manifold Learning</div>
+                        <p>Development of t-SNE, LLE, and other manifold techniques</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2010s</div>
+                        <div class="timeline-title">Deep Unsupervised</div>
+                        <p>Autoencoders, GANs, and other neural approaches</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-puzzle-piece"></i> Key Algorithms</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-object-group"></i> Clustering</div>
+                <div class="algorithm-content">
+                    <p>Grouping similar data points together based on feature similarity:</p>
+                    
+                    <h3>K-Means</h3>
+                    <div class="formula">
+                        1. Initialize k centroids randomly<br>
+                        2. Assign points to nearest centroid<br>
+                        3. Recalculate centroids as mean of points<br>
+                        4. Repeat until convergence
+                    </div>
+                    
+                    <h3>Hierarchical Clustering</h3>
+                    <p>Builds a hierarchy of clusters either through:</p>
+                    <ul>
+                        <li><strong>Agglomerative:</strong> Bottom-up approach merging similar clusters</li>
+                        <li><strong>Divisive:</strong> Top-down approach splitting clusters</li>
+                    </ul>
+                    
+                    <h3>DBSCAN</h3>
+                    <p>Density-based clustering that finds core samples of high density</p>
+                    <div class="formula">
+                        Core point: ≥ minPts within ε distance<br>
+                        Border point: < minPts but reachable from core<br>
+                        Noise point: Neither core nor border
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Grouping</span>
+                        <span class="badge badge-secondary">Similarity</span>
+                        <span class="badge badge-accent">Segmentation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-compress-alt"></i> Dimensionality Reduction</div>
+                <div class="algorithm-content">
+                    <p>Reducing the number of random variables while preserving structure:</p>
+                    
+                    <h3>Principal Component Analysis (PCA)</h3>
+                    <div class="formula">
+                        X = UΣVᵀ (Singular Value Decomposition)<br>
+                        Principal Components = XV = UΣ
+                    </div>
+                    <p>Projects data onto orthogonal axes of maximum variance</p>
+                    
+                    <h3>t-SNE</h3>
+                    <p>Nonlinear technique for visualizing high-dimensional data</p>
+                    <div class="formula">
+                        pⱼₙ = exp(-||xⱼ-xₙ||²/2σ²) / ∑ exp(-||xₖ-xₙ||²/2σ²)<br>
+                        qⱼₙ = (1+||yⱼ-yₙ||²)⁻¹ / ∑ (1+||yₖ-yₙ||²)⁻¹
+                    </div>
+                    
+                    <h3>Autoencoders</h3>
+                    <p>Neural networks that learn compressed representations</p>
+                    <div class="formula">
+                        Encoder: z = f(x)<br>
+                        Decoder: x̂ = g(z)<br>
+                        Loss: L = ||x - g(f(x))||²
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Compression</span>
+                        <span class="badge badge-secondary">Visualization</span>
+                        <span class="badge badge-accent">Feature Learning</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chart-bar"></i> Density Estimation</div>
+                <div class="algorithm-content">
+                    <p>Modeling the probability distribution of data:</p>
+                    
+                    <h3>Gaussian Mixture Models (GMM)</h3>
+                    <div class="formula">
+                        p(x) = ∑ πₖ N(x|μₖ, Σₖ)<br>
+                        πₖ: Mixing coefficients<br>
+                        μₖ, Σₖ: Component means and covariances
+                    </div>
+                    
+                    <h3>Kernel Density Estimation</h3>
+                    <div class="formula">
+                        p̂(x) = 1/n ∑ K((x-xᵢ)/h)<br>
+                        K: Kernel function (e.g., Gaussian)<br>
+                        h: Bandwidth parameter
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Probability</span>
+                        <span class="badge badge-secondary">Distribution</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-exclamation-triangle"></i> Anomaly Detection</div>
+                <div class="algorithm-content">
+                    <p>Identifying rare items or outliers:</p>
+                    
+                    <h3>Isolation Forest</h3>
+                    <p>Randomly partitions data with trees - anomalies need fewer splits</p>
+                    
+                    <h3>One-Class SVM</h3>
+                    <p>Learns a decision boundary around normal data</p>
+                    <div class="formula">
+                        min 1/2||w||² + 1/νn ∑ ξᵢ - ρ<br>
+                        s.t. w·Φ(xᵢ) ≥ ρ - ξᵢ, ξᵢ ≥ 0
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Outliers</span>
+                        <span class="badge badge-secondary">Novelty Detection</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-balance-scale"></i> Unsupervised vs Other Learning Paradigms</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Unsupervised Learning</th>
+                        <th>Supervised Learning</th>
+                        <th>Reinforcement Learning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Requirements</td>
+                        <td>Only input data (X)</td>
+                        <td>Labeled examples (X, y)</td>
+                        <td>Reward signals from environment</td>
+                    </tr>
+                    <tr>
+                        <td>Goal</td>
+                        <td>Discover hidden patterns</td>
+                        <td>Predict known outputs</td>
+                        <td>Maximize cumulative reward</td>
+                    </tr>
+                    <tr>
+                        <td>Feedback</td>
+                        <td>None</td>
+                        <td>Immediate and correct</td>
+                        <td>Delayed and evaluative</td>
+                    </tr>
+                    <tr>
+                        <td>Evaluation</td>
+                        <td>Indirect (silhouette, inertia)</td>
+                        <td>Direct (accuracy, error)</td>
+                        <td>Reward accumulation</td>
+                    </tr>
+                    <tr>
+                        <td>Example Tasks</td>
+                        <td>Clustering, dimensionality reduction</td>
+                        <td>Classification, regression</td>
+                        <td>Game playing, robotics</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Supervised Learning</span>
+                    <span>75%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Unsupervised Learning</span>
+                    <span>15%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 15%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Reinforcement Learning</span>
+                    <span>10%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            
+            <p><small><i class="fas fa-info-circle"></i> Approximate distribution of machine learning approaches in current applications</small></p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-key"></i> Key Concepts</h2>
+            
+            <h3>Curse of Dimensionality</h3>
+            <p>As dimensionality increases, data becomes increasingly sparse, making distance metrics less meaningful and algorithms less effective.</p>
+            <div class="formula">
+                Volume ratio in d-dimensions: (r/R)^d → 0 as d → ∞
+            </div>
+            <p>Dimensionality reduction techniques help mitigate this issue.</p>
+            
+            <h3>Cluster Validation</h3>
+            <p>Evaluating clustering quality without ground truth labels:</p>
+            <ul>
+                <li><strong>Silhouette Coefficient:</strong> Measures how similar an object is to its own cluster vs others</li>
+                <li><strong>Davies-Bouldin Index:</strong> Ratio of within-cluster to between-cluster distances</li>
+                <li><strong>Calinski-Harabasz Index:</strong> Ratio of between-cluster to within-cluster dispersion</li>
+            </ul>
+            
+            <h3>Manifold Hypothesis</h3>
+            <p>High-dimensional data often lies near a lower-dimensional manifold. Techniques like t-SNE and UMAP exploit this.</p>
+            <div class="formula">
+                Locally: M ≈ ℝᵏ where k ≪ d (ambient dimension)
+            </div>
+            
+            <h3>EM Algorithm</h3>
+            <p>General approach for maximum likelihood estimation with latent variables:</p>
+            <div class="formula">
+                E-step: Q(θ|θ⁽ᵗ⁾) = 𝔼[log p(X,Z|θ)|X,θ⁽ᵗ⁾]<br>
+                M-step: θ⁽ᵗ⁺¹⁾ = argmax Q(θ|θ⁽ᵗ⁾)
+            </div>
+            <p>Used in GMMs, HMMs, and many other models.</p>
+        </div>
+
+        <div class="interactive-demo">
+            <h2><i class="fas fa-play-circle"></i> Interactive Clustering Demo</h2>
+            <p>Experiment with different clustering algorithms on synthetic datasets. Adjust parameters and see how they affect the results.</p>
+            
+            <div class="demo-controls">
+                <button id="generateData"><i class="fas fa-random"></i> Generate Data</button>
+                <button id="runClustering"><i class="fas fa-play"></i> Run Clustering</button>
+                <button id="resetDemo" class="secondary"><i class="fas fa-redo"></i> Reset</button>
+                
+                <div class="slider-container">
+                    <label for="datasetSelect"><i class="fas fa-database"></i> Dataset:</label>
+                    <select id="datasetSelect">
+                        <option value="blobs">Blobs</option>
+                        <option value="moons">Moons</option>
+                        <option value="circles">Circles</option>
+                        <option value="anisotropic">Anisotropic</option>
+                        <option value="random">Random</option>
+                    </select>
+                </div>
+                
+                <div class="slider-container">
+                    <label for="algorithmSelect"><i class="fas fa-code-branch"></i> Algorithm:</label>
+                    <select id="algorithmSelect">
+                        <option value="kmeans">K-Means</option>
+                        <option value="dbscan">DBSCAN</option>
+                        <option value="agglomerative">Agglomerative</option>
+                        <option value="gmm">Gaussian Mixture</option>
+                    </select>
+                </div>
+                
+                <div class="slider-container" id="kSliderContainer">
+                    <label for="kValue"><i class="fas fa-hashtag"></i> Clusters (k):</label>
+                    <input type="range" id="kValue" min="2" max="10" step="1" value="3">
+                    <span id="kValueDisplay">3</span>
+                </div>
+                
+                <div class="slider-container" id="epsilonSliderContainer" style="display:none">
+                    <label for="epsilonValue"><i class="fas fa-arrows-alt-h"></i> Epsilon (ε):</label>
+                    <input type="range" id="epsilonValue" min="0.05" max="0.5" step="0.01" value="0.2">
+                    <span id="epsilonValueDisplay">0.2</span>
+                </div>
+                
+                <div class="slider-container" id="minSamplesSliderContainer" style="display:none">
+                    <label for="minSamplesValue"><i class="fas fa-users"></i> Min Samples:</label>
+                    <input type="range" id="minSamplesValue" min="2" max="20" step="1" value="5">
+                    <span id="minSamplesValueDisplay">5</span>
+                </div>
+            </div>
+            
+            <div class="demo-visualization" id="demoVisualization">
+                <canvas id="clusterCanvas" width="600" height="300"></canvas>
+            </div>
+            
+            <div class="demo-stats">
+                <div class="stat-card">
+                    <h4><i class="fas fa-hashtag"></i> Clusters Found</h4>
+                    <p id="clusterCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-ruler-combined"></i> Inertia</h4>
+                    <p id="inertiaValue">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-user-friends"></i> Silhouette</h4>
+                    <p id="silhouetteValue">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-clock"></i> Time</h4>
+                    <p id="timeValue">0ms</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-rocket"></i> Applications</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-shopping-cart"></i> Customer Segmentation</div>
+                <div class="algorithm-content">
+                    <p>Grouping customers based on purchasing behavior for targeted marketing:</p>
+                    <ul>
+                        <li>Identify distinct customer personas</li>
+                        <li>Personalize recommendations and promotions</li>
+                        <li>Optimize inventory based on segment preferences</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> K-Means, RFM analysis, PCA for feature reduction</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-dna"></i> Genomics</div>
+                <div class="algorithm-content">
+                    <p>Discovering patterns in gene expression data:</p>
+                    <ul>
+                        <li>Identify co-expressed genes</li>
+                        <li>Discover disease subtypes</li>
+                        <li>Reduce high-dimensional genomic data</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> Hierarchical clustering, t-SNE, autoencoders</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-image"></i> Image Processing</div>
+                <div class="algorithm-content">
+                    <p>Analyzing and compressing visual data:</p>
+                    <ul>
+                        <li>Image segmentation and object detection</li>
+                        <li>Feature learning for computer vision</li>
+                        <li>Image compression and denoising</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> Convolutional autoencoders, K-Means for color quantization</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chart-line"></i> Anomaly Detection</div>
+                <div class="algorithm-content">
+                    <p>Identifying unusual patterns in data:</p>
+                    <ul>
+                        <li>Fraud detection in financial transactions</li>
+                        <li>Network intrusion detection</li>
+                        <li>Manufacturing defect detection</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> Isolation Forest, One-Class SVM, Autoencoder reconstruction error</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-language"></i> Natural Language Processing</div>
+                <div class="algorithm-content">
+                    <p>Discovering structure in text data:</p>
+                    <ul>
+                        <li>Topic modeling and document clustering</li>
+                        <li>Word embeddings (Word2Vec, GloVe)</li>
+                        <li>Dimensionality reduction for text visualization</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> LDA, NMF, t-SNE, UMAP</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-exclamation-triangle"></i> Challenges</h2>
+            
+            <h3>Evaluation Difficulties</h3>
+            <p>Without ground truth labels, assessing algorithm performance is subjective and often relies on heuristics.</p>
+            
+            <h3>Parameter Sensitivity</h3>
+            <p>Many algorithms require careful tuning of parameters (k in K-Means, ε in DBSCAN) which may not be obvious.</p>
+            
+            <h3>Scalability</h3>
+            <p>Some methods (like hierarchical clustering) don't scale well to large datasets.</p>
+            
+            <h3>Interpretability</h3>
+            <p>Discovered patterns may be mathematically valid but lack meaningful interpretation.</p>
+            
+            <h3>Curse of Dimensionality</h3>
+            <p>High-dimensional data makes distance metrics less meaningful and visualization difficult.</p>
+            
+            <h3>Local Optima</h3>
+            <p>Many algorithms (like K-Means) can converge to suboptimal solutions depending on initialization.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-graduation-cap"></i> Learning Resources</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-book"></i> Books</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>Pattern Recognition and Machine Learning</strong> by Christopher Bishop</li>
+                        <li><strong>The Elements of Statistical Learning</strong> by Hastie, Tibshirani, Friedman</li>
+                        <li><strong>Machine Learning: A Probabilistic Perspective</strong> by Kevin Murphy</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-video"></i> Courses</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>Stanford CS229</strong> - Machine Learning</li>
+                        <li><strong>MIT 6.862</strong> - Applied Machine Learning</li>
+                        <li><strong>Coursera: Unsupervised Learning</strong> by University of Washington</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-laptop-code"></i> Libraries</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>scikit-learn</strong>: Comprehensive ML library with many unsupervised algorithms</li>
+                        <li><strong>TensorFlow/PyTorch</strong>: For neural approaches like autoencoders</li>
+                        <li><strong>UMAP</strong>: State-of-the-art dimensionality reduction</li>
+                        <li><strong>HDBSCAN</strong>: Advanced density-based clustering</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>Unsupervised Learning Guide</h3>
+            <p>Discovering the hidden structure in your data</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p>© 2023 ML Guides | Created with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for data enthusiasts</p>
+            <p><small>This content is for educational purposes only</small></p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            
+            // Save preference to localStorage
+            const isLight = body.classList.contains('light-theme');
+            localStorage.setItem('themePreference', isLight ? 'light' : 'dark');
+            
+            // Update icon
+            const moonIcon = themeToggle.querySelector('.fa-moon');
+            const sunIcon = themeToggle.querySelector('.fa-sun');
+            if (isLight) {
+                moonIcon.classList.remove('fa-moon');
+                moonIcon.classList.add('fa-sun');
+                sunIcon.classList.remove('fa-sun');
+                sunIcon.classList.add('fa-moon');
+            } else {
+                moonIcon.classList.remove('fa-sun');
+                moonIcon.classList.add('fa-moon');
+                sunIcon.classList.remove('fa-moon');
+                sunIcon.classList.add('fa-sun');
+            }
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('themePreference');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            const moonIcon = themeToggle.querySelector('.fa-moon');
+            const sunIcon = themeToggle.querySelector('.fa-sun');
+            moonIcon.classList.remove('fa-moon');
+            moonIcon.classList.add('fa-sun');
+            sunIcon.classList.remove('fa-sun');
+            sunIcon.classList.add('fa-moon');
+        }
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.accordion-header i').classList.remove('fa-chevron-up');
+                    i.querySelector('.accordion-header i').classList.add('fa-chevron-down');
+                });
+                
+                // Open clicked item if it was closed
+                if (!isActive) {
+                    item.classList.add('active');
+                    header.querySelector('i').classList.remove('fa-chevron-down');
+                    header.querySelector('i').classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Clustering Demo
+        const canvas = document.getElementById('clusterCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        let dataPoints = [];
+        let clusters = [];
+        let centers = [];
+        
+        // Color palette
+        const colors = [
+            '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', 
+            '#98D8C8', '#F06292', '#7986CB', '#9575CD',
+            '#64B5F6', '#4DB6AC', '#81C784', '#FFD54F'
+        ];
+        
+        // Generate synthetic data
+        function generateData(type) {
+            dataPoints = [];
+            
+            if (type === 'blobs') {
+                // Three Gaussian blobs
+                for (let i = 0; i < 100; i++) {
+                    dataPoints.push({
+                        x: gaussianRandom(width * 0.3, width * 0.05),
+                        y: gaussianRandom(height * 0.3, height * 0.05)
+                    });
+                    dataPoints.push({
+                        x: gaussianRandom(width * 0.7, width * 0.05),
+                        y: gaussianRandom(height * 0.3, height * 0.05)
+                    });
+                    dataPoints.push({
+                        x: gaussianRandom(width * 0.5, width * 0.05),
+                        y: gaussianRandom(height * 0.7, height * 0.05)
+                    });
+                }
+            } else if (type === 'moons') {
+                // Two moons
+                for (let i = 0; i < 150; i++) {
+                    const angle = Math.PI * i / 150;
+                    dataPoints.push({
+                        x: width * (0.5 + 0.2 * Math.cos(angle)),
+                        y: height * (0.5 + 0.2 * Math.sin(angle))
+                    });
+                    dataPoints.push({
+                        x: width * (0.5 + 0.2 * Math.cos(angle) + 0.15),
+                        y: height * (0.5 - 0.2 * Math.sin(angle) - 0.1)
+                    });
+                }
+            } else if (type === 'circles') {
+                // Concentric circles
+                for (let i = 0; i < 100; i++) {
+                    const angle = Math.PI * 2 * i / 100;
+                    dataPoints.push({
+                        x: width * (0.5 + 0.1 * Math.cos(angle)),
+                        y: height * (0.5 + 0.1 * Math.sin(angle))
+                    });
+                    dataPoints.push({
+                        x: width * (0.5 + 0.25 * Math.cos(angle)),
+                        y: height * (0.5 + 0.25 * Math.sin(angle))
+                    });
+                }
+            } else if (type === 'anisotropic') {
+                // Anisotropic data
+                for (let i = 0; i < 100; i++) {
+                    const x = Math.random() * width * 0.4 + width * 0.3;
+                    const y = x * 0.5 + gaussianRandom(height * 0.5, height * 0.02);
+                    dataPoints.push({ x, y });
+                    
+                    const x2 = Math.random() * width * 0.4 + width * 0.3;
+                    const y2 = x2 * -0.5 + gaussianRandom(height * 0.5, height * 0.02);
+                    dataPoints.push({ x: x2, y: y2 });
+                }
+            } else {
+                // Random data
+                for (let i = 0; i < 300; i++) {
+                    dataPoints.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height
+                    });
+                }
+            }
+            
+            drawData();
+        }
+        
+        // Gaussian random number
+        function gaussianRandom(mean, stdev) {
+            let u = 0, v = 0;
+            while(u === 0) u = Math.random();
+            while(v === 0) v = Math.random();
+            const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+            return z * stdev + mean;
+        }
+        
+        // Draw data points
+        function drawData() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw data points
+            dataPoints.forEach(point => {
+                ctx.fillStyle = '#4ECDC4';
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Draw cluster centers if they exist
+            centers.forEach((center, i) => {
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.beginPath();
+                ctx.arc(center.x, center.y, 8, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+            
+            // Draw cluster assignments if they exist
+            if (clusters.length > 0) {
+                dataPoints.forEach((point, i) => {
+                    const clusterIdx = clusters[i];
+                    ctx.fillStyle = colors[clusterIdx % colors.length];
+                    ctx.beginPath();
+                    ctx.arc(point.x, point.y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+        }
+        
+        // K-Means clustering
+        function kMeans(k, maxIterations = 10) {
+            // Initialize centers randomly
+            centers = [];
+            for (let i = 0; i < k; i++) {
+                centers.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height
+                });
+            }
+            
+            clusters = new Array(dataPoints.length);
+            
+            for (let iter = 0; iter < maxIterations; iter++) {
+                // Assign points to nearest center
+                let changed = false;
+                dataPoints.forEach((point, i) => {
+                    let minDist = Infinity;
+                    let bestCluster = 0;
+                    
+                    centers.forEach((center, j) => {
+                        const dx = point.x - center.x;
+                        const dy = point.y - center.y;
+                        const dist = dx * dx + dy * dy;
+                        
+                        if (dist < minDist) {
+                            minDist = dist;
+                            bestCluster = j;
+                        }
+                    });
+                    
+                    if (clusters[i] !== bestCluster) {
+                        changed = true;
+                        clusters[i] = bestCluster;
+                    }
+                });
+                
+                if (!changed) break;
+                
+                // Update centers
+                const sums = new Array(k).fill().map(() => ({ x: 0, y: 0, count: 0 }));
+                
+                dataPoints.forEach((point, i) => {
+                    const cluster = clusters[i];
+                    sums[cluster].x += point.x;
+                    sums[cluster].y += point.y;
+                    sums[cluster].count += 1;
+                });
+                
+                centers = sums.map(sum => ({
+                    x: sum.count > 0 ? sum.x / sum.count : Math.random() * width,
+                    y: sum.count > 0 ? sum.y / sum.count : Math.random() * height
+                }));
+            }
+            
+            // Calculate inertia (sum of squared distances)
+            let inertia = 0;
+            dataPoints.forEach((point, i) => {
+                const center = centers[clusters[i]];
+                const dx = point.x - center.x;
+                const dy = point.y - center.y;
+                inertia += dx * dx + dy * dy;
+            });
+            
+            return inertia;
+        }
+        
+        // DBSCAN clustering
+        function dbscan(epsilon, minPts) {
+            clusters = new Array(dataPoints.length).fill(-1); // -1 means noise
+            let clusterId = 0;
+            
+            function regionQuery(pointIdx) {
+                const neighbors = [];
+                const point = dataPoints[pointIdx];
+                
+                dataPoints.forEach((p, i) => {
+                    if (i === pointIdx) return;
+                    
+                    const dx = p.x - point.x;
+                    const dy = p.y - point.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist <= epsilon) {
+                        neighbors.push(i);
+                    }
+                });
+                
+                return neighbors;
+            }
+            
+            function expandCluster(pointIdx, neighbors, clusterId) {
+                clusters[pointIdx] = clusterId;
+                
+                for (let i = 0; i < neighbors.length; i++) {
+                    const neighborIdx = neighbors[i];
+                    
+                    if (clusters[neighborIdx] === -1) {
+                        clusters[neighborIdx] = clusterId;
+                    } else if (clusters[neighborIdx] === 0) { // 0 means unvisited
+                        clusters[neighborIdx] = clusterId;
+                        const newNeighbors = regionQuery(neighborIdx);
+                        
+                        if (newNeighbors.length >= minPts) {
+                            neighbors = neighbors.concat(newNeighbors);
+                        }
+                    }
+                }
+            }
+            
+            dataPoints.forEach((point, i) => {
+                if (clusters[i] !== 0) return; // Already processed
+                
+                const neighbors = regionQuery(i);
+                
+                if (neighbors.length < minPts) {
+                    clusters[i] = -1; // Mark as noise
+                } else {
+                    clusterId++;
+                    expandCluster(i, neighbors, clusterId);
+                }
+            });
+            
+            // Convert cluster assignments to 0-based indices
+            const uniqueClusters = [...new Set(clusters.filter(c => c !== -1))];
+            const clusterMap = {};
+            uniqueClusters.forEach((c, i) => { clusterMap[c] = i; });
+            
+            clusters = clusters.map(c => c === -1 ? -1 : clusterMap[c]);
+            
+            // Calculate centers for visualization
+            centers = [];
+            const clusterPoints = {};
+            
+            dataPoints.forEach((point, i) => {
+                const cluster = clusters[i];
+                if (cluster === -1) return;
+                
+                if (!clusterPoints[cluster]) {
+                    clusterPoints[cluster] = { x: 0, y: 0, count: 0 };
+                }
+                
+                clusterPoints[cluster].x += point.x;
+                clusterPoints[cluster].y += point.y;
+                clusterPoints[cluster].count += 1;
+            });
+            
+            for (const cluster in clusterPoints) {
+                const sum = clusterPoints[cluster];
+                centers.push({
+                    x: sum.x / sum.count,
+                    y: sum.y / sum.count
+                });
+            }
+            
+            return clusters.filter(c => c !== -1).length > 0 ? clusterId : 0;
+        }
+        
+        // Run clustering based on selected algorithm
+        function runClustering() {
+            const algorithm = document.getElementById('algorithmSelect').value;
+            const startTime = performance.now();
+            let clusterCount = 0;
+            let inertia = '-';
+            let silhouette = '-';
+            
+            if (algorithm === 'kmeans') {
+                const k = parseInt(document.getElementById('kValue').value);
+                inertia = kMeans(k).toFixed(2);
+                clusterCount = k;
+            } else if (algorithm === 'dbscan') {
+                const epsilon = parseFloat(document.getElementById('epsilonValue').value) * width;
+                const minPts = parseInt(document.getElementById('minSamplesValue').value);
+                clusterCount = dbscan(epsilon, minPts);
+            }
+            
+            const endTime = performance.now();
+            const timeTaken = (endTime - startTime).toFixed(2);
+            
+            // Update stats
+            document.getElementById('clusterCount').textContent = clusterCount;
+            document.getElementById('inertiaValue').textContent = inertia;
+            document.getElementById('silhouetteValue').textContent = silhouette;
+            document.getElementById('timeValue').textContent = `${timeTaken}ms`;
+            
+            drawData();
+        }
+        
+        // Event listeners for demo controls
+        document.getElementById('generateData').addEventListener('click', () => {
+            const datasetType = document.getElementById('datasetSelect').value;
+            generateData(datasetType);
+            clusters = [];
+            centers = [];
+            document.getElementById('clusterCount').textContent = '0';
+            document.getElementById('inertiaValue').textContent = '-';
+            document.getElementById('silhouetteValue').textContent = '-';
+            document.getElementById('timeValue').textContent = '0ms';
+        });
+        
+        document.getElementById('runClustering').addEventListener('click', runClustering);
+        
+        document.getElementById('resetDemo').addEventListener('click', () => {
+            dataPoints = [];
+            clusters = [];
+            centers = [];
+            ctx.clearRect(0, 0, width, height);
+            document.getElementById('clusterCount').textContent = '0';
+            document.getElementById('inertiaValue').textContent = '-';
+            document.getElementById('silhouetteValue').textContent = '-';
+            document.getElementById('timeValue').textContent = '0ms';
+        });
+        
+        // Show/hide parameters based on algorithm
+        document.getElementById('algorithmSelect').addEventListener('change', function() {
+            const algorithm = this.value;
+            
+            document.getElementById('kSliderContainer').style.display = 
+                algorithm === 'kmeans' ? 'flex' : 'none';
+            document.getElementById('epsilonSliderContainer').style.display = 
+                algorithm === 'dbscan' ? 'flex' : 'none';
+            document.getElementById('minSamplesSliderContainer').style.display = 
+                algorithm === 'dbscan' ? 'flex' : 'none';
+        });
+        
+        // Update slider value displays
+        document.getElementById('kValue').addEventListener('input', function() {
+            document.getElementById('kValueDisplay').textContent = this.value;
+        });
+        
+        document.getElementById('epsilonValue').addEventListener('input', function() {
+            document.getElementById('epsilonValueDisplay').textContent = this.value;
+        });
+        
+        document.getElementById('minSamplesValue').addEventListener('input', function() {
+            document.getElementById('minSamplesValueDisplay').textContent = this.value;
+        });
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                const opacity = Math.random() * 0.3 + 0.1;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = opacity;
+                particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                // Random animation
+                const keyframes = `
+                    @keyframes float {
+                        0% { transform: translate(0, 0); }
+                        25% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        50% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        75% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        100% { transform: translate(0, 0); }
+                    }
+                `;
+                
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document.head.appendChild(style);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize
+        createParticles();
+        generateData('blobs');
+    </script>
+</body>
+</html>

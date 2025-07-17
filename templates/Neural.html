@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Networks Explorer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7b2cbf;
+            --secondary: #5a189a;
+            --accent: #ff7b00;
+            --dark: #10002b;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #38b000;
+            --info: #0096c7;
+            --warning: #ffaa00;
+            --danger: #d00000;
+            --bg: #0f0f1a;
+            --card-bg: rgba(25, 25, 45, 0.8);
+            --text: #e2e2e2;
+            --text-muted: #a0a0a0;
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --radius: 12px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .light-mode {
+            --bg: #f5f7ff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text: #333344;
+            --text-muted: #666677;
+            --border: 1px solid rgba(0, 0, 0, 0.1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(123, 44, 191, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(90, 24, 154, 0.08) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: var(--border);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            font-weight: 400;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 50px;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            height: 40px;
+            width: 80px;
+        }
+
+        .toggle-switch {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .light-mode .toggle-switch {
+            transform: translateX(40px);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(123, 44, 191, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        h2 i {
+            color: var(--accent);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary);
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            height: 1.5rem;
+            width: 5px;
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.6rem;
+            position: relative;
+        }
+
+        li::before {
+            content: '•';
+            color: var(--accent);
+            position: absolute;
+            left: -1rem;
+        }
+
+        .highlight {
+            background: rgba(255, 123, 0, 0.15);
+            color: var(--accent);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .example {
+            background: rgba(123, 44, 191, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+
+        .example-title {
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1.2rem 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent);
+            position: relative;
+        }
+
+        .formula::before {
+            content: 'Formula';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 0 0 0 5px;
+            font-family: sans-serif;
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            margin: 2rem 0;
+            box-shadow: var(--shadow);
+            border: var(--border);
+        }
+
+        .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button.secondary {
+            background: transparent;
+            color: var(--text);
+            border: var(--border);
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        select, input {
+            background: var(--card-bg);
+            color: var(--text);
+            border: var(--border);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            flex-grow: 1;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .network-canvas {
+            width: 100%;
+            height: 400px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neuron {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 2;
+            box-shadow: 0 0 0 3px rgba(255, 123, 0, 0.3);
+        }
+
+        .connection {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            height: 2px;
+            transform-origin: 0 0;
+            z-index: 1;
+        }
+
+        .demo-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .tab.active {
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .accordion {
+            margin: 1.5rem 0;
+        }
+
+        .accordion-item {
+            border: var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1.2rem;
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .accordion-content {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 1.2rem;
+            max-height: 1000px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-primary {
+            background: rgba(123, 44, 191, 0.2);
+            color: var(--primary);
+        }
+
+        .badge-secondary {
+            background: rgba(90, 24, 154, 0.2);
+            color: var(--secondary);
+        }
+
+        .badge-accent {
+            background: rgba(255, 123, 0, 0.2);
+            color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: var(--border);
+            opacity: 0.8;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+            100% { transform: translateY(0) translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-controls {
+                flex-direction: column;
+            }
+            
+            .card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div>
+                <h1><i class="fas fa-brain"></i> Neural Networks Explorer</h1>
+                <p class="subtitle">Visual guide to understanding artificial neural networks and deep learning</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+                <div class="toggle-switch">
+                    <i class="fas fa-sun"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="card">
+            <h2><i class="fas fa-question-circle"></i> Introduction</h2>
+            <p>Neural networks are <span class="highlight">computational models</span> inspired by the human brain that learn patterns from data. They form the foundation of modern artificial intelligence and machine learning.</p>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="overview">Overview</div>
+                <div class="tab" data-tab="history">History</div>
+                <div class="tab" data-tab="importance">Importance</div>
+            </div>
+
+            <div class="tab-content active" id="overview">
+                <p>A neural network consists of interconnected <span class="highlight">artificial neurons</span> organized in layers that process information:</p>
+                <ul>
+                    <li><strong>Input Layer:</strong> Receives raw data (images, text, etc.)</li>
+                    <li><strong>Hidden Layers:</strong> Extract hierarchical features through transformations</li>
+                    <li><strong>Output Layer:</strong> Produces predictions or classifications</li>
+                </ul>
+                
+                <div class="formula">
+                    y = σ(Wx + b)<br>
+                    σ: Activation function, W: Weights, b: Bias
+                </div>
+            </div>
+
+            <div class="tab-content" id="history">
+                <div class="example">
+                    <div class="example-title"><i class="fas fa-history"></i> Neural Network Timeline</div>
+                    <ul>
+                        <li><strong>1943:</strong> McCulloch-Pitts neuron model</li>
+                        <li><strong>1958:</strong> Rosenblatt's perceptron</li>
+                        <li><strong>1986:</strong> Backpropagation algorithm</li>
+                        <li><strong>2012:</strong> AlexNet revolutionizes deep learning</li>
+                        <li><strong>Present:</strong> Transformers dominate AI</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content" id="importance">
+                <p>Neural networks power modern AI applications because they:</p>
+                <ul>
+                    <li>Automatically learn features from raw data</li>
+                    <li>Can approximate any complex function</li>
+                    <li>Scale effectively with more data and compute</li>
+                    <li>Enable breakthroughs in vision, language, and science</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <div class="demo-header">
+                <h2><i class="fas fa-play"></i> Neural Network Playground</h2>
+                <div id="demo-status" class="badge badge-accent">Ready</div>
+            </div>
+            
+            <p>Build and visualize your own neural network:</p>
+            
+            <div class="demo-controls">
+                <button id="initBtn"><i class="fas fa-network-wired"></i> Initialize</button>
+                <button id="trainBtn" disabled><i class="fas fa-running"></i> Train</button>
+                <button id="resetBtn" class="secondary"><i class="fas fa-redo"></i> Reset</button>
+                
+                <div class="slider-container">
+                    <label for="layers"><i class="fas fa-layer-group"></i> Layers:</label>
+                    <select id="layers">
+                        <option value="1">1 Hidden Layer</option>
+                        <option value="2" selected>2 Hidden Layers</option>
+                        <option value="3">3 Hidden Layers</option>
+                    </select>
+                </div>
+                
+                <div class="slider-container">
+                    <label for="neurons"><i class="fas fa-circle-nodes"></i> Neurons:</label>
+                    <input type="range" id="neurons" min="1" max="10" value="4">
+                    <span id="neuronsValue">4</span>
+                </div>
+            </div>
+            
+            <div class="network-canvas" id="networkCanvas"></div>
+            
+            <div class="demo-stats">
+                <div class="stat-card">
+                    <h4><i class="fas fa-stopwatch"></i> Training Time</h4>
+                    <p id="timeStat">0s</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-bolt"></i> Epochs</h4>
+                    <p id="epochStat">0</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-chart-line"></i> Accuracy</h4>
+                    <p id="accuracyStat">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-fire"></i> Loss</h4>
+                    <p id="lossStat">0.000</p>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-cogs"></i> How Neural Networks Learn</h2>
+            
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span><i class="fas fa-forward"></i> Forward Propagation</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Data flows through the network to make predictions:</p>
+                        <div class="formula">
+                            a⁽ˡ⁺¹⁾ = f(W⁽ˡ⁾a⁽ˡ⁾ + b⁽ˡ⁾)
+                        </div>
+                        <p>Where:</p>
+                        <ul>
+                            <li><strong>a⁽ˡ⁾:</strong> Activations at layer l</li>
+                            <li><strong>W⁽ˡ⁾:</strong> Weight matrix</li>
+                            <li><strong>b⁽ˡ⁾:</strong> Bias vector</li>
+                            <li><strong>f:</strong> Activation function</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span><i class="fas fa-backward"></i> Backpropagation</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Adjusts weights to minimize error using gradient descent:</p>
+                        <div class="formula">
+                            W := W - α∇L(W)<br>
+                            α: Learning rate, L: Loss function
+                        </div>
+                        <p>The algorithm:</p>
+                        <ol>
+                            <li>Compute error at output</li>
+                            <li>Propagate error backward</li>
+                            <li>Update weights and biases</li>
+                            <li>Repeat until convergence</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span><i class="fas fa-tachometer-alt"></i> Optimization</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Advanced optimization techniques:</p>
+                        
+                        <h3>Momentum</h3>
+                        <div class="formula">
+                            vₜ = βvₜ₋₁ + (1-β)∇L(W)<br>
+                            W = W - αvₜ
+                        </div>
+                        
+                        <h3>Adam</h3>
+                        <div class="formula">
+                            mₜ = β₁mₜ₋₁ + (1-β₁)gₜ<br>
+                            vₜ = β₂vₜ₋₁ + (1-β₂)gₜ²<br>
+                            Wₜ = Wₜ₋₁ - α mₜ/(√vₜ + ε)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-shapes"></i> Neural Network Architectures</h2>
+            
+            <div class="example">
+                <div class="example-title"><i class="fas fa-network-wired"></i> Common Architectures</div>
+                <p>Different network designs for different tasks:</p>
+                
+                <div class="badge badge-primary">Feedforward</div>
+                <div class="badge badge-secondary">CNN</div>
+                <div class="badge badge-accent">RNN</div>
+                <div class="badge badge-primary">Transformer</div>
+                <div class="badge badge-secondary">GAN</div>
+            </div>
+            
+            <h3>Convolutional Neural Networks (CNNs)</h3>
+            <p>Specialized for grid-like data (images):</p>
+            <div class="formula">
+                Feature maps = Conv(Input, Kernel) + Bias
+            </div>
+            <p>Uses convolutional and pooling layers to extract spatial hierarchies.</p>
+            
+            <h3>Recurrent Neural Networks (RNNs)</h3>
+            <p>For sequential data (time series, text):</p>
+            <div class="formula">
+                hₜ = f(Wₕₕhₜ₋₁ + Wₓₕxₜ + bₕ)
+            </div>
+            <p>Maintains hidden state that captures temporal dependencies.</p>
+            
+            <h3>Transformers</h3>
+            <p>State-of-the-art for NLP using attention:</p>
+            <div class="formula">
+                Attention(Q,K,V) = softmax(QKᵀ/√dₖ)V
+            </div>
+            <p>Processes all tokens in parallel with self-attention mechanisms.</p>
+        </div>
+
+        <footer>
+            <p>© 2023 Neural Networks Explorer</p>
+            <p>An interactive guide to artificial intelligence</p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            
+            // Update icon
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('light-mode')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+
+        // Tab System
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update active content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Accordion
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+                
+                const icon = header.querySelector('i');
+                if (item.classList.contains('active')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            });
+        });
+
+        // Neural Network Playground
+        const initBtn = document.getElementById('initBtn');
+        const trainBtn = document.getElementById('trainBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const layersSelect = document.getElementById('layers');
+        const neuronsSlider = document.getElementById('neurons');
+        const neuronsValue = document.getElementById('neuronsValue');
+        const canvas = document.getElementById('networkCanvas');
+        const statusBadge = document.getElementById('demo-status');
+        
+        // Update neurons value display
+        neuronsSlider.addEventListener('input', () => {
+            neuronsValue.textContent = neuronsSlider.value;
+        });
+        
+        // Initialize network visualization
+        initBtn.addEventListener('click', () => {
+            canvas.innerHTML = '';
+            const layers = parseInt(layersSelect.value);
+            const neurons = parseInt(neuronsSlider.value);
+            
+            // Create input layer
+            createNeuron(canvas, 10, 50, 'Input');
+            
+            // Create hidden layers
+            for (let l = 0; l < layers; l++) {
+                const xPos = 30 + (l * 20);
+                for (let n = 0; n < neurons; n++) {
+                    const yPos = 20 + (n * (60 / (neurons - 1 || 1)));
+                    createNeuron(canvas, xPos, yPos, `H${l+1}`);
+                }
+            }
+            
+            // Create output layer
+            createNeuron(canvas, 30 + (layers * 20) + 10, 50, 'Output');
+            
+            // Create connections
+            setTimeout(() => {
+                const allNeurons = canvas.querySelectorAll('.neuron');
+                for (let i = 0; i < allNeurons.length - 1; i++) {
+                    for (let j = i + 1; j < allNeurons.length; j++) {
+                        createConnection(allNeurons[i], allNeurons[j]);
+                    }
+                }
+            }, 100);
+            
+            trainBtn.disabled = false;
+            statusBadge.textContent = 'Initialized';
+            statusBadge.className = 'badge badge-primary';
+        });
+        
+        // Train network simulation
+        trainBtn.addEventListener('click', () => {
+            trainBtn.disabled = true;
+            statusBadge.textContent = 'Training';
+            statusBadge.className = 'badge badge-accent';
+            
+            const progressBar = document.getElementById('progressBar');
+            const timeStat = document.getElementById('timeStat');
+            const epochStat = document.getElementById('epochStat');
+            const accuracyStat = document.getElementById('accuracyStat');
+            const lossStat = document.getElementById('lossStat');
+            
+            let progress = 0;
+            let time = 0;
+            let epochs = 0;
+            let accuracy = 0;
+            let loss = 1.0;
+            
+            const trainInterval = setInterval(() => {
+                progress += 1;
+                epochs += 1;
+                time += 0.1;
+                accuracy = Math.min(100, accuracy + Math.random() * 2);
+                loss = Math.max(0.001, loss - Math.random() * 0.02);
+                
+                progressBar.style.width = `${progress}%`;
+                timeStat.textContent = `${time.toFixed(1)}s`;
+                epochStat.textContent = epochs;
+                accuracyStat.textContent = `${accuracy.toFixed(1)}%`;
+                lossStat.textContent = loss.toFixed(3);
+                
+                // Animate random connections
+                const connections = canvas.querySelectorAll('.connection');
+                const randomConn = connections[Math.floor(Math.random() * connections.length)];
+                randomConn.style.background = 'rgba(255, 255, 255, 0.8)';
+                setTimeout(() => {
+                    randomConn.style.background = 'rgba(255, 255, 255, 0.3)';
+                }, 100);
+                
+                if (progress >= 100) {
+                    clearInterval(trainInterval);
+                    trainBtn.disabled = false;
+                    statusBadge.textContent = 'Trained';
+                    statusBadge.className = 'badge badge-success';
+                }
+            }, 100);
+        });
+        
+        // Reset simulation
+        resetBtn.addEventListener('click', () => {
+            canvas.innerHTML = '';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('timeStat').textContent = '0s';
+            document.getElementById('epochStat').textContent = '0';
+            document.getElementById('accuracyStat').textContent = '0%';
+            document.getElementById('lossStat').textContent = '0.000';
+            trainBtn.disabled = true;
+            statusBadge.textContent = 'Ready';
+            statusBadge.className = 'badge badge-accent';
+        });
+        
+        // Helper functions
+        function createNeuron(container, xPercent, yPercent, label) {
+            const neuron = document.createElement('div');
+            neuron.className = 'neuron';
+            neuron.textContent = label;
+            neuron.style.left = `${xPercent}%`;
+            neuron.style.top = `${yPercent}%`;
+            container.appendChild(neuron);
+            return neuron;
+        }
+        
+        function createConnection(neuron1, neuron2) {
+            const connection = document.createElement('div');
+            connection.className = 'connection';
+            canvas.appendChild(connection);
+            
+            const rect1 = neuron1.getBoundingClientRect();
+            const rect2 = neuron2.getBoundingClientRect();
+            const canvasRect = canvas.getBoundingClientRect();
+            
+            const x1 = rect1.left + rect1.width/2 - canvasRect.left;
+            const y1 = rect1.top + rect1.height/2 - canvasRect.top;
+            const x2 = rect2.left + rect2.width/2 - canvasRect.left;
+            const y2 = rect2.top + rect2.height/2 - canvasRect.top;
+            
+            const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            
+            connection.style.width = `${length}px`;
+            connection.style.left = `${x1}px`;
+            connection.style.top = `${y1}px`;
+            connection.style.transform = `rotate(${angle}deg)`;
+        }
+        
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = `${Math.random() * 5 + 1}px`;
+            particle.style.height = particle.style.width;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

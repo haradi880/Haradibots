@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Python Robotics Lab</title>
+    <style>
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff2a6d;
+            --neon-purple: #d300c5;
+            --dark-space: #0c0c1a;
+            --void-black: #050510;
+            --cyber-white: #e0e0e0;
+            --hacker-green: #00ff88;
+            --matrix: #00ff41;
+            --glass: rgba(15, 240, 252, 0.05);
+            --neon-glow: 0 0 15px var(--neon-blue), 0 0 30px rgba(15, 240, 252, 0.3);
+            --pink-glow: 0 0 15px var(--neon-pink), 0 0 30px rgba(255, 42, 109, 0.3);
+            --transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        @font-face {
+            font-family: 'Rajdhani';
+            src: url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        }
+
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(ellipse at top, var(--void-black), var(--dark-space));
+            color: var(--cyber-white);
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        ::selection {
+            background: var(--neon-pink);
+            color: var(--void-black);
+        }
+
+        .cyber-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .cyber-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, var(--void-black) 0%, transparent 20%, transparent 80%, var(--void-black) 100%),
+                linear-gradient(0deg, var(--void-black) 0%, transparent 10%, transparent 90%, var(--void-black) 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(15, 240, 252, 0.2);
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            box-shadow: var(--neon-glow);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: var(--neon-glow);
+            letter-spacing: 2px;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+            text-shadow: 0 0 10px rgba(15, 240, 252, 0.5);
+        }
+
+        .cyber-card {
+            background: var(--glass);
+            backdrop-filter: blur(16px);
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(15, 240, 252, 0.1);
+            box-shadow: 
+                inset 0 0 20px rgba(15, 240, 252, 0.1),
+                0 0 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle, rgba(15, 240, 252, 0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+            z-index: -1;
+        }
+
+        .cyber-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                inset 0 0 30px rgba(15, 240, 252, 0.2),
+                0 0 40px rgba(15, 240, 252, 0.3);
+            border-color: rgba(15, 240, 252, 0.3);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-blue);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 70px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            box-shadow: var(--neon-glow);
+            border-radius: 3px;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: rgba(224, 224, 224, 0.9);
+        }
+
+        .cyber-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .cyber-module {
+            background: rgba(12, 12, 26, 0.7);
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid rgba(15, 240, 252, 0.1);
+            box-shadow: 
+                inset 0 0 15px rgba(15, 240, 252, 0.05),
+                0 0 20px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-module::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--neon-blue), transparent);
+            box-shadow: var(--neon-glow);
+        }
+
+        .cyber-module:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                inset 0 0 20px rgba(15, 240, 252, 0.1),
+                0 0 30px rgba(15, 240, 252, 0.2);
+            border-color: rgba(15, 240, 252, 0.3);
+        }
+
+        .cyber-module h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-pink);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .module-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+            text-shadow: var(--neon-glow);
+        }
+
+        .cyber-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            color: var(--void-black);
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--neon-glow);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .cyber-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 
+                0 0 20px var(--neon-blue),
+                0 0 40px rgba(15, 240, 252, 0.3);
+        }
+
+        .cyber-btn-outline {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            box-shadow: none;
+        }
+
+        .cyber-btn-outline:hover {
+            background: linear-gradient(90deg, rgba(15, 240, 252, 0.2), rgba(211, 0, 197, 0.2));
+            color: var(--cyber-white);
+        }
+
+        .simulation-lab {
+            width: 100%;
+            height: 600px;
+            margin: 3rem 0;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(5, 5, 16, 0.5);
+            border: 1px solid rgba(15, 240, 252, 0.1);
+            box-shadow: 
+                inset 0 0 30px rgba(15, 240, 252, 0.1),
+                0 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .cyber-editor {
+            width: 100%;
+            height: 500px;
+            background: #0a0a1a;
+            border-radius: 8px;
+            margin: 2rem 0;
+            overflow: hidden;
+            border: 1px solid rgba(15, 240, 252, 0.1);
+            box-shadow: 
+                inset 0 0 20px rgba(15, 240, 252, 0.1),
+                0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .editor-header {
+            background: #0c0c24;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(15, 240, 252, 0.1);
+        }
+
+        .editor-header span {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-blue);
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .editor-content {
+            padding: 1.5rem;
+            height: calc(100% - 50px);
+            overflow-y: auto;
+            color: var(--cyber-white);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            background: 
+                linear-gradient(rgba(10, 10, 26, 0.9), rgba(10, 10, 26, 0.9)),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%230ff0fc" stroke-width="0.5" opacity="0.1"/></svg>');
+        }
+
+        .cyber-terminal {
+            background: #0a0a1a;
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
+            font-family: 'Courier New', monospace;
+            color: var(--hacker-green);
+            min-height: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            border-top: 1px solid rgba(15, 240, 252, 0.1);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 5px var(--matrix);
+        }
+
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .terminal-line::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--neon-pink);
+        }
+
+        .control-panel {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            background: rgba(15, 240, 252, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .control-btn:hover {
+            background: rgba(15, 240, 252, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .tab-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(15, 240, 252, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        .cyber-tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            background: transparent;
+            color: var(--cyber-white);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .cyber-tab.active {
+            background: rgba(15, 240, 252, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .cyber-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -11px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-blue);
+            box-shadow: var(--neon-glow);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 6rem;
+            padding: 3rem;
+            border-top: 1px solid rgba(15, 240, 252, 0.1);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 25%;
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            box-shadow: var(--neon-glow);
+        }
+
+        .cyber-footer-text {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            color: var(--neon-blue);
+        }
+
+        .neon-pulse {
+            animation: neonPulse 2s infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from {
+                text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+            }
+            to {
+                text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue);
+            }
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.5;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .cyber-container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .cyber-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .simulation-lab {
+                height: 400px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="cyber-container">
+        <header>
+            <h1 class="neon-pulse">PYTHON ROBOTICS LAB</h1>
+            <p class="subtitle">NEON EDITION | INTERACTIVE LEARNING PLATFORM</p>
+        </header>
+
+        <div class="cyber-card">
+            <h2>QUANTUM SIMULATION LAB</h2>
+            <p>Control a futuristic robot in our quantum simulation environment. Write Python code and see immediate results.</p>
+            
+            <div class="simulation-lab" id="quantum-simulator">
+                <!-- 3D Robot Simulation will be loaded here -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <i class="fas fa-robot" style="font-size: 5rem; color: var(--neon-blue); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--neon-blue); font-family: 'Orbitron', sans-serif;">QUANTUM SIMULATION LOADING...</p>
+                </div>
+            </div>
+
+            <div class="tab-container">
+                <button class="cyber-tab active" onclick="openCyberTab(event, 'cyber-code')"><i class="fas fa-code"></i> QUANTUM CODE</button>
+                <button class="cyber-tab" onclick="openCyberTab(event, 'cyber-terminal')"><i class="fas fa-terminal"></i> NEON TERMINAL</button>
+                <button class="cyber-tab" onclick="openCyberTab(event, 'cyber-sensors')"><i class="fas fa-satellite-dish"></i> SENSOR DATA</button>
+            </div>
+
+            <div id="cyber-code" class="tab-content active">
+                <div class="cyber-editor">
+                    <div class="editor-header">
+                        <span>quantum_bot.py</span>
+                        <button class="cyber-btn" onclick="executeCyberCode()"><i class="fas fa-play"></i> EXECUTE</button>
+                    </div>
+                    <div class="editor-content" id="cyber-editor" contenteditable="true">
+# QUANTUM ROBOT CONTROL MODULE
+from quantum_bot import QuantumRobot
+
+bot = QuantumRobot()
+
+def main():
+    bot.activate_neural_net()
+    bot.scan_environment()
+    
+    # Movement sequence
+    bot.thrusters(0.7)  # 70% power
+    bot.rotate(45)       # 45 degree turn
+    bot.thrusters(0.5)
+    bot.scan_environment()
+    
+    if bot.detect_obstacle():
+        bot.evasive_maneuver()
+        
+    bot.return_to_base()
+
+if __name__ == "__main__":
+    main()</div>
+                </div>
+            </div>
+
+            <div id="cyber-terminal" class="tab-content">
+                <div class="cyber-terminal" id="cyber-output">
+                    <div class="terminal-line">SYSTEM READY</div>
+                    <div class="terminal-line">QUANTUM CORE INITIALIZED</div>
+                    <div class="terminal-line">AWAITING USER COMMANDS...</div>
+                </div>
+            </div>
+
+            <div id="cyber-sensors" class="tab-content">
+                <div class="cyber-terminal">
+                    <div class="terminal-line">LIDAR: SCANNING...</div>
+                    <div class="terminal-line">THERMAL: 23.7°C</div>
+                    <div class="terminal-line">GRAVITATIONAL: 9.81 m/s²</div>
+                    <div class="terminal-line">QUANTUM ENTANGLEMENT: STABLE</div>
+                </div>
+            </div>
+
+            <div class="control-panel">
+                <button class="control-btn" onclick="cyberCommand('init')"><i class="fas fa-power-off"></i> INITIALIZE</button>
+                <button class="control-btn" onclick="cyberCommand('scan')"><i class="fas fa-radar"></i> FULL SCAN</button>
+                <button class="control-btn" onclick="cyberCommand('calibrate')"><i class="fas fa-cogs"></i> CALIBRATE</button>
+                <button class="control-btn" onclick="cyberCommand('emergency')" style="color: var(--neon-pink); border-color: var(--neon-pink);"><i class="fas fa-skull-crossbones"></i> EMERGENCY STOP</button>
+            </div>
+        </div>
+
+        <div class="cyber-card">
+            <h2>NEON LEARNING MODULES</h2>
+            <p>Master futuristic robotics programming through these cyber-enhanced modules:</p>
+            
+            <div class="cyber-grid">
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-atom"></i></div>
+                    <h3>QUANTUM CONTROL</h3>
+                    <p>Program quantum processors for ultra-precise robot movements using Python Q# integrations.</p>
+                    <button class="cyber-btn-outline" onclick="loadCyberModule('quantum')"><i class="fas fa-arrow-right"></i> ENGAGE</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-eye"></i></div>
+                    <h3>NEURAL VISION</h3>
+                    <p>Implement photon-based vision systems with deep learning for object recognition.</p>
+                    <button class="cyber-btn-outline" onclick="loadCyberModule('vision')"><i class="fas fa-arrow-right"></i> ENGAGE</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h3>SWARM INTELLIGENCE</h3>
+                    <p>Coordinate fleets of nano-robots using Python-based swarm algorithms.</p>
+                    <button class="cyber-btn-outline" onclick="loadCyberModule('swarm')"><i class="fas fa-arrow-right"></i> ENGAGE</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-brain"></i></div>
+                    <h3>NEUROMORPHIC AI</h3>
+                    <p>Program brain-like neural networks for autonomous decision making.</p>
+                    <button class="cyber-btn-outline" onclick="loadCyberModule('neuromorphic')"><i class="fas fa-arrow-right"></i> ENGAGE</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-satellite"></i></div>
+                    <h3>SPACE NAVIGATION</h3>
+                    <p>Write Python scripts for orbital mechanics and zero-G movement.</p>
+                    <button class="cyber-btn-outline" onclick="loadCyberModule('space')"><i class="fas fa-arrow-right"></i> ENGAGE</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-user-astronaut"></i></div>
+                    <h3>HUMANOID CONTROL</h3>
+                    <p>Program advanced bipedal movement and human-robot interaction.</p>
+                    <button class="cyber-btn-outline" onclick="loadCyberModule('humanoid')"><i class="fas fa-arrow-right"></i> ENGAGE</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cyber-card">
+            <h2>CYBER CHALLENGES</h2>
+            <p>Test your skills in these neon-lit robotics scenarios:</p>
+            
+            <div class="cyber-grid">
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-meteor"></i></div>
+                    <h3>ASTEROID FIELD</h3>
+                    <p>Navigate through a dense asteroid field using LIDAR and predictive algorithms.</p>
+                    <button class="cyber-btn" onclick="startCyberChallenge('asteroid')"><i class="fas fa-play"></i> BEGIN</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-viruses"></i></div>
+                    <h3>NANO-SWARM</h3>
+                    <p>Control a swarm of medical nanobots to repair damaged tissue.</p>
+                    <button class="cyber-btn" onclick="startCyberChallenge('nanobot')"><i class="fas fa-play"></i> BEGIN</button>
+                </div>
+                
+                <div class="cyber-module">
+                    <div class="module-icon"><i class="fas fa-city"></i></div>
+                    <h3>MEGACITY</h3>
+                    <p>Autonomously navigate a futuristic cityscape with dynamic obstacles.</p>
+                    <button class="cyber-btn" onclick="startCyberChallenge('megacity')"><i class="fas fa-play"></i> BEGIN</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p class="cyber-footer-text">NEON PYTHON ROBOTICS LAB | QUANTUM EDITION</p>
+        <p class="cyber-footer-text" style="margin-top: 1rem; color: var(--neon-pink);">SYSTEM STATUS: <span style="color: var(--hacker-green);">ONLINE</span></p>
+    </footer>
+
+    <script>
+        // Cyber Terminal Functions
+        function addCyberOutput(message, type = "normal") {
+            const terminal = document.getElementById('cyber-output');
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            
+            if (type === "error") {
+                line.style.color = "var(--neon-pink)";
+            } else if (type === "success") {
+                line.style.color = "var(--hacker-green)";
+            } else if (type === "system") {
+                line.style.color = "var(--neon-blue)";
+            }
+            
+            line.innerHTML = message;
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Tab functionality
+        function openCyberTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("cyber-tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Cyber Commands
+        function cyberCommand(command) {
+            const terminal = document.getElementById('cyber-output');
+            
+            switch (command) {
+                case 'init':
+                    addCyberOutput("INITIALIZING QUANTUM CORE...", "system");
+                    setTimeout(() => {
+                        addCyberOutput("NEURAL NETWORK ACTIVATED", "success");
+                        addCyberOutput("ALL SYSTEMS NOMINAL", "success");
+                    }, 1000);
+                    break;
+                    
+                case 'scan':
+                    addCyberOutput("INITIATING FULL SPECTRUM SCAN...", "system");
+                    setTimeout(() => {
+                        addCyberOutput("LIDAR: 3 OBSTACLES DETECTED", "normal");
+                        addCyberOutput("THERMAL: 23.7°C ±0.2", "normal");
+                        addCyberOutput("QUANTUM FLUCTUATIONS: 0.003%", "normal");
+                    }, 1500);
+                    break;
+                    
+                case 'calibrate':
+                    addCyberOutput("CALIBRATING SENSORS...", "system");
+                    setTimeout(() => {
+                        addCyberOutput("GYROSCOPE: CALIBRATED", "success");
+                        addCyberOutput("MAGNETOMETER: CALIBRATED", "success");
+                        addCyberOutput("CALIBRATION COMPLETE", "success");
+                    }, 2000);
+                    break;
+                    
+                case 'emergency':
+                    addCyberOutput("!!! EMERGENCY SHUTDOWN INITIATED !!!", "error");
+                    setTimeout(() => {
+                        addCyberOutput("ALL SYSTEMS OFFLINE", "error");
+                    }, 500);
+                    break;
+            }
+        }
+
+        // Code Execution
+        function executeCyberCode() {
+            const code = document.getElementById('cyber-editor').textContent;
+            const terminal = document.getElementById('cyber-output');
+            
+            // Clear terminal
+            terminal.innerHTML = '<div class="terminal-line" style="color: var(--neon-blue);">EXECUTING QUANTUM_BOT.PY...</div>';
+            
+            // Simulate code execution
+            setTimeout(() => {
+                addCyberOutput("QUANTUM PROCESSOR ENGAGED", "system");
+                
+                setTimeout(() => {
+                    addCyberOutput("NEURAL NETWORK ACTIVATION SEQUENCE STARTED", "normal");
+                    
+                    setTimeout(() => {
+                        addCyberOutput("ENVIRONMENT SCAN COMPLETE", "success");
+                        
+                        setTimeout(() => {
+                            addCyberOutput("THRUSTERS AT 70% POWER", "normal");
+                            
+                            setTimeout(() => {
+                                addCyberOutput("ROTATING 45 DEGREES", "normal");
+                                
+                                setTimeout(() => {
+                                    addCyberOutput("NO OBSTACLES DETECTED", "success");
+                                    
+                                    setTimeout(() => {
+                                        addCyberOutput("RETURNING TO BASE", "normal");
+                                        
+                                        setTimeout(() => {
+                                            addCyberOutput("PROGRAM EXECUTION COMPLETE", "success");
+                                        }, 800);
+                                    }, 800);
+                                }, 800);
+                            }, 800);
+                        }, 800);
+                    }, 800);
+                }, 800);
+            }, 800);
+        }
+
+        // Module Loader
+        function loadCyberModule(module) {
+            addCyberOutput(`LOADING ${module.toUpperCase()} MODULE...`, "system");
+            // In full implementation would load new content
+        }
+
+        // Challenge Starter
+        function startCyberChallenge(challenge) {
+            addCyberOutput(`INITIALIZING ${challenge.toUpperCase()} CHALLENGE...`, "system");
+            // In full implementation would load challenge scenario
+        }
+
+        // Initialize terminal with cool effect
+        window.onload = function() {
+            setTimeout(() => {
+                addCyberOutput("SYSTEM BOOT SEQUENCE INITIATED", "system");
+                
+                setTimeout(() => {
+                    addCyberOutput("QUANTUM CORE: ONLINE", "success");
+                    
+                    setTimeout(() => {
+                        addCyberOutput("NEURAL NETWORK: SYNCHRONIZED", "success");
+                        
+                        setTimeout(() => {
+                            addCyberOutput("ALL SYSTEMS READY", "success");
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

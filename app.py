@@ -296,12 +296,49 @@ def hosting():
 def notebook():
     return render_template('notebook.html')
 
-# ------------------notebook------------------
+# ------------------port------------------
 
 @app.route('/port')
 def port():
     return render_template('port.html')
 
+# ------------------supervised learning------------------
+
+@app.route('/supervised')
+def supervised():
+    return render_template('supervised.html')
+
+# ------------------unsupervised learning------------------
+
+@app.route('/unsupervised')
+def unsupervised():
+    return render_template('unsupervised.html')
+
+# ------------------reinforcement learning------------------
+
+@app.route('/reinforcement')
+def reinforcement():
+    return render_template('reinforcement.html')
+
+# ------------------Neural learning------------------
+
+@app.route('/Neural')
+def Neural():
+    return render_template('Neural.html')
+
+
+# ------------------Neural learning------------------
+
+@app.route('/deep')
+def deep():
+    return render_template('deep.html')
+
+
+# ------------------python for robo ------------------
+
+@app.route('/python_for_robo')
+def python_for_robo():
+    return render_template('python_for_robo.html')
 # ------------------ Project Creation ------------------
 
 # protectin session 

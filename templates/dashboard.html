@@ -1,290 +1,1814 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta name="description" content="Haradi Bots - Learn Robotics, AI, Python, and more. Join the future.">
-    <meta property="og:title" content="Haradi Bots">
-    <meta property="og:image" content="/static/img2.jpeg">
-    <meta property="og:description" content="Free Robotics and AI Education by Aditya Yadav.">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>White-HaradiBots</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <link rel="icon" type="image/png" href="/static/img2.jpeg">
-    <!-- Font Awesome CDN Link -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <title>Haradi Bots - AI & Robotics Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <style>
+        :root {
+            /* Light Theme */
+            --primary: #4361ee;
+            --primary-dark: #3a0ca3;
+            --primary-light: #4895ef;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            
+            --bg: #f8f9fa;
+            --bg-alt: #e9ecef;
+            --text: #212529;
+            --text-light: #6c757d;
+            --card-bg: #ffffff;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --header-border: rgba(0, 0, 0, 0.1);
+            
+            --radius: 12px;
+            --radius-sm: 8px;
+            
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: all 0.2s ease;
+            
+            --section-padding: 6rem 0;
+        }
 
+        /* Dark Theme */
+        .dark-mode {
+            --primary: #4895ef;
+            --primary-dark: #4361ee;
+            --primary-light: #4cc9f0;
+            --secondary: #b5179e;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            
+            --bg: #121212;
+            --bg-alt: #1e1e1e;
+            --text: #f8f9fa;
+            --text-light: #adb5bd;
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            
+            --header-bg: rgba(30, 30, 30, 0.9);
+            --header-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-alt);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: var(--section-padding);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--header-border);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            transition: var(--transition);
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            border-radius: 50px;
+            background-color: var(--bg-alt);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            margin-left: 1rem;
+            transition: var(--transition);
+        }
+
+        .theme-toggle i {
+            position: absolute;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .theme-toggle .sun {
+            left: 6px;
+            color: var(--warning);
+            opacity: 1;
+        }
+
+        .theme-toggle .moon {
+            right: 6px;
+            color: var(--primary-light);
+            opacity: 0;
+        }
+
+        .dark-mode .theme-toggle .sun {
+            opacity: 0;
+        }
+
+        .dark-mode .theme-toggle .moon {
+            opacity: 1;
+        }
+
+        .toggle-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            position: absolute;
+            left: 4px;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode .toggle-thumb {
+            left: calc(100% - 22px);
+        }
+
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transition: var(--transition-fast);
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a:hover::after {
+            width: 80%;
+        }
+
+        nav ul li a.active {
+            color: var(--primary);
+        }
+
+        nav ul li a.active::after {
+            width: 80%;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--card-bg);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--card-shadow);
+            padding: 0.5rem 0;
+            min-width: 200px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        .dropdown-content a:hover {
+            background-color: var(--bg-alt);
+            color: var(--primary);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, transparent 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(67, 97, 238, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary::before {
+            opacity: 0;
+        }
+
+        .btn-secondary:hover {
+            color: white;
+            border-color: transparent;
+        }
+
+        .btn-secondary:hover::before {
+            opacity: 1;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            max-width: 600px;
+            z-index: -1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--bg-alt);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-link i {
+            transition: var(--transition);
+        }
+
+        .feature-link:hover {
+            color: var(--accent);
+            gap: 0.75rem;
+        }
+
+        .feature-link:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Courses Section */
+        .courses-slider {
+            position: relative;
+            padding: 1rem 0 3rem;
+        }
+
+        .swiper {
+            padding: 2rem 1rem;
+            margin: 0 -1rem;
+        }
+
+        .course-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .course-content {
+            padding: 1.5rem;
+        }
+
+        .course-category {
+            display: inline-block;
+            padding: 0.35rem 1rem;
+            background-color: var(--bg-alt);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .course-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-duration {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .enroll-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .enroll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Technologies Section */
+        .technologies {
+            background-color: var(--bg-alt);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .tech-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .tech-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--bg-alt);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .tech-card:hover .tech-icon {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .tech-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .tech-card p {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tech-link {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .tech-link:hover {
+            color: var(--accent);
+            gap: 0.75rem;
+        }
+
+        /* About Section */
+        .about-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .about-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--bg-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: var(--card-shadow);
+        }
+
+        .social-link:hover {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Contact Section */
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-info h3::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .contact-info p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .contact-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-method {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--bg-alt);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .contact-method:hover .contact-icon {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .contact-details h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .contact-details a, .contact-details p {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .contact-details a:hover {
+            color: var(--primary);
+        }
+
+        .contact-form {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--bg-alt);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            transition: var(--transition);
+            font-size: 1rem;
+            background-color: var(--bg-alt);
+            color: var(--text);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-alt);
+            color: var(--text);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .footer-logo i {
+            color: var(--accent);
+            font-size: 2rem;
+        }
+
+        .footer-about p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1rem;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--bg);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-image {
+                width: 40%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 300px;
+                height: 100vh;
+                background-color: var(--card-bg);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                transition: var(--transition);
+                padding-top: 80px;
+                z-index: 1000;
+            }
+            
+            nav.active {
+                right: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                padding: 0;
+                margin-left: 1.5rem;
+                margin-top: 0.5rem;
+                display: none;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+            }
+            
+            .hero {
+                text-align: center;
+                padding-top: 100px;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .cta-buttons {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                position: relative;
+                width: 80%;
+                margin: 2rem auto 0;
+                top: auto;
+                right: auto;
+                transform: none;
+            }
+            
+            .about-container, .contact-container {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-header h2, .about-content h2, .contact-info h3 {
+                font-size: 2rem;
+            }
+            
+            .feature-card, .tech-card {
+                padding: 1.5rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-links {
+                margin-top: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-header h2, .about-content h2, .contact-info h3 {
+                font-size: 1.8rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .contact-form {
+                padding: 1.5rem;
+            }
+            
+            .back-to-top {
+                width: 40px;
+                height: 40px;
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <!-- Header -->
     <header>
-        <div class="logo" data-aos="fade-right">
-            <a href="#">Haradi Bots</a>
-        </div>
-        <button class="menu-toggle" aria-label="Toggle navigation">&#9776;</button>
-        <nav>
-            <ul class="navbar" data-aos="fade-up">
-                <li class="has-dropdown" data-aos="fade-left">
-                    <a href="#"><i class="fa-solid fa-robot"></i> Machine Learning</a>
-                    <ul class="dropdown">
-                        <li><a href="#" data-aos="fade-up"><i class="fa-solid fa-scale-balanced"></i> Supervised
-                                Learning</a></li>
-                        <li><a href="#" data-aos="fade-up" data-aos-delay="100"><i class="fa-solid fa-layer-group"></i>
-                                Unsupervised Learning</a></li>
-                        <li><a href="#" data-aos="fade-up" data-aos-delay="200"><i class="fa-solid fa-gamepad"></i>
-                                Reinforcement Learning</a></li>
-                        <li><a href="#" data-aos="fade-up" data-aos-delay="300"><i
-                                    class="fa-solid fa-network-wired"></i> Neural Networks</a></li>
-                        <li><a href="#" data-aos="fade-up" data-aos-delay="400"><i class="fa-solid fa-brain"></i> Deep
-                                Learning</a></li>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-robot"></i> Haradi Bots
+            </a>
+            
+            <div class="nav-container">
+                <nav>
+                    <ul>
+                        <li class="dropdown">
+                            <a href="#"><i class="fas fa-robot"></i> Machine Learning <i class="fas fa-chevron-down"></i></a>
+                            <div class="dropdown-content">
+                                <a href="/supervised"><i class="fas fa-scale-balanced"></i> Supervised Learning</a>
+                                <a href="/unsupervised"><i class="fas fa-layer-group"></i> Unsupervised Learning</a>
+                                <a href="/reinforcement"><i class="fas fa-gamepad"></i> Reinforcement Learning</a>
+                                <a href="/Neural"><i class="fas fa-network-wired"></i> Neural Networks</a>
+                                <a href="/deep"><i class="fas fa-brain"></i> Deep Learning</a>
+                            </div>
+                        </li>
+                        <li><a href="/hosting"><i class="fas fa-server"></i> Hosting</a></li>
+                        <li><a href="/notebook"><i class="fas fa-book"></i> Notebook</a></li>
+                        <li><a href="#about"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
                     </ul>
-                </li>
-                <li><a href="/hosting" data-aos="zoom-in"><i class="fa-solid fa-server"></i> Hosting Services</a></li>
-                </li>
-                <li><a href="/notebook" data-aos="zoom-in"><i class="fa-solid fa-book"></i> NoteBook</a></li>
-
-                <li><a href="#about" data-aos="zoom-in"><i class="fa-solid fa-circle-info"></i> Info</a></li>
-                <li><a href="#contact" data-aos="zoom-in"><i class="fa-solid fa-phone"></i> Contact</a></li>
-                <div class="container1">
-                    <h5>Welcome, {{ username }}</h5>
+                </nav>
+                
+                <div class="theme-toggle">
+                    <i class="fas fa-sun sun"></i>
+                    <i class="fas fa-moon moon"></i>
+                    <span class="toggle-thumb"></span>
                 </div>
-                <li><a href="/logout">🚪 Logout</a></li>
-            </ul>
-        </nav>
+                
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
     </header>
 
-        <!-- Hero Section -->
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Haradi Bots</h1>
-            <p class="hero-subtitle">Your journey to mastering robotics, AI, and technology starts here. Join us in
-                exploring the future of technology!</p>
-            <div class="cta-container">
-                <a href="#robotics" class="cta-button">Get Started</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="robotics" class="robotics">
-        <h2>Robotics Technologies</h2>
-        <div class="robotic-topics">
-            <div class="topic" data-aos="fade-right">
-                <h3>SLAM (Simultaneous Localization and Mapping)</h3>
-                <p>SLAM is the process used by robots and autonomous systems to build or update a map of an unknown
-                    environment while simultaneously keeping track of their location within it.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="100">
-                <h3>Natural Language Processing (NLP)</h3>
-                <p>NLP allows robots to understand and process human languages, enabling voice commands, conversation
-                    systems, and more intuitive human-robot interactions.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="200">
-                <h3>LSTM (Long Short-Term Memory)</h3>
-                <p>LSTM is a type of recurrent neural network (RNN) used to predict and understand time-series data,
-                    essential for tasks such as speech recognition and motion prediction in robotics.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="300">
-                <h3>Path Planning</h3>
-                <p>Path planning algorithms allow robots to navigate from a starting point to a goal while avoiding
-                    obstacles, optimizing routes and ensuring safety.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="400">
-                <h3>Autonomous Systems</h3>
-                <p>Robots equipped with autonomous systems use sensors and algorithms to make real-time decisions,
-                    allowing them to operate independently in dynamic environments.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <!-- New Topics Added Below -->
-            <div class="topic" data-aos="fade-right" data-aos-delay="500">
-                <h3>Computer Vision</h3>
-                <p>Computer Vision enables robots to interpret and understand visual information from the world,
-                    facilitating tasks such as object recognition, image segmentation, and facial recognition.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="600">
-                <h3>Reinforcement Learning</h3>
-                <p>Reinforcement Learning is a machine learning technique where an agent learns to make decisions by
-                    interacting with its environment, which is crucial for tasks like robotics control and game-playing.
-                </p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="700">
-                <h3>Robot Perception</h3>
-                <p>Robot perception refers to the ability of robots to perceive their environment through sensors like
-                    cameras, lidar, and touch, helping them to make informed decisions in real-time.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="800">
-                <h3>AI in Robotics</h3>
-                <p>Artificial Intelligence (AI) enhances robotics by enabling machines to learn from data and make
-                    autonomous decisions, improving their performance and adaptability in complex tasks.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="900">
-                <h3>Human-Robot Interaction (HRI)</h3>
-                <p>Human-Robot Interaction (HRI) is the study of how humans and robots interact, focusing on making
-                    robots more intuitive, user-friendly, and collaborative in human environments.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="1000">
-                <h3>Swarm Robotics</h3>
-                <p>Swarm robotics involves multiple robots working together to complete tasks more efficiently, inspired
-                    by the behavior of social animals like ants and bees.</p>
-                <a href="#">Learn More</a>
-            </div>
-            <div class="topic" data-aos="fade-right" data-aos-delay="1100">
-                <h3>Robotic Grasping and Manipulation</h3>
-                <p>Robotic grasping and manipulation focuses on enabling robots to pick up, hold, and manipulate objects
-                    in various ways, essential for industrial automation, healthcare, and everyday tasks.</p>
-                <a href="#">Learn More</a>
-            </div>
-        </div>
-    </section>
-
-
-    <section id="features" class="features">
-        <div class="feature" data-aos="fade-up">
-            <h3>Python</h3>
-            <p>Learn the foundations of Python programming and explore its applications in various fields.</p>
-        </div>
-        <div class="feature" data-aos="fade-up" data-aos-delay="200">
-            <h3>Machine Learning</h3>
-            <p>Dive into the world of AI and data-driven algorithms, from supervised to unsupervised learning.</p>
-        </div>
-        <div class="feature" data-aos="fade-up" data-aos-delay="400">
-            <h3>TensorFlow</h3>
-            <p>Master TensorFlow to build and deploy deep learning models efficiently.</p>
-        </div>
-    </section>
-
-    <section id="courses" class="courses">
-        <h2>Our Courses</h2>
-        <div class="course-list">
-            <div class="course" data-aos="fade-right">
-                <h4>Introduction to Python</h4>
-                <p>Learn the basics of Python programming, including data structures, functions, and object-oriented
-                    programming.</p>
-                <a href="#">Enroll Now</a>
-            </div>
-            <div class="course" data-aos="fade-right" data-aos-delay="100">
-                <h4>Machine Learning 101</h4>
-                <p>Understand the core concepts of machine learning, including algorithms like linear regression and
-                    decision trees.</p>
-                <a href="#">Enroll Now</a>
-            </div>
-            <div class="course" data-aos="fade-right" data-aos-delay="200">
-                <h4>Deep Learning with TensorFlow</h4>
-                <p>Build deep learning models using TensorFlow, from image classification to natural language
-                    processing.</p>
-                <a href="#">Enroll Now</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <h2>Contact Us</h2>
-        <form action="https://formspree.io/f/xrgnvgwz" method="POST" class="contact-form">
-            <div class="form-group">
-                <input type="text" id="name" name="name" placeholder=" " required>
-                <label for="name">Name</label>
-            </div>
-            <div class="form-group">
-                <input type="email" id="email" name="email" placeholder=" " required>
-                <label for="email">Email</label>
-            </div>
-            <div class="form-group">
-                <textarea id="message" name="message" rows="5" placeholder=" " required></textarea>
-                <label for="message">Message</label>
-            </div>
-            <button type="submit" class="submit-btn">Send Message</button>
-        </form>
-    </section>
-
-
-    <section id="about" class="about">
         <div class="container">
-            <div class="about-text">
-                <h2>About Us</h2>
-                <p class="short-description">Haradi Bots offers free knowledge in robotics, AI, and computer science.
-                    Our mission is to make learning accessible to everyone with resources on Python, Machine Learning,
-                    Robotics, and more.</p>
-
-                <div class="long-description">
-                    <p>Our goal is to bridge the gap between students and advanced technology, making complex subjects
-                        easier to understand through tutorials and resources. Haradi Bots is led by Aditya Yadav, a
-                        passionate robotics engineer aiming to create advanced humanoid robots.</p>
-                </div>
-
-                <button id="read-more-btn" class="read-more-btn">Read More</button>
-
-                <!-- Social Media Icons -->
-                <div class="social-icons">
-                     <a href="/port" class="social-icon" target="_blank">
-                        <i class="fas fa-briefcase"></i> Portfolio
+            <div class="hero-content">
+                <h1>Learn AI & Robotics with Haradi Bots</h1>
+                <p>Master cutting-edge technologies through our free educational resources and hands-on projects. Start your journey into the future today.</p>
+                <div class="cta-buttons">
+                    <a href="#courses" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start Learning
                     </a>
-                    <a href="https://www.instagram.com/llaka2937/" target="_blank" class="social-icon">
-                        <i class="fab fa-instagram"></i> Instagram
-                    </a>
-                    <a href="mailto:llaka2937@gmail.com" class="social-icon">
-                        <i class="fas fa-envelope"></i> Email
-                    </a>
-                    <a href="tel:+917887285338" class="social-icon">
-                        <i class="fas fa-phone"></i> Phone
+                    <a href="#about" class="btn btn-secondary">
+                        <i class="fas fa-book-open"></i> Learn More
                     </a>
                 </div>
             </div>
-
-            <div class="about-image" data-aos="fade-left">
-                <img src="/static/img2.jpeg" alt="Haradi Bots" />
+            <div class="hero-image">
+                <i class="fas fa-robot" style="font-size: 20rem; color: rgba(67, 97, 238, 0.1);"></i>
             </div>
         </div>
     </section>
 
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Haradi Bots</h2>
+                <p>We provide high-quality, accessible education in robotics and artificial intelligence for everyone.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Free Education</h3>
+                    <p>All our courses and resources are completely free, making quality education accessible to everyone.</p>
+                    <a href="#" class="feature-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Hands-on Projects</h3>
+                    <p>Learn by doing with practical projects that reinforce theoretical concepts and give real-world experience.</p>
+                    <a href="#" class="feature-link">
+                        View projects <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>Join our growing community of learners and get help when you need it from both peers and experts.</p>
+                    <a href="#" class="feature-link">
+                        Join community <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Courses Section -->
+    <section id="courses" class="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Popular Courses</h2>
+                <p>Explore our most popular courses on robotics and artificial intelligence.</p>
+            </div>
+            
+            <div class="courses-slider">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        <!-- Course 1 -->
+                        <div class="swiper-slide">
+                            <div class="course-card">
+                                <div class="course-image">
+                                    <i class="fab fa-python"></i>
+                                </div>
+                                <div class="course-content">
+                                    <span class="course-category">Programming</span>
+                                    <h3 class="course-title">Python for Robotics</h3>
+                                    <p class="course-description">Learn Python fundamentals and how to apply them to robotics projects with practical examples.</p>
+                                    <div class="course-meta">
+                                        <span class="course-duration">
+                                            <i class="far fa-clock"></i> 6 weeks
+                                        </span>
+                                        <a href="/python_for_robo" class="enroll-btn">Enroll Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 2 -->
+                        <div class="swiper-slide">
+                            <div class="course-card">
+                                <div class="course-image" style="background: linear-gradient(135deg, var(--secondary), var(--primary-dark));">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="course-content">
+                                    <span class="course-category">AI</span>
+                                    <h3 class="course-title">Machine Learning Basics</h3>
+                                    <p class="course-description">Introduction to machine learning algorithms and their applications in real-world scenarios.</p>
+                                    <div class="course-meta">
+                                        <span class="course-duration">
+                                            <i class="far fa-clock"></i> 8 weeks
+                                        </span>
+                                        <a href="#" class="enroll-btn">Enroll Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 3 -->
+                        <div class="swiper-slide">
+                            <div class="course-card">
+                                <div class="course-image" style="background: linear-gradient(135deg, var(--accent), var(--secondary));">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="course-content">
+                                    <span class="course-category">Robotics</span>
+                                    <h3 class="course-title">ROS Fundamentals</h3>
+                                    <p class="course-description">Learn the Robot Operating System for building complex robots with modular components.</p>
+                                    <div class="course-meta">
+                                        <span class="course-duration">
+                                            <i class="far fa-clock"></i> 10 weeks
+                                        </span>
+                                        <a href="#" class="enroll-btn">Enroll Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 4 -->
+                        <div class="swiper-slide">
+                            <div class="course-card">
+                                <div class="course-image" style="background: linear-gradient(135deg, var(--success), var(--primary));">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div class="course-content">
+                                    <span class="course-category">Vision</span>
+                                    <h3 class="course-title">Computer Vision</h3>
+                                    <p class="course-description">Teach robots to see and understand their environment using advanced image processing.</p>
+                                    <div class="course-meta">
+                                        <span class="course-duration">
+                                            <i class="far fa-clock"></i> 7 weeks
+                                        </span>
+                                        <a href="#" class="enroll-btn">Enroll Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Technologies Section -->
+    <section id="technologies" class="technologies">
+        <div class="container">
+            <div class="section-header">
+                <h2>Technologies We Teach</h2>
+                <p>Master the tools and frameworks used in modern robotics and AI development.</p>
+            </div>
+            
+            <div class="tech-grid">
+                <!-- Tech 1 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <h3>Python</h3>
+                    <p>The most popular programming language for robotics and AI development with extensive libraries.</p>
+                    <a href="#" class="tech-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Tech 2 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>TensorFlow</h3>
+                    <p>Powerful library for machine learning and neural network applications developed by Google.</p>
+                    <a href="#" class="tech-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Tech 3 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>ROS</h3>
+                    <p>Robot Operating System provides services for building complex robotic applications.</p>
+                    <a href="#" class="tech-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <!-- Tech 4 -->
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>PyTorch</h3>
+                    <p>Flexible deep learning framework for research and production developed by Facebook.</p>
+                    <a href="#" class="tech-link">
+                        Learn more <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container about-container">
+            <div class="about-image">
+                <img src="/static/img2.jpeg" alt="Aditya Yadav - Haradi Bots Founder" loading="lazy">
+            </div>
+            <div class="about-content">
+                <h2>About Haradi Bots</h2>
+                <p>Haradi Bots was founded by Aditya Yadav with the mission to democratize robotics and AI education, making it accessible to everyone regardless of their background or financial situation.</p>
+                <p>We believe that hands-on learning is the most effective way to master complex technical subjects. Our courses combine theoretical foundations with practical projects to give you real-world skills that are immediately applicable.</p>
+                <p>Join our growing community of thousands of learners who are building the future with robotics and artificial intelligence.</p>
+                
+                <div class="social-links">
+                    <a href="https://www.instagram.com/llaka2937/" class="social-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="mailto:llaka2937@gmail.com" class="social-link">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="tel:+917887285338" class="social-link">
+                        <i class="fas fa-phone"></i>
+                    </a>
+                    <a href="/port" class="social-link" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-briefcase"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Have questions or want to collaborate? Reach out to us!</p>
+            </div>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    <p>We're here to help with any questions about our courses or resources. Feel free to reach out through any of these channels.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Email</h4>
+                                <a href="mailto:llaka2937@gmail.com">llaka2937@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Phone</h4>
+                                <a href="tel:+917887285338">+91 7887285338</a>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Location</h4>
+                                <p>India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <form action="https://formspree.io/f/xrgnvgwz" method="POST">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <p>&copy; 2024 <strong>Haradi Bots | Aditya </strong>. All rights reserved.</p>
-            <nav class="footer-links">
-                <a href="policy.html">Privacy Policy</a>
-                <span>|</span>
-                <a href="#">Terms & Conditions</a>
-            </nav>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <a href="#" class="footer-logo">
+                        <i class="fas fa-robot"></i> Haradi Bots
+                    </a>
+                    <p>Free robotics and AI education for everyone. Join us in building the future of technology through accessible learning resources.</p>
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/llaka2937/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="mailto:llaka2937@gmail.com"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+917887285338"><i class="fas fa-phone"></i></a>
+                        <a href="/port" target="_blank" rel="noopener noreferrer"><i class="fas fa-briefcase"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#courses">Courses</a></li>
+                        <li><a href="#technologies">Technologies</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Haradi Bots. All rights reserved. Created by Aditya Yadav.</p>
+            </div>
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="/static/Index.js"></script>
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
-        AOS.init();
-
-        // Fetch username from Flask session
-        fetch('/user')
-            .then(response => response.json())
-            .then(data => {
-                if (data.name) {
-                    document.getElementById('username').innerText = data.name;
-                } else {
-                    document.getElementById('username').innerText = 'Guest';
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // Save preference to localStorage
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            mobileMenuBtn.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Dropdown Toggle for Mobile
+        const dropdowns = document.querySelectorAll('.dropdown > a');
+        
+        dropdowns.forEach(dropdown => {
+            dropdown.addEventListener('click', function(e) {
+                if (window.innerWidth <= 992) {
+                    e.preventDefault();
+                    const parent = this.parentElement;
+                    parent.classList.toggle('active');
                 }
-            })
-            .catch(() => {
-                document.getElementById('username').innerText = 'Guest';
             });
-
-        // Logout functionality
-        document.getElementById('logoutButton').onclick = async () => {
-            await fetch('/logout');
-            window.location.href = '/';
+        });
+        
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                },
+            }
+        });
+        
+        // Back to Top Button
+        const backToTopBtn = document.querySelector('.back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('active');
+            } else {
+                backToTopBtn.classList.remove('active');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        // Form submission
+        const contactForm = document.querySelector('.contact-form form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const submitBtn = this.querySelector('.submit-btn');
+                const originalText = submitBtn.innerHTML;
+                
+                // Show loading state
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                    
+                    // Reset form after 2 seconds
+                    setTimeout(() => {
+                        this.reset();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 2000);
+                }, 1500);
+            });
+        }
+        
+        // Animate elements when they come into view
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .tech-card, .about-image');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.animation = 'fadeIn 1s ease-out forwards';
+                }
+            });
         };
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
     </script>
-
 </body>
-
 </html>

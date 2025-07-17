@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervised Learning Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4c9f70;
+            --secondary-color: #6bbf92;
+            --accent-color: #ff7e5f;
+            --bg-color: #121212;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --text-color: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --highlight: #ff7e5f;
+            --success: #4caf50;
+            --danger: #f44336;
+            --info: #2196f3;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --border: 1px solid rgba(255, 255, 255, 0.1);
+            --border-radius: 15px;
+            --transition: all 0.3s ease;
+            --glass-blur: blur(12px);
+            --header-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .light-theme {
+            --primary-color: #2e7d57;
+            --secondary-color: #4c9f70;
+            --accent-color: #ff5722;
+            --bg-color: #f5f5f5;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --text-color: #333333;
+            --text-muted: #666666;
+            --highlight: #ff5722;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --border: 1px solid rgba(0, 0, 0, 0.08);
+            --header-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(76, 159, 112, 0.08) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(107, 191, 146, 0.08) 0%, transparent 20%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: var(--border);
+            position: relative;
+        }
+
+        .header-content {
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            background: var(--header-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            color: var(--text-muted);
+            max-width: 700px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: var(--border);
+            border-radius: 30px;
+            padding: 0.3rem;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        .theme-toggle span {
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle .dark {
+            background: var(--header-gradient);
+            color: white;
+        }
+
+        .theme-toggle .light {
+            color: var(--text-color);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            backdrop-filter: var(--glass-blur);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(76, 159, 112, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        h2 i {
+            color: var(--accent-color);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin: 2rem 0 1.2rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            height: 1.5rem;
+            width: 5px;
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 0.5rem;
+        }
+
+        li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: -1rem;
+        }
+
+        .highlight {
+            color: var(--highlight);
+            font-weight: 600;
+            background: rgba(255, 126, 95, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .diagram {
+            width: 100%;
+            max-width: 800px;
+            margin: 2.5rem auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--header-gradient);
+        }
+
+        .graph-container {
+            height: 400px;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .example {
+            background: rgba(76, 159, 112, 0.08);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            position: relative;
+        }
+
+        .example::before {
+            content: '🛈';
+            position: absolute;
+            left: -0.8rem;
+            top: -0.8rem;
+            background: var(--primary-color);
+            color: white;
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .example-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2.5rem 0;
+            box-shadow: var(--shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1.2rem;
+            text-align: left;
+            border: var(--border);
+        }
+
+        .comparison-table th {
+            background: rgba(76, 159, 112, 0.3);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(76, 159, 112, 0.1);
+        }
+
+        .algorithm-card {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .algorithm-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .algorithm-header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1.2rem 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .algorithm-content {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border: var(--border);
+            border-top: none;
+        }
+
+        .formula {
+            font-family: 'Courier New', Courier, monospace;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid var(--accent-color);
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .formula::before {
+            content: 'Formula';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            border-radius: 0 0 0 5px;
+            font-family: sans-serif;
+        }
+
+        .interactive-demo {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin: 3rem 0;
+            box-shadow: var(--shadow);
+            border: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-demo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            background: var(--header-gradient);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button.secondary {
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        select, input {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: var(--border);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--card-bg);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .slider-container label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            min-width: 100px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            flex-grow: 1;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .demo-visualization {
+            height: 350px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            border: var(--border);
+        }
+
+        .demo-visualization::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .data-point {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+
+        .decision-boundary {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .demo-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: var(--border);
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--header-gradient);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 1rem;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.7rem;
+            top: 0.3rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: 3px solid var(--card-bg);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: var(--border);
+            opacity: 0.8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .card, .diagram, .interactive-demo {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--text-muted);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.8rem;
+            position: absolute;
+            z-index: 100;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            font-size: 0.9rem;
+            font-weight: normal;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .tab.active {
+            color: var(--accent-color);
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .accordion {
+            margin: 1.5rem 0;
+        }
+
+        .accordion-item {
+            border: var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1.2rem;
+            background: var(--card-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .accordion-header:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .accordion-content {
+            padding: 0 1.2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            border-top: var(--border);
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 1.2rem;
+            max-height: 1000px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-primary {
+            background: rgba(76, 159, 112, 0.2);
+            color: var(--primary-color);
+        }
+
+        .badge-secondary {
+            background: rgba(107, 191, 146, 0.2);
+            color: var(--secondary-color);
+        }
+
+        .badge-accent {
+            background: rgba(255, 126, 95, 0.2);
+            color: var(--accent-color);
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .demo-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .slider-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .card {
+                padding: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-graduation-cap"></i> Supervised Learning</h1>
+                <p class="subtitle">Teaching machines to learn from labeled examples</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle">
+                <span class="dark"><i class="fas fa-moon"></i> Dark</span>
+                <span class="light"><i class="fas fa-sun"></i> Light</span>
+            </div>
+        </header>
+
+        <div class="card">
+            <h2><i class="fas fa-question-circle"></i> What is Supervised Learning?</h2>
+            <p>Supervised Learning is a type of <span class="highlight">machine learning</span> where the algorithm learns from labeled training data, and predicts outcomes for unseen data. The "supervision" comes from the labeled examples that guide the learning process.</p>
+            
+            <div class="example">
+                <div class="example-title"><i class="fas fa-lightbulb"></i> Real-world Example</div>
+                <p>Imagine teaching a child to recognize animals by showing them pictures with labels ("cat", "dog", etc.). After seeing enough examples, the child can identify new animals correctly. Similarly, supervised learning algorithms learn from labeled data to make predictions on new, unseen data.</p>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="definition">Definition</div>
+                <div class="tab" data-tab="characteristics">Characteristics</div>
+                <div class="tab" data-tab="history">History</div>
+            </div>
+
+            <div class="tab-content active" id="definition">
+                <p>Formally, supervised learning involves learning a function that maps input variables (X) to an output variable (y) based on example input-output pairs:</p>
+                <div class="formula">
+                    f: X → y
+                </div>
+                <p>Where:</p>
+                <ul>
+                    <li><strong>X</strong> is the input feature space</li>
+                    <li><strong>y</strong> is the output/target variable</li>
+                    <li><strong>f</strong> is the learned model function</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="characteristics">
+                <ul>
+                    <li><strong>Labeled data required:</strong> Needs pre-classified training examples</li>
+                    <li><strong>Predictive modeling:</strong> Focuses on making accurate predictions</li>
+                    <li><strong>Clear evaluation:</strong> Performance can be directly measured</li>
+                    <li><strong>Two main types:</strong> Classification and regression</li>
+                    <li><strong>Widely applicable:</strong> Used in many practical applications</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="history">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">1950s</div>
+                        <div class="timeline-title">Perceptron</div>
+                        <p>Frank Rosenblatt develops the perceptron learning algorithm</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1960s</div>
+                        <div class="timeline-title">Decision Trees</div>
+                        <p>Early work on decision tree algorithms begins</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1980s</div>
+                        <div class="timeline-title">Backpropagation</div>
+                        <p>Rediscovery and popularization of backpropagation for neural networks</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">1990s</div>
+                        <div class="timeline-title">SVMs</div>
+                        <p>Introduction of Support Vector Machines by Vapnik</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2010s</div>
+                        <div class="timeline-title">Deep Learning</div>
+                        <p>Deep neural networks achieve breakthrough results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-puzzle-piece"></i> Key Algorithms</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-project-diagram"></i> Classification</div>
+                <div class="algorithm-content">
+                    <p>Predicting discrete class labels:</p>
+                    
+                    <h3>Logistic Regression</h3>
+                    <div class="formula">
+                        P(y=1|x) = 1 / (1 + e^(-w·x + b))
+                    </div>
+                    <p>Despite its name, it's a classification algorithm that estimates probabilities using a logistic function.</p>
+                    
+                    <h3>Support Vector Machines (SVM)</h3>
+                    <div class="formula">
+                        min 1/2||w||² + C∑ξᵢ<br>
+                        s.t. yᵢ(w·xᵢ + b) ≥ 1-ξᵢ, ξᵢ ≥ 0
+                    </div>
+                    <p>Finds the optimal hyperplane that maximizes the margin between classes.</p>
+                    
+                    <h3>Decision Trees</h3>
+                    <p>Recursively partitions the feature space based on feature values.</p>
+                    <div class="formula">
+                        Information Gain = H(D) - ∑ (|Dᵥ|/|D|) H(Dᵥ)
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Discrete Output</span>
+                        <span class="badge badge-secondary">Categorical</span>
+                        <span class="badge badge-accent">Decision Boundary</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chart-line"></i> Regression</div>
+                <div class="algorithm-content">
+                    <p>Predicting continuous numerical values:</p>
+                    
+                    <h3>Linear Regression</h3>
+                    <div class="formula">
+                        ŷ = w·x + b<br>
+                        min ∑(yᵢ - ŷᵢ)²
+                    </div>
+                    <p>Models the relationship between features and target as a linear function.</p>
+                    
+                    <h3>Random Forest</h3>
+                    <p>Ensemble method that averages predictions from multiple decision trees.</p>
+                    <div class="formula">
+                        ŷ = 1/B ∑ f_b(x)
+                    </div>
+                    
+                    <h3>Neural Networks</h3>
+                    <p>Universal function approximators with multiple layers.</p>
+                    <div class="formula">
+                        a⁽ˡ⁺¹⁾ = σ(W⁽ˡ⁾a⁽ˡ⁾ + b⁽ˡ⁾)
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Continuous Output</span>
+                        <span class="badge badge-secondary">Numerical</span>
+                        <span class="badge badge-accent">Prediction</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-network-wired"></i> Neural Networks</div>
+                <div class="algorithm-content">
+                    <p>Multi-layer architectures for complex patterns:</p>
+                    
+                    <h3>Feedforward Networks</h3>
+                    <div class="formula">
+                        z⁽ˡ⁺¹⁾ = W⁽ˡ⁾a⁽ˡ⁾ + b⁽ˡ⁾<br>
+                        a⁽ˡ⁺¹⁾ = g(z⁽ˡ⁺¹⁾)
+                    </div>
+                    
+                    <h3>Convolutional Networks (CNN)</h3>
+                    <p>Specialized for grid-like data (images, time series).</p>
+                    <div class="formula">
+                        (I * K)(i,j) = ∑∑ I(m,n)K(i-m,j-n)
+                    </div>
+                    
+                    <h3>Recurrent Networks (RNN)</h3>
+                    <p>For sequential data with temporal dependencies.</p>
+                    <div class="formula">
+                        hₜ = f(Wₕₕhₜ₋₁ + Wₓₕxₜ)
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Deep Learning</span>
+                        <span class="badge badge-secondary">Feature Learning</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-users"></i> Ensemble Methods</div>
+                <div class="algorithm-content">
+                    <p>Combining multiple models for better performance:</p>
+                    
+                    <h3>Random Forest</h3>
+                    <p>Collection of decision trees with bagging.</p>
+                    <div class="formula">
+                        ŷ = mode{f_b(x)} for classification<br>
+                        ŷ = mean{f_b(x)} for regression
+                    </div>
+                    
+                    <h3>Gradient Boosting</h3>
+                    <p>Sequentially builds models to correct previous errors.</p>
+                    <div class="formula">
+                        Fₘ(x) = Fₘ₋₁(x) + γₘhₘ(x)
+                    </div>
+                    
+                    <h3>Stacking</h3>
+                    <p>Uses a meta-model to combine base models.</p>
+                    
+                    <div class="badges">
+                        <span class="badge badge-primary">Combining Models</span>
+                        <span class="badge badge-secondary">Improved Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-balance-scale"></i> Supervised vs Other Learning Paradigms</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Supervised Learning</th>
+                        <th>Unsupervised Learning</th>
+                        <th>Reinforcement Learning</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Requirements</td>
+                        <td>Labeled examples (X, y)</td>
+                        <td>Only input data (X)</td>
+                        <td>Reward signals from environment</td>
+                    </tr>
+                    <tr>
+                        <td>Goal</td>
+                        <td>Predict known outputs</td>
+                        <td>Discover hidden patterns</td>
+                        <td>Maximize cumulative reward</td>
+                    </tr>
+                    <tr>
+                        <td>Feedback</td>
+                        <td>Immediate and correct</td>
+                        <td>None</td>
+                        <td>Delayed and evaluative</td>
+                    </tr>
+                    <tr>
+                        <td>Evaluation</td>
+                        <td>Direct (accuracy, error)</td>
+                        <td>Indirect (silhouette, inertia)</td>
+                        <td>Reward accumulation</td>
+                    </tr>
+                    <tr>
+                        <td>Example Tasks</td>
+                        <td>Classification, regression</td>
+                        <td>Clustering, dimensionality reduction</td>
+                        <td>Game playing, robotics</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Supervised Learning</span>
+                    <span>75%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 75%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Unsupervised Learning</span>
+                    <span>15%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 15%"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Reinforcement Learning</span>
+                    <span>10%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 10%"></div>
+                </div>
+            </div>
+            
+            <p><small><i class="fas fa-info-circle"></i> Approximate distribution of machine learning approaches in current applications</small></p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-key"></i> Key Concepts</h2>
+            
+            <h3>Bias-Variance Tradeoff</h3>
+            <p>The tension between model complexity and generalization:</p>
+            <div class="formula">
+                Expected Error = Bias² + Variance + Irreducible Error
+            </div>
+            <ul>
+                <li><strong>High bias:</strong> Underfitting (too simple)</li>
+                <li><strong>High variance:</strong> Overfitting (too complex)</li>
+            </ul>
+            
+            <h3>Loss Functions</h3>
+            <p>Measure how well the model's predictions match the true labels:</p>
+            <div class="formula">
+                Classification: Cross-Entropy = -∑ yᵢ log(ŷᵢ)<br>
+                Regression: MSE = 1/n ∑ (yᵢ - ŷᵢ)²
+            </div>
+            
+            <h3>Regularization</h3>
+            <p>Techniques to prevent overfitting:</p>
+            <div class="formula">
+                L1 (Lasso): λ∑|wᵢ|<br>
+                L2 (Ridge): λ∑wᵢ²<br>
+                Elastic Net: λ₁∑|wᵢ| + λ₂∑wᵢ²
+            </div>
+            
+            <h3>Evaluation Metrics</h3>
+            <p>Measuring model performance:</p>
+            <div class="formula">
+                Accuracy = (TP + TN) / (TP + TN + FP + FN)<br>
+                Precision = TP / (TP + FP)<br>
+                Recall = TP / (TP + FN)<br>
+                F1 = 2 * (Precision * Recall) / (Precision + Recall)<br>
+                R² = 1 - ∑(yᵢ - ŷᵢ)² / ∑(yᵢ - ȳ)²
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h2><i class="fas fa-play-circle"></i> Interactive Classification Demo</h2>
+            <p>Experiment with different classification algorithms and see their decision boundaries. Adjust parameters and observe how they affect the model's performance.</p>
+            
+            <div class="demo-controls">
+                <button id="generateData"><i class="fas fa-random"></i> Generate Data</button>
+                <button id="trainModel"><i class="fas fa-play"></i> Train Model</button>
+                <button id="resetDemo" class="secondary"><i class="fas fa-redo"></i> Reset</button>
+                
+                <div class="slider-container">
+                    <label for="datasetSelect"><i class="fas fa-database"></i> Dataset:</label>
+                    <select id="datasetSelect">
+                        <option value="linear">Linear</option>
+                        <option value="moons">Moons</option>
+                        <option value="circles">Circles</option>
+                        <option value="xor">XOR</option>
+                        <option value="random">Random</option>
+                    </select>
+                </div>
+                
+                <div class="slider-container">
+                    <label for="algorithmSelect"><i class="fas fa-code-branch"></i> Algorithm:</label>
+                    <select id="algorithmSelect">
+                        <option value="logistic">Logistic Regression</option>
+                        <option value="svm">SVM</option>
+                        <option value="tree">Decision Tree</option>
+                        <option value="mlp">Neural Network</option>
+                    </select>
+                </div>
+                
+                <div class="slider-container" id="regularizationSlider">
+                    <label for="regularizationValue"><i class="fas fa-compress-alt"></i> Regularization:</label>
+                    <input type="range" id="regularizationValue" min="0.01" max="10" step="0.1" value="1">
+                    <span id="regularizationValueDisplay">1.0</span>
+                </div>
+                
+                <div class="slider-container" id="depthSlider" style="display:none">
+                    <label for="depthValue"><i class="fas fa-sitemap"></i> Max Depth:</label>
+                    <input type="range" id="depthValue" min="1" max="10" step="1" value="3">
+                    <span id="depthValueDisplay">3</span>
+                </div>
+            </div>
+            
+            <div class="demo-visualization" id="demoVisualization">
+                <canvas id="classCanvas" width="600" height="300"></canvas>
+            </div>
+            
+            <div class="demo-stats">
+                <div class="stat-card">
+                    <h4><i class="fas fa-check-circle"></i> Accuracy</h4>
+                    <p id="accuracyValue">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-clock"></i> Training Time</h4>
+                    <p id="timeValue">0ms</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-project-diagram"></i> Parameters</h4>
+                    <p id="paramsValue">-</p>
+                </div>
+                <div class="stat-card">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Loss</h4>
+                    <p id="lossValue">-</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-rocket"></i> Applications</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-image"></i> Computer Vision</div>
+                <div class="algorithm-content">
+                    <p>Image classification, object detection, and more:</p>
+                    <ul>
+                        <li>Facial recognition systems</li>
+                        <li>Medical image analysis</li>
+                        <li>Autonomous vehicle perception</li>
+                        <li>Quality control in manufacturing</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> CNNs, Transfer Learning, Object Detection</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-language"></i> Natural Language Processing</div>
+                <div class="algorithm-content">
+                    <p>Text classification and generation:</p>
+                    <ul>
+                        <li>Sentiment analysis</li>
+                        <li>Spam detection</li>
+                        <li>Machine translation</li>
+                        <li>Chatbots and virtual assistants</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> RNNs, Transformers, Word Embeddings</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-chart-line"></i> Predictive Analytics</div>
+                <div class="algorithm-content">
+                    <p>Forecasting and decision support:</p>
+                    <ul>
+                        <li>Stock price prediction</li>
+                        <li>Customer churn prediction</li>
+                        <li>Risk assessment in finance</li>
+                        <li>Demand forecasting</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> Regression, Time Series Analysis, Ensemble Methods</p>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-medkit"></i> Healthcare</div>
+                <div class="algorithm-content">
+                    <p>Medical diagnosis and treatment:</p>
+                        <li>Disease diagnosis from medical images</li>
+                        <li>Drug discovery and development</li>
+                        <li>Personalized treatment recommendations</li>
+                        <li>Patient outcome prediction</li>
+                    </ul>
+                    <p><strong>Techniques:</strong> Deep Learning, Survival Analysis, Clinical Decision Support</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-exclamation-triangle"></i> Challenges</h2>
+            
+            <h3>Data Quality</h3>
+            <p>Supervised learning requires large amounts of high-quality labeled data, which can be expensive and time-consuming to acquire.</p>
+            
+            <h3>Overfitting</h3>
+            <p>Models may memorize training data rather than learning generalizable patterns, performing poorly on new data.</p>
+            
+            <h3>Feature Engineering</h3>
+            <p>The need to manually select and transform features can be labor-intensive and require domain expertise.</p>
+            
+            <h3>Class Imbalance</h3>
+            <p>When some classes are much more frequent than others, models may become biased toward the majority class.</p>
+            
+            <h3>Concept Drift</h3>
+            <p>The statistical properties of the target variable may change over time, requiring model retraining.</p>
+            
+            <h3>Interpretability</h3>
+            <p>Complex models like deep neural networks can be "black boxes" with limited explainability.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fas fa-graduation-cap"></i> Learning Resources</h2>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-book"></i> Books</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>Pattern Recognition and Machine Learning</strong> by Christopher Bishop</li>
+                        <li><strong>The Elements of Statistical Learning</strong> by Hastie, Tibshirani, Friedman</li>
+                        <li><strong>Deep Learning</strong> by Goodfellow, Bengio, Courville</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-video"></i> Courses</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>Stanford CS229</strong> - Machine Learning</li>
+                        <li><strong>Andrew Ng's Machine Learning</strong> on Coursera</li>
+                        <li><strong>Fast.ai Practical Deep Learning</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="algorithm-card">
+                <div class="algorithm-header"><i class="fas fa-laptop-code"></i> Libraries</div>
+                <div class="algorithm-content">
+                    <ul>
+                        <li><strong>scikit-learn</strong>: Comprehensive ML library</li>
+                        <li><strong>TensorFlow/PyTorch</strong>: For deep learning</li>
+                        <li><strong>XGBoost/LightGBM</strong>: For gradient boosting</li>
+                        <li><strong>Keras</strong>: High-level neural networks API</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>Supervised Learning Guide</h3>
+            <p>Mastering the art of learning from labeled data</p>
+            
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            
+            <p>© 2023 ML Guides | Created with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for data enthusiasts</p>
+            <p><small>This content is for educational purposes only</small></p>
+        </footer>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            
+            // Save preference to localStorage
+            const isLight = body.classList.contains('light-theme');
+            localStorage.setItem('themePreference', isLight ? 'light' : 'dark');
+            
+            // Update icon
+            const moonIcon = themeToggle.querySelector('.fa-moon');
+            const sunIcon = themeToggle.querySelector('.fa-sun');
+            if (isLight) {
+                moonIcon.classList.remove('fa-moon');
+                moonIcon.classList.add('fa-sun');
+                sunIcon.classList.remove('fa-sun');
+                sunIcon.classList.add('fa-moon');
+            } else {
+                moonIcon.classList.remove('fa-sun');
+                moonIcon.classList.add('fa-moon');
+                sunIcon.classList.remove('fa-moon');
+                sunIcon.classList.add('fa-sun');
+            }
+        });
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('themePreference');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            const moonIcon = themeToggle.querySelector('.fa-moon');
+            const sunIcon = themeToggle.querySelector('.fa-sun');
+            moonIcon.classList.remove('fa-moon');
+            moonIcon.classList.add('fa-sun');
+            sunIcon.classList.remove('fa-sun');
+            sunIcon.classList.add('fa-moon');
+        }
+        
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked tab and corresponding content
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                document.querySelectorAll('.accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.accordion-header i').classList.remove('fa-chevron-up');
+                    i.querySelector('.accordion-header i').classList.add('fa-chevron-down');
+                });
+                
+                // Open clicked item if it was closed
+                if (!isActive) {
+                    item.classList.add('active');
+                    header.querySelector('i').classList.remove('fa-chevron-down');
+                    header.querySelector('i').classList.add('fa-chevron-up');
+                }
+            });
+        });
+        
+        // Classification Demo
+        const canvas = document.getElementById('classCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        let dataPoints = [];
+        let labels = [];
+        let decisionBoundary = null;
+        
+        // Color palette
+        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'];
+        
+        // Generate synthetic data
+        function generateData(type) {
+            dataPoints = [];
+            labels = [];
+            
+            if (type === 'linear') {
+                // Linearly separable data
+                for (let i = 0; i < 100; i++) {
+                    const x = Math.random() * width;
+                    const y = Math.random() * height;
+                    const label = x + y < width * 0.7 ? 0 : 1;
+                    
+                    dataPoints.push({ x, y });
+                    labels.push(label);
+                }
+            } else if (type === 'moons') {
+                // Two moons
+                for (let i = 0; i < 50; i++) {
+                    const angle = Math.PI * i / 50;
+                    dataPoints.push({
+                        x: width * (0.3 + 0.2 * Math.cos(angle)),
+                        y: height * (0.4 + 0.2 * Math.sin(angle))
+                    });
+                    labels.push(0);
+                    
+                    dataPoints.push({
+                        x: width * (0.7 + 0.2 * Math.cos(angle) + 0.15),
+                        y: height * (0.6 - 0.2 * Math.sin(angle) - 0.1)
+                    });
+                    labels.push(1);
+                }
+            } else if (type === 'circles') {
+                // Concentric circles
+                for (let i = 0; i < 50; i++) {
+                    const angle = Math.PI * 2 * i / 50;
+                    dataPoints.push({
+                        x: width * (0.5 + 0.1 * Math.cos(angle)),
+                        y: height * (0.5 + 0.1 * Math.sin(angle))
+                    });
+                    labels.push(0);
+                    
+                    dataPoints.push({
+                        x: width * (0.5 + 0.25 * Math.cos(angle)),
+                        y: height * (0.5 + 0.25 * Math.sin(angle))
+                    });
+                    labels.push(1);
+                }
+            } else if (type === 'xor') {
+                // XOR pattern
+                for (let i = 0; i < 50; i++) {
+                    dataPoints.push({
+                        x: width * (0.3 + Math.random() * 0.2),
+                        y: height * (0.3 + Math.random() * 0.2)
+                    });
+                    labels.push(0);
+                    
+                    dataPoints.push({
+                        x: width * (0.6 + Math.random() * 0.2),
+                        y: height * (0.6 + Math.random() * 0.2)
+                    });
+                    labels.push(0);
+                    
+                    dataPoints.push({
+                        x: width * (0.3 + Math.random() * 0.2),
+                        y: height * (0.6 + Math.random() * 0.2)
+                    });
+                    labels.push(1);
+                    
+                    dataPoints.push({
+                        x: width * (0.6 + Math.random() * 0.2),
+                        y: height * (0.3 + Math.random() * 0.2)
+                    });
+                    labels.push(1);
+                }
+            } else {
+                // Random data
+                for (let i = 0; i < 200; i++) {
+                    dataPoints.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height
+                    });
+                    labels.push(Math.round(Math.random()));
+                }
+            }
+            
+            drawData();
+        }
+        
+        // Draw data points
+        function drawData() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw decision boundary if it exists
+            if (decisionBoundary) {
+                const imageData = ctx.getImageData(0, 0, width, height);
+                const data = imageData.data;
+                
+                for (let y = 0; y < height; y++) {
+                    for (let x = 0; x < width; x++) {
+                        const pred = predictPoint(x, y);
+                        const idx = (y * width + x) * 4;
+                        
+                        if (pred === 0) {
+                            data[idx] = 76;    // R
+                            data[idx+1] = 159; // G
+                            data[idx+2] = 112; // B
+                            data[idx+3] = 50;  // A
+                        } else {
+                            data[idx] = 255;   // R
+                            data[idx+1] = 126; // G
+                            data[idx+2] = 95;  // B
+                            data[idx+3] = 50;  // A
+                        }
+                    }
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+            }
+            
+            // Draw data points
+            dataPoints.forEach((point, i) => {
+                ctx.fillStyle = colors[labels[i] % colors.length];
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+        }
+        
+        // Simple logistic regression prediction for demo
+        function predictPoint(x, y) {
+            const algorithm = document.getElementById('algorithmSelect').value;
+            const normX = x / width;
+            const normY = y / height;
+            
+            if (algorithm === 'logistic') {
+                // Simple linear decision boundary
+                return normX + normY > 1 ? 1 : 0;
+            } else if (algorithm === 'svm') {
+                // More complex boundary
+                return Math.abs(normX - 0.5) + Math.abs(normY - 0.5) > 0.4 ? 1 : 0;
+            } else if (algorithm === 'tree') {
+                // Piecewise constant
+                const depth = parseInt(document.getElementById('depthValue').value);
+                if (depth <= 2) {
+                    return normX > 0.5 ? 1 : 0;
+                } else {
+                    return (normX > 0.3 && normY > 0.3) || (normX < 0.7 && normY < 0.7) ? 1 : 0;
+                }
+            } else {
+                // Neural network-like
+                return Math.sin(normX * 10) + Math.cos(normY * 10) > 0 ? 1 : 0;
+            }
+        }
+        
+        // Train model (simulated for demo)
+        function trainModel() {
+            const startTime = performance.now();
+            const algorithm = document.getElementById('algorithmSelect').value;
+            
+            // Simulate training by creating a decision boundary
+            decisionBoundary = {
+                algorithm,
+                params: {
+                    regularization: parseFloat(document.getElementById('regularizationValue').value),
+                    depth: parseInt(document.getElementById('depthValue').value)
+                }
+            };
+            
+            // Calculate accuracy (simplified)
+            let correct = 0;
+            dataPoints.forEach((point, i) => {
+                if (predictPoint(point.x, point.y) === labels[i]) {
+                    correct++;
+                }
+            });
+            const accuracy = (correct / dataPoints.length * 100).toFixed(1);
+            
+            const endTime = performance.now();
+            const timeTaken = (endTime - startTime).toFixed(2);
+            
+            // Update stats
+            document.getElementById('accuracyValue').textContent = `${accuracy}%`;
+            document.getElementById('timeValue').textContent = `${timeTaken}ms`;
+            document.getElementById('paramsValue').textContent = 
+                algorithm === 'tree' ? decisionBoundary.params.depth : decisionBoundary.params.regularization.toFixed(1);
+            document.getElementById('lossValue').textContent = (100 - accuracy).toFixed(1);
+            
+            drawData();
+        }
+        
+        // Event listeners for demo controls
+        document.getElementById('generateData').addEventListener('click', () => {
+            const datasetType = document.getElementById('datasetSelect').value;
+            generateData(datasetType);
+            decisionBoundary = null;
+            document.getElementById('accuracyValue').textContent = '-';
+            document.getElementById('timeValue').textContent = '0ms';
+            document.getElementById('paramsValue').textContent = '-';
+            document.getElementById('lossValue').textContent = '-';
+        });
+        
+        document.getElementById('trainModel').addEventListener('click', trainModel);
+        
+        document.getElementById('resetDemo').addEventListener('click', () => {
+            dataPoints = [];
+            labels = [];
+            decisionBoundary = null;
+            ctx.clearRect(0, 0, width, height);
+            document.getElementById('accuracyValue').textContent = '-';
+            document.getElementById('timeValue').textContent = '0ms';
+            document.getElementById('paramsValue').textContent = '-';
+            document.getElementById('lossValue').textContent = '-';
+        });
+        
+        // Show/hide parameters based on algorithm
+        document.getElementById('algorithmSelect').addEventListener('change', function() {
+            const algorithm = this.value;
+            
+            document.getElementById('regularizationSlider').style.display = 
+                algorithm !== 'tree' ? 'flex' : 'none';
+            document.getElementById('depthSlider').style.display = 
+                algorithm === 'tree' ? 'flex' : 'none';
+        });
+        
+        // Update slider value displays
+        document.getElementById('regularizationValue').addEventListener('input', function() {
+            document.getElementById('regularizationValueDisplay').textContent = parseFloat(this.value).toFixed(1);
+        });
+        
+        document.getElementById('depthValue').addEventListener('input', function() {
+            document.getElementById('depthValueDisplay').textContent = this.value;
+        });
+        
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 3 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 10 + 10;
+                const opacity = Math.random() * 0.3 + 0.1;
+                
+                // Apply styles
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = opacity;
+                particle.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                // Random animation
+                const keyframes = `
+                    @keyframes float {
+                        0% { transform: translate(0, 0); }
+                        25% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        50% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        75% { transform: translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px); }
+                        100% { transform: translate(0, 0); }
+                    }
+                `;
+                
+                const style = document.createElement('style');
+                style.innerHTML = keyframes;
+                document.head.appendChild(style);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Initialize
+        createParticles();
+        generateData('linear');
+    </script>
+</body>
+</html>
