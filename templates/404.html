@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      overflow: hidden;
+    }
+    .container {
+      text-align: center;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1.5s ease;
+    }
+    h1 {
+      font-size: 8em;
+      margin: 0;
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: pulse 2s infinite;
+    }
+    h2 {
+      font-size: 2em;
+      margin: 15px 0;
+    }
+    p {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    a {
+      display: inline-block;
+      padding: 12px 28px;
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    a:hover {
+      transform: scale(1.1);
+      background: linear-gradient(90deg, #ee0979, #ff6a00);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>404</h1>
+    <h2>Oops! Page not found</h2>
+    <p>Redirecting you to the dashboard in <span id="countdown">5</span> seconds...</p>
+    <a href="/dashboard">Take Me Home</a>
+  </div>
+
+  <script>
+    let seconds = 5;
+    const countdown = document.getElementById('countdown');
+    const interval = setInterval(() => {
+      seconds--;
+      countdown.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(interval);
+        window.location.href = "/dashboard";
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

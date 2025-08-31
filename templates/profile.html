@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user }}'s Profile - Haradi Bots</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .activity-item {
+            transition: all 0.2s ease;
+        }
+        
+        .profile-actions a:hover {
+            transform: translateX(5px);
+        }
+        
+        .security-score {
+            position: relative;
+        }
+        
+        .security-score::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, var(--secondary), var(--info));
+            border-radius: 0 0 8px 8px;
+            opacity: 0.3;
+        }
+        
+        .avatar-ring {
+            box-shadow: 0 0 0 4px white, 0 0 0 6px var(--primary);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="/dashboard" class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-robot mr-2"></i>
+                    Haradi Bots
+                </a>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="/dashboard" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-home mr-2"></i> Dashboard
+                    </a>
+                    <a href="/notes" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-book mr-2"></i> Notes
+                    </a>
+                    <a href="/Haradi" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-comments mr-2"></i> Chatbot
+                    </a>
+                    <a href="/profile" class="font-semibold bg-white bg-opacity-20 px-4 py-2 rounded-full flex items-center">
+                        <i class="fas fa-user mr-2"></i> Profile
+                    </a>
+                    <a href="/logout" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </div>
+                <button class="md:hidden text-2xl focus:outline-none" id="mobile-menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="md:hidden hidden pt-4" id="mobile-menu">
+                <div class="flex flex-col space-y-3">
+                    <a href="/dashboard" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-home mr-3"></i> Dashboard
+                    </a>
+                    <a href="/notes" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-book mr-3"></i> Notes
+                    </a>
+                    <a href="/Haradi" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-comments mr-3"></i> Chatbot
+                    </a>
+                    <a href="/profile" class="font-semibold bg-white bg-opacity-20 px-4 py-2 rounded-full flex items-center">
+                        <i class="fas fa-user mr-3"></i> Profile
+                    </a>
+                    <a href="/logout" class="hover:text-blue-200 transition flex items-center">
+                        <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Profile Header -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <div class="gradient-bg p-6 md:p-8 text-white relative">
+                <div class="absolute top-4 right-4">
+                    <button class="bg-white bg-opacity-20 hover:bg-opacity-30 p-2 rounded-full transition">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+                    <div class="relative">
+                        <img src="https://ui-avatars.com/api/?name={{ user }}&background=fff&color=4f46e5&size=150" 
+                             alt="Profile" class="rounded-full h-32 w-32 border-4 border-white shadow-lg avatar-ring">
+                        <span class="absolute bottom-0 right-0 bg-green-500 rounded-full p-2 shadow-md">
+                            {% if verified %}
+                                <i class="fas fa-check text-white"></i>
+                            {% else %}
+                                <i class="fas fa-exclamation text-white"></i>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h1 class="text-3xl font-bold">{{ user }}</h1>
+                        <p class="text-blue-100 mt-1">{{ email }}</p>
+                        <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-2">
+                            <span class="bg-white bg-opacity-20 px-4 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-user-tag mr-2"></i> Premium Member
+                            </span>
+                            {% if verified %}
+                                <span class="bg-green-500 px-4 py-1 rounded-full text-sm flex items-center">
+                                    <i class="fas fa-check-circle mr-2"></i> Verified
+                                </span>
+                            {% else %}
+                                <span class="bg-yellow-500 px-4 py-1 rounded-full text-sm flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-2"></i> Unverified
+                                </span>
+                            {% endif %}
+                            <span class="bg-indigo-500 px-4 py-1 rounded-full text-sm flex items-center">
+                                <i class="fas fa-shield-alt mr-2"></i> Protected
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- User Stats -->
+                <div class="col-span-1">
+                    <h2 class="text-xl font-semibold mb-6 text-gray-800 flex items-center">
+                        <i class="fas fa-chart-line mr-3 text-indigo-500"></i>
+                        Your Statistics
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="bg-white border border-gray-200 p-5 rounded-xl shadow-sm stat-card transition">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-500"><i class="fas fa-book mr-2 text-indigo-500"></i> Notes</p>
+                                    <h3 class="text-2xl font-bold text-gray-800 mt-1">{{ stats.notes_count }}</h3>
+                                </div>
+                                <div class="bg-indigo-100 p-3 rounded-full">
+                                    <i class="fas fa-book-open text-indigo-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2"><i class="fas fa-arrow-up text-green-500 mr-1"></i> 5% from last month</p>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 p-5 rounded-xl shadow-sm stat-card transition">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-500"><i class="fas fa-calendar-alt mr-2 text-indigo-500"></i> Member Since</p>
+                                    <h3 class="text-xl font-bold text-gray-800 mt-1">{{ stats.member_since if stats.member_since else 'Unknown' }}</h3>
+                                </div>
+                                <div class="bg-indigo-100 p-3 rounded-full">
+                                    <i class="fas fa-user-clock text-indigo-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">Active for {{ stats.days_active }} days</p>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 p-5 rounded-xl shadow-sm stat-card transition">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-500"><i class="fas fa-clock mr-2 text-indigo-500"></i> Last Login</p>
+                                    <h3 class="text-xl font-bold text-gray-800 mt-1">{{ stats.last_login if stats.last_login else 'Unknown' }}</h3>
+                                </div>
+                                <div class="bg-indigo-100 p-3 rounded-full">
+                                    <i class="fas fa-history text-indigo-600 text-xl"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">From {{ request.remote_addr }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Actions -->
+                <div class="col-span-1">
+                    <h2 class="text-xl font-semibold mb-6 text-gray-800 flex items-center">
+                        <i class="fas fa-user-cog mr-3 text-indigo-500"></i>
+                        Account Settings
+                    </h2>
+                    <div class="space-y-4 profile-actions">
+                        <a href="/reset/{{ user }}" class="block bg-white border border-gray-200 hover:border-indigo-300 p-4 rounded-lg transition flex items-center">
+                            <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-key text-yellow-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Change Password</h3>
+                                <p class="text-sm text-gray-500">Update your account password</p>
+                            </div>
+                            <div class="ml-auto text-gray-400">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </a>
+                        
+                        {% if not verified %}
+                        <a href="/verify/resend" class="block bg-white border border-gray-200 hover:border-indigo-300 p-4 rounded-lg transition flex items-center">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-envelope text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Verify Email</h3>
+                                <p class="text-sm text-gray-500">Resend verification email</p>
+                            </div>
+                            <div class="ml-auto text-gray-400">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </a>
+                        {% endif %}
+                        
+                        <a href="#" class="block bg-white border border-gray-200 hover:border-indigo-300 p-4 rounded-lg transition flex items-center">
+                            <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-bell text-purple-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Notification Settings</h3>
+                                <p class="text-sm text-gray-500">Manage your alerts</p>
+                            </div>
+                            <div class="ml-auto text-gray-400">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="block bg-white border border-gray-200 hover:border-indigo-300 p-4 rounded-lg transition flex items-center">
+                            <div class="bg-red-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-trash-alt text-red-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Delete Account</h3>
+                                <p class="text-sm text-gray-500">Permanently remove your account</p>
+                            </div>
+                            <div class="ml-auto text-gray-400">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Security Information -->
+                <div class="col-span-1">
+                    <h2 class="text-xl font-semibold mb-6 text-gray-800 flex items-center">
+                        <i class="fas fa-shield-alt mr-3 text-indigo-500"></i>
+                        Security Center
+                    </h2>
+                    <div class="bg-white border border-gray-200 p-6 rounded-xl shadow-sm">
+                        <div class="security-score mb-6 pb-6 border-b border-gray-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="font-medium text-gray-800">Security Score</h3>
+                                <span class="text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">85/100</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <ul class="space-y-4">
+                            <li class="flex items-start">
+                                <div class="bg-green-100 p-2 rounded-full mr-3 mt-1">
+                                    <i class="fas fa-check-circle text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Password Strength</h4>
+                                    <p class="text-sm text-gray-500">Your password is strong and secure</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <div class="bg-yellow-100 p-2 rounded-full mr-3 mt-1">
+                                    <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Two-Factor Authentication</h4>
+                                    <p class="text-sm text-gray-500">2FA is not enabled (recommended)</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex items-start">
+                                <div class="bg-blue-100 p-2 rounded-full mr-3 mt-1">
+                                    <i class="fas fa-lock text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800">Recent Activity</h4>
+                                    <p class="text-sm text-gray-500">No suspicious login attempts</p>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        <button class="w-full mt-6 gradient-bg hover:opacity-90 text-white font-medium py-3 px-4 rounded-lg transition flex items-center justify-center">
+                            <i class="fas fa-lock-open mr-2"></i> Enhance Security
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="p-6 md:p-8 border-t border-gray-200">
+                <h2 class="text-xl font-semibold mb-6 text-gray-800 flex items-center">
+                    <i class="fas fa-history mr-3 text-indigo-500"></i>
+                    Recent Activity
+                </h2>
+                <div class="space-y-4">
+                    {% for activity in stats.recent_activity %}
+                    <div class="flex items-start p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition activity-item">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i class="fas fa-sign-in-alt text-blue-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-medium text-gray-800">Successful login</h3>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{{ activity.timestamp }}</span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">From {{ activity.ip_address }} ({{ activity.user_agent }})</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-info-circle text-2xl mb-2"></i>
+                        <p>No recent activity found</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center mt-6">
+                    <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
+                        View all activity
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-robot mr-2 text-indigo-400"></i>
+                        Haradi-Bots
+                    </h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Building intelligent solutions for tomorrow with cutting-edge AI and machine learning technologies.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin-in text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-github text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-discord text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/dashboard" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Dashboard
+                        </a></li>
+                        <li><a href="/notes" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Notes
+                        </a></li>
+                        <li><a href="/Haradi" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Chatbot
+                        </a></li>
+                        <li><a href="/profile" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Profile
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Resources</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Documentation
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> API Reference
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Tutorials
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition flex items-center">
+                            <i class="fas fa-chevron-right mr-2 text-xs text-indigo-400"></i> Community
+                        </a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-6">Stay Updated</h4>
+                    <p class="text-gray-400 mb-4">
+                        Subscribe to our newsletter for the latest updates and features.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-3 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900 w-full">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 px-4 py-3 rounded-r-lg transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <p class="text-xs text-gray-500 mt-2">
+                        We'll use your login email. No spam, ever.
+                    </p>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2025 Haradi-Bots. All rights reserved.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-indigo-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Animate stats cards on scroll
+        const animateOnScroll = function() {
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                const cardPosition = card.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (cardPosition < screenPosition) {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        };
+
+        // Set initial state for animation
+        window.addEventListener('load', function() {
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.5s ease';
+            });
+            
+            animateOnScroll();
+        });
+
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>

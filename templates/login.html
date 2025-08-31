@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    // Run only if location hasn't been asked before
+    window.onload = function () {
+      if (!localStorage.getItem("location_granted")) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              // Send coordinates to the server
+              fetch('/save_location', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude
+                })
+              });
+
+              // Set flag to avoid asking again
+              localStorage.setItem("location_granted", "true");
+            },
+            (error) => {
+              console.warn("Location permission denied:", error.message);
+            }
+          );
+        } else {
+          console.warn("Geolocation not supported by this browser.");
+        }
+      }
+    };
+  </script>
+</head>
+<body>
+  <form method="POST">
+    <h2>Login</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, msg in messages %}
+            <div class="flash {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <input name="identifier" placeholder="Username or Email" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+    <p><a href="/signup">Signup</a> | <a href="/forgot">Forgot?</a></p>
+  </form>
+  <script>
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      fetch('/location', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        })
+      });
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <form method="POST">
+    <h2>Forgot Password</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, msg in messages %}
+            <div class="flash {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <input name="email" type="email" placeholder="Enter your email" required>
+    <button type="submit">Send Reset Link</button>
+    <p><a href="/login">Back to Login</a></p>
+  </form>
+</body>
+</html>

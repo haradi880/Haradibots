@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haradi-Bots</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <nav>
+                <div class="brand">
+                    <a href="/dashboard" class="logo">
+                        Haradi<span class="logo-badge">Bots</span>
+                    </a>
+                </div>
+
+                <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="/dashboard" class="active">Home</a></li>
+                    <li><a href="/notes">Notes</a></li>
+                    <li><a href="/codes">Codes</a></li>
+                    <li><a href="/datasets">Datasets</a></li>
+                    <li><a href="/Haradi">Chatbot</a></li>
+                    <li><a href="/info">Info</a></li>
+                    <li><a href="/setting">Settings</a></li>
+                </ul>
+
+                <div class="user-container">
+                    <button class="user-btn" id="userBtn">
+                        <div class="user-avatar">U</div>
+                        <span class="username">{{ user }}</span>
+                        <i class="fas fa-chevron-down dropdown-icon" id="dropdownIcon"></i>
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, msg in messages %}
+            <div class="flash {{ category }}">
+              {{ msg }}
+              <span class="close">&times;</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+</div>
+
+<main>
+    <!-- Immersive Hero with Particle Background -->
+    <section class="hero">
+        <canvas id="particleCanvas" class="particle-background"></canvas>
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Haradi</span> 
+                    <span class="typing-effect"></span>
+                </h1>
+                <p class="hero-subtitle">The most advanced AI/ML resource platform with real-time data and collaborative tools</p>
+                
+                <div class="hero-search">
+                    <div class="search-container">
+                        <input type="text" placeholder="Search 850+ ML resources..." class="search-input">
+                        <button class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        <div class="search-suggestions">
+                            <span>Trending: </span>
+                            <a href="#">Transformers</a>
+                            <a href="#">LLMs</a>
+                            <a href="#">Reinforcement Learning</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-chip">
+                        <i class="fas fa-bolt"></i>
+                        <span>3,428 Daily Users</span>
+                    </div>
+                    <div class="stat-chip">
+                        <i class="fas fa-cloud-download-alt"></i>
+                        <span>12,457 Weekly Downloads</span>
+                    </div>
+                    <div class="stat-chip">
+                        <i class="fas fa-code-branch"></i>
+                        <span>892 Community Contributions</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-illustration">
+                <!-- <img src="svg_ml.jpeg" alt="AI Illustration" class="hero-img"> -->
+                <div class="floating-elements">
+                    <div class="floating-icon" style="--delay: 0s">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="floating-icon" style="--delay: 0.5s">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="floating-icon" style="--delay: 1s">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-down">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <span>Explore Resources</span>
+        </div>
+    </section>
+
+    <!-- Live Data Dashboard -->
+    <section class="dashboard">
+        <div class="section-header">
+            <h2>Platform <span class="highlight">Live Metrics</span></h2>
+            <p>Real-time insights into our growing community and resources</p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Resource Growth Chart -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Resource Growth</h3>
+                    <div class="time-filter">
+                        <button class="active">7D</button>
+                        <button>30D</button>
+                        <button>90D</button>
+                        <button>1Y</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <span class="color-dot" style="background: #4361ee"></span>
+                        <span>Codes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-dot" style="background: #3a0ca3"></span>
+                        <span>Notes</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="color-dot" style="background: #f72585"></span>
+                        <span>Datasets</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top Categories -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Top Categories</h3>
+                    <div class="view-all">View All</div>
+                </div>
+                <div class="categories-list">
+                    <div class="category-item">
+                        <div class="category-info">
+                            <div class="category-icon" style="background: rgba(67, 97, 238, 0.1)">
+                                <i class="fas fa-language" style="color: #4361ee"></i>
+                            </div>
+                            <div class="category-name">
+                                <h4>Natural Language Processing</h4>
+                                <p>128 resources</p>
+                            </div>
+                        </div>
+                        <div class="category-stats">
+                            <div class="stat-badge">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>24%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item">
+                        <div class="category-info">
+                            <div class="category-icon" style="background: rgba(247, 37, 133, 0.1)">
+                                <i class="fas fa-eye" style="color: #f72585"></i>
+                            </div>
+                            <div class="category-name">
+                                <h4>Computer Vision</h4>
+                                <p>96 resources</p>
+                            </div>
+                        </div>
+                        <div class="category-stats">
+                            <div class="stat-badge">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>18%</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item">
+                        <div class="category-info">
+                            <div class="category-icon" style="background: rgba(76, 201, 240, 0.1)">
+                                <i class="fas fa-robot" style="color: #4cc9f0"></i>
+                            </div>
+                            <div class="category-name">
+                                <h4>Reinforcement Learning</h4>
+                                <p>64 resources</p>
+                            </div>
+                        </div>
+                        <div class="category-stats">
+                            <div class="stat-badge">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>32%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Active Users Map -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Global Community</h3>
+                    <div class="online-count">
+                        <i class="fas fa-users"></i>
+                        <span>1,428 online</span>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <img src="./static/images/world_map.jpg" alt="World Map" class="world-map">
+                    <div class="map-point" style="top: 30%; left: 20%">
+                        <div class="pulse-dot"></div>
+                        <div class="point-label">USA: 428</div>
+                    </div>
+                    <div class="map-point" style="top: 35%; left: 50%">
+                        <div class="pulse-dot"></div>
+                        <div class="point-label">Europe: 512</div>
+                    </div>
+                    <div class="map-point" style="top: 60%; left: 75%">
+                        <div class="pulse-dot"></div>
+                        <div class="point-label">Asia: 328</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-filter">
+                        <select>
+                            <option>All Activity</option>
+                            <option>Code Submissions</option>
+                            <option>Note Updates</option>
+                            <option>Dataset Uploads</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="activity-feed">
+                    <div class="activity-item">
+                        <div class="user-avatar">
+                            <img src="https://via.placeholder.com/40" alt="User">
+                        </div>
+                        <div class="activity-details">
+                            <p><strong>Alex Chen</strong> uploaded a new <strong>Vision Transformer</strong> implementation</p>
+                            <span class="activity-time">15 minutes ago</span>
+                        </div>
+                        <div class="activity-badge">
+                            <i class="fas fa-code"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="user-avatar">
+                            <img src="https://via.placeholder.com/40" alt="User">
+                        </div>
+                        <div class="activity-details">
+                            <p><strong>Maria Rodriguez</strong> updated the <strong>GANs</strong> tutorial notes</p>
+                            <span class="activity-time">1 hour ago</span>
+                        </div>
+                        <div class="activity-badge">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="user-avatar">
+                            <img src="https://via.placeholder.com/40" alt="User">
+                        </div>
+                        <div class="activity-details">
+                            <p><strong>Sam Wilson</strong> contributed a new <strong>Medical Imaging</strong> dataset</p>
+                            <span class="activity-time">3 hours ago</span>
+                        </div>
+                        <div class="activity-badge">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+  <!-- Project Section -->
+    <section class="project-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Featured Projects</h2>
+                <div class="project-filter">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="vision">Computer Vision</button>
+                    <button class="filter-btn" data-filter="nlp">NLP</button>
+                    <button class="filter-btn" data-filter="rl">Reinforcement Learning</button>
+                    <button class="filter-btn" data-filter="data">Datasets</button>
+                </div>
+            </div>
+            
+            <div class="project-grid" id="projectGrid">
+                <!-- Project Card 1 -->
+                <div class="project-card" data-category="vision">
+                    <div class="project-image">
+                        <img src="https://source.unsplash.com/random/600x400/?ai,technology" alt="Vision Transformer Implementation">
+                        <span class="project-category">Computer Vision</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Vision Transformer from Scratch</h3>
+                        <p class="project-description">A PyTorch implementation of Vision Transformers with detailed documentation and training scripts for image classification tasks.</p>
+                        <div class="project-meta">
+                            <span class="contributors">
+                                <i class="fas fa-users"></i> 12 contributors
+                            </span>
+                            <span class="updated">
+                                <i class="fas fa-clock"></i> Updated 2 days ago
+                            </span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> View Project
+                            </a>
+                            <div class="project-stats">
+                                <span><i class="fas fa-star"></i> 245</span>
+                                <span><i class="fas fa-code-branch"></i> 43</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Card 2 -->
+                <div class="project-card" data-category="data">
+                    <div class="project-image">
+                        <img src="https://source.unsplash.com/random/600x400/?medical,scan" alt="Medical Imaging Dataset">
+                        <span class="project-category">Datasets</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>COVID-19 CT Scan Dataset</h3>
+                        <p class="project-description">Curated collection of 10,000+ CT scans with annotations for COVID-19 detection research and machine learning applications.</p>
+                        <div class="project-meta">
+                            <span class="contributors">
+                                <i class="fas fa-users"></i> 5 contributors
+                            </span>
+                            <span class="updated">
+                                <i class="fas fa-clock"></i> Updated 1 week ago
+                            </span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-download"></i> View Dataset
+                            </a>
+                            <div class="project-stats">
+                                <span><i class="fas fa-star"></i> 189</span>
+                                <span><i class="fas fa-download"></i> 1.2k</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Card 3 -->
+                <div class="project-card" data-category="nlp">
+                    <div class="project-image">
+                        <img src="https://source.unsplash.com/random/600x400/?language,text" alt="Multilingual BERT">
+                        <span class="project-category">NLP</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Multilingual BERT Fine-tuning</h3>
+                        <p class="project-description">Comprehensive guide and code for fine-tuning mBERT on low-resource languages with benchmark results and performance metrics.</p>
+                        <div class="project-meta">
+                            <span class="contributors">
+                                <i class="fas fa-users"></i> 8 contributors
+                            </span>
+                            <span class="updated">
+                                <i class="fas fa-clock"></i> Updated 3 days ago
+                            </span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-book-open"></i> View Project
+                            </a>
+                            <div class="project-stats">
+                                <span><i class="fas fa-star"></i> 312</span>
+                                <span><i class="fas fa-code-branch"></i> 76</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Card 4 -->
+                <div class="project-card" data-category="rl">
+                    <div class="project-image">
+                        <img src="https://source.unsplash.com/random/600x400/?finance,graph" alt="RL Trading Agent">
+                        <span class="project-category">Reinforcement Learning</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Algorithmic Trading Agent</h3>
+                        <p class="project-description">Deep RL trading bot with backtesting framework for cryptocurrency markets using TensorFlow and market simulation environments.</p>
+                        <div class="project-meta">
+                            <span class="contributors">
+                                <i class="fas fa-users"></i> 4 contributors
+                            </span>
+                            <span class="updated">
+                                <i class="fas fa-clock"></i> Updated 5 days ago
+                            </span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-chart-line"></i> View Project
+                            </a>
+                            <div class="project-stats">
+                                <span><i class="fas fa-star"></i> 178</span>
+                                <span><i class="fas fa-code-branch"></i> 34</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Card 5 -->
+                <div class="project-card" data-category="vision">
+                    <div class="project-image">
+                        <img src="https://source.unsplash.com/random/600x400/?face,recognition" alt="Face Recognition">
+                        <span class="project-category">Computer Vision</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Real-time Face Recognition</h3>
+                        <p class="project-description">Lightweight face recognition system using MobileNetV2 with 98% accuracy on LFW dataset and real-time webcam integration.</p>
+                        <div class="project-meta">
+                            <span class="contributors">
+                                <i class="fas fa-users"></i> 7 contributors
+                            </span>
+                            <span class="updated">
+                                <i class="fas fa-clock"></i> Updated 1 day ago
+                            </span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-camera"></i> View Project
+                            </a>
+                            <div class="project-stats">
+                                <span><i class="fas fa-star"></i> 321</span>
+                                <span><i class="fas fa-code-branch"></i> 89</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project Card 6 -->
+                <div class="project-card" data-category="nlp">
+                    <div class="project-image">
+                        <img src="https://source.unsplash.com/random/600x400/?chatbot,ai" alt="Chatbot">
+                        <span class="project-category">NLP</span>
+                    </div>
+                    <div class="project-content">
+                        <h3>Conversational AI Assistant</h3>
+                        <p class="project-description">Haradi is a simple yet functional chatbot framework built using Python and NLTK's Naive Bayes Classifier for intent classification.</p>
+                        <div class="project-meta">
+                            <span class="contributors">
+                                <i class="fas fa-users"></i> 6 contributors
+                            </span>
+                            <span class="updated">
+                                <i class="fas fa-clock"></i> Updated 4 days ago
+                            </span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="/Haradi" class="btn btn-primary">
+                                <i class="fas fa-comments"></i> View Project
+                            </a>
+                            <div class="project-stats">
+                                <span><i class="fas fa-star"></i> 276</span>
+                                <span><i class="fas fa-code-branch"></i> 52</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-footer">
+                <a href="#" class="btn btn-outline">
+                    View All Projects <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    const filterValue = button.dataset.filter;
+                    
+                    // Filter projects
+                    projectCards.forEach(card => {
+                        if (filterValue === 'all' || card.dataset.category === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Smooth hover effects for mobile
+            function handleHover() {
+                if (window.innerWidth >= 992) {
+                    projectCards.forEach(card => {
+                        card.addEventListener('mouseenter', () => {
+                            card.classList.add('hover-effect');
+                        });
+                        card.addEventListener('mouseleave', () => {
+                            card.classList.remove('hover-effect');
+                        });
+                    });
+                }
+            }
+            
+            // Initialize and handle resize
+            handleHover();
+            window.addEventListener('resize', handleHover);
+            
+            // Touch feedback for mobile
+            projectCards.forEach(card => {
+                card.addEventListener('touchstart', () => {
+                    card.classList.add('touch-effect');
+                }, { passive: true });
+                
+                card.addEventListener('touchend', () => {
+                    setTimeout(() => {
+                        card.classList.remove('touch-effect');
+                    }, 150);
+                }, { passive: true });
+            });
+        });
+    </script>
+        
+    <!-- Interactive Resource Explorer -->
+    <section class="resource-explorer">
+        <div class="explorer-header">
+            <h2>Interactive <span class="highlight">Resource Explorer</span></h2>
+            <p>Browse our entire collection with advanced filtering and visualization</p>
+        </div>
+        
+        <div class="explorer-container">
+            <div class="explorer-sidebar">
+                <div class="filter-group">
+                    <h4>Resource Type</h4>
+                    <div class="filter-options">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span>Codes</span>
+                            <span class="filter-count">428</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span>Notes</span>
+                            <span class="filter-count">256</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span>Datasets</span>
+                            <span class="filter-count">184</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>ML Categories</h4>
+                    <div class="filter-options">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" checked>
+                            <span class="checkmark"></span>
+                            <span>Deep Learning</span>
+                            <span class="filter-count">312</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            <span>Computer Vision</span>
+                            <span class="filter-count">128</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            <span>NLP</span>
+                            <span class="filter-count">156</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            <span>Reinforcement Learning</span>
+                            <span class="filter-count">64</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Difficulty Level</h4>
+                    <div class="difficulty-filter">
+                        <button class="difficulty-btn active">All</button>
+                        <button class="difficulty-btn">
+                            <span class="difficulty-dot beginner"></span>
+                            Beginner
+                        </button>
+                        <button class="difficulty-btn">
+                            <span class="difficulty-dot intermediate"></span>
+                            Intermediate
+                        </button>
+                        <button class="difficulty-btn">
+                            <span class="difficulty-dot advanced"></span>
+                            Advanced
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filter-group">
+                    <h4>Last Updated</h4>
+                    <div class="date-filter">
+                        <label class="date-option active">
+                            <input type="radio" name="date" checked>
+                            <span>Any Time</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="date">
+                            <span>Last Month</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="date">
+                            <span>Last 3 Months</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="date">
+                            <span>Last Year</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explorer-main">
+                <div class="explorer-toolbar">
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <button class="view-btn" data-view="graph">
+                            <i class="fas fa-project-diagram"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="sort-filter">
+                        <select>
+                            <option>Most Relevant</option>
+                            <option>Most Popular</option>
+                            <option>Newest First</option>
+                            <option>Highest Rated</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="resource-view grid-view">
+                    <!-- Resource cards would be displayed here -->
+                    <div class="explorer-card">
+                        <div class="card-badge">
+                            <i class="fas fa-code"></i>
+                            <span>Code</span>
+                        </div>
+                        <div class="card-content">
+                            <h3>Transformer Architecture</h3>
+                            <p class="card-desc">Complete PyTorch implementation with attention visualization</p>
+                            <div class="card-meta">
+                                <span class="meta-item">
+                                    <i class="fas fa-tag"></i>
+                                    <span>NLP</span>
+                                </span>
+                                <span class="meta-item">
+                                    <i class="fas fa-star"></i>
+                                    <span>4.9</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="card-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="card-btn">
+                                <i class="far fa-bookmark"></i>
+                            </button>
+                            <button class="card-btn primary">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- More cards would be here -->
+                </div>
+                
+                <div class="explorer-pagination">
+                    <button class="page-btn disabled">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span>...</span>
+                    <button class="page-btn">12</button>
+                    <button class="page-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collaborative Features -->
+    <section class="collaboration">
+        <div class="collab-container">
+            <div class="collab-header">
+                <h2><span class="highlight">Collaborative</span> ML Development</h2>
+                <p>Work together with the community to create and improve resources</p>
+            </div>
+            
+            <div class="collab-features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3>Version Control</h3>
+                    <p>Track changes and collaborate on code implementations with built-in Git integration</p>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <span>428 Active Contributors</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-code-merge"></i>
+                            <span>1,248 Merged PRs</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Live Discussions</h3>
+                    <p>Real-time commenting and discussion threads on every resource</p>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-comment-dots"></i>
+                            <span>3,428 Comments</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>892 Resolved Questions</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Project Boards</h3>
+                    <p>Organize community projects with Kanban boards and task tracking</p>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-project-diagram"></i>
+                            <span>128 Active Projects</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-check"></i>
+                            <span>512 Completed Tasks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="collab-cta">
+                <button class="cta-btn">
+                    <i class="fas fa-users"></i>
+                    Join the Community
+                </button>
+                <button class="cta-btn outline">
+                    <i class="fas fa-book"></i>
+                    View Contribution Guide
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Analytics -->
+    <section class="analytics">
+        <div class="analytics-container">
+            <div class="analytics-header">
+                <h2>Personalized <span class="highlight">Learning Analytics</span></h2>
+                <p>Track your progress and get intelligent recommendations</p>
+            </div>
+            
+            <div class="analytics-content">
+                <div class="analytics-sidebar">
+                    <div class="user-profile">
+                        <div class="profile-avatar">
+                            <img src="https://via.placeholder.com/80" alt="User">
+                        </div>
+                        <div class="profile-info">
+                            <h3>Your Learning</h3>
+                            <p>Member since June 2023</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-summary">
+                        <div class="stat-item">
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">Resources Used</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Projects Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">84</div>
+                            <div class="stat-label">Community Points</div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-meter">
+                        <h4>Your Skill Level</h4>
+                        <div class="meter-container">
+                            <div class="meter-bar" style="width: 65%">
+                                <span class="meter-label">Intermediate</span>
+                            </div>
+                        </div>
+                        <div class="meter-description">
+                            Based on your activity and completed resources
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-main">
+                    <div class="progress-chart">
+                        <div class="chart-header">
+                            <h3>Learning Progress</h3>
+                            <div class="time-filter">
+                                <button class="active">Weekly</button>
+                                <button>Monthly</button>
+                                <button>Yearly</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="recommendations">
+                        <div class="recommendation-header">
+                            <h3>Recommended For You</h3>
+                            <button class="refresh-btn">
+                                <i class="fas fa-sync-alt"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        
+                        <div class="recommendation-list">
+                            <div class="recommendation-item">
+                                <div class="rec-icon">
+                                    <i class="fas fa-book"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Attention Mechanisms Explained</h4>
+                                    <p>Based on your interest in Transformers</p>
+                                </div>
+                                <button class="rec-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="rec-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Implementing BERT from Scratch</h4>
+                                    <p>Matches your skill level and past downloads</p>
+                                </div>
+                                <button class="rec-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="recommendation-item">
+                                <div class="rec-icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div class="rec-content">
+                                    <h4>Large-Scale Text Corpus</h4>
+                                    <p>For your NLP project in progress</p>
+                                </div>
+                                <button class="rec-btn">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Tutorials -->
+    <section class="interactive-tutorials">
+        <div class="tutorials-container">
+            <div class="tutorials-header">
+                <h2><span class="highlight">Interactive</span> ML Tutorials</h2>
+                <p>Learn by doing with our browser-based coding environment</p>
+            </div>
+            
+            <div class="tutorials-grid">
+                <div class="tutorial-card">
+                    <div class="tutorial-preview">
+                        <div class="preview-header">
+                            <div class="lang-badge">
+                                <i class="fab fa-python"></i>
+                                Python
+                            </div>
+                            <div class="difficulty-badge intermediate">
+                                Intermediate
+                            </div>
+                        </div>
+                        <div class="code-preview">
+                            <pre><code class="language-python"># Neural Network Implementation
+class NeuralNetwork:
+    def __init__(self, layers):
+        self.layers = layers
+        
+    def forward(self, x):
+        for layer in self.layers:
+            x = layer.forward(x)
+        return x</code></pre>
+                        </div>
+                        <div class="preview-footer">
+                            <button class="run-btn">
+                                <i class="fas fa-play"></i>
+                                Run Code
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tutorial-info">
+                        <h3>Building Neural Networks from Scratch</h3>
+                        <p>Implement forward and backward propagation using only NumPy</p>
+                        <div class="tutorial-meta">
+                            <span><i class="fas fa-clock"></i> 2h 15m</span>
+                            <span><i class="fas fa-user-graduate"></i> 1,428 students</span>
+                            <span><i class="fas fa-star"></i> 4.9/5</span>
+                        </div>
+                        <button class="tutorial-btn">
+                            Start Tutorial
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- More tutorial cards would be here -->
+            </div>
+            
+            <div class="tutorials-cta">
+                <button class="cta-btn">
+                    <i class="fas fa-graduation-cap"></i>
+                    View All Tutorials
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter & Community -->
+    <section class="newsletter-community">
+        <div class="nc-container">
+            <div class="newsletter-box">
+                <h2>Stay Updated</h2>
+                <p>Subscribe to our weekly newsletter for the latest resources and community highlights</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your email address">
+                    <button type="submit">
+                        Subscribe
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+                <div class="newsletter-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Weekly Resource Digest</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Community Spotlights</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span>Exclusive Tutorials</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="community-box">
+                <h2>Join Our Community</h2>
+                <p>Connect with thousands of ML practitioners and researchers</p>
+                <div class="community-platforms">
+                    <a href="#" class="platform-btn discord">
+                        <i class="fab fa-discord"></i>
+                        Discord
+                    </a>
+                    <a href="#" class="platform-btn github">
+                        <i class="fab fa-github"></i>
+                        GitHub
+                    </a>
+                    <a href="#" class="platform-btn twitter">
+                        <i class="fab fa-twitter"></i>
+                        Twitter
+                    </a>
+                </div>
+                <div class="community-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">5,428+</div>
+                        <div class="stat-label">Members</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1,248+</div>
+                        <div class="stat-label">Daily Discussions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">428+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle close button clicks
+    document.querySelectorAll('.flash .close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            const flash = this.closest('.flash');
+            flash.classList.add('fade-out');
+            
+            // Remove element after animation completes
+            flash.addEventListener('animationend', function() {
+                flash.remove();
+            });
+        });
+    });
+    
+    // Auto-remove flashes after animation completes
+    document.querySelectorAll('.flash').forEach(flash => {
+        flash.addEventListener('animationend', function(e) {
+            if (e.animationName === 'fadeOut') {
+                flash.remove();
+            }
+        });
+    });
+});
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+code_id,title,tag,code_path,code_img_path,about_text,upload_date,author,visibility
+1,A Old Web Deginer,Web Development,/static/codes/Carvilla.zip,/static/codes/carvilla.PNG,"A simple and elegant web designer template using HTML and CSS.",2025-08-12,Author,public
+2,A Chatbot Using Python,Python,/static/codes/chat_bot_old.zip,/static/codes/chatbot_old.jpg,"A basic chatbot implemented in Python that can respond to user queries.",2025-08-12,Author,public
+3,A Old Copy WebSite,Web Development,/static/codes/Old_looks_hb.zip,/static/codes/Old_H.B.PNG,"The previous version of the Haradi-Bots website, showcasing its old design and layout.",2025-08-12,Author,public
+4,Old Web Starting Days ,Web Development,/static/codes/old_works.zip,/static/codes/Old_start.PNG,"The initial files and resources used to create the first version of the Haradi-Bots website.",2025-08-12,Author,public

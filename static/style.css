@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --primary: #00c6ff;
+  --primary-dark: #007eaf;
+  --text-light: rgba(255,255,255,0.9);
+  --text-lighter: rgba(255,255,255,0.7);
+  --glass-light: rgba(255, 255, 255, 0.15);
+  --glass-dark: rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: url('/static/images/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: var(--text-light);
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: -1;
+}
+
+form {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid var(--glass-light);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 380px;
+  margin: 1rem;
+  transition: transform 0.3s ease;
+}
+
+form:hover {
+  transform: translateY(-5px);
+}
+
+h2 {
+  margin-bottom: 1.75rem;
+  font-weight: 600;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
+  color: white;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 0.9rem 1.2rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  border: 1px solid var(--glass-light);
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 198, 255, 0.2);
+}
+
+input::placeholder {
+  color: var(--text-lighter);
+}
+
+button {
+  padding: 0.9rem;
+  border: none;
+  background: var(--primary);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 15px rgba(0, 198, 255, 0.3);
+}
+
+button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 198, 255, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+p {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-lighter);
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Flash Messages */
+.flash-container {
+  position: fixed;
+  top: -60px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.flash {
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transform: translateX(120%);
+  animation: slideIn 0.5s forwards, fadeOut 0.5s forwards 4.5s;
+  opacity: 0;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.flash::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+}
+
+.flash .close {
+  margin-left: 15px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  font-size: 1.2rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+.flash .close:hover {
+  opacity: 1;
+}
+
+/* Message Types */
+.flash.success {
+  background: rgba(34, 197, 94, 0.233);
+  color: #d1fae5;
+}
+
+.flash.success::before {
+  background-color: #10b981;
+}
+
+.flash.error {
+  background: rgba(239, 68, 68, 0.199);
+  color: #fee2e2;
+}
+
+.flash.error::before {
+  background-color: #ef4444;
+}
+
+.flash.warning {
+  background: rgba(245, 159, 11, 0.24);
+  color: #fef3c7;
+}
+
+.flash.warning::before {
+  background-color: #f59e0b;
+}
+
+.flash.info {
+  background: rgba(59, 131, 246, 0.205);
+  color: #dbeafe;
+}
+
+.flash.info::before {
+  background-color: #3b82f6;
+}
+
+/* Animations */
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  form {
+    padding: 1.75rem;
+    margin: 1rem;
+    border-radius: 15px;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .flash-container {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    top: 10px;
+  }
+}
