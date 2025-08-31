@@ -1,1 +1,11 @@
 note_id,title,tag,note_path,note_img_path,about_text,upload_date,author,visibility
+1,Machine Learning Basics,Machine Learning,/static/notes/Ml_notes_113.pdf,/static/img/ml_notes_intro.PNG,"Introduction to ML concepts, including supervised and unsupervised learning",2025-08-12,{{user}},public
+2,Neural Networks,Deep Learning,/static/notes/Neural-Networks.pdf,/static/img/n-networks-img.PNG,"Deep dive into neural networks, backpropagation, and activation functions",2025-08-12,{{user}},public
+3,Deep Learning Fundamentals,Deep Learning,/static/notes/Deep Learning Specialization Notes.pdf,/static/img/Deep Learning.PNG,"Fundamental concepts of deep learning, including CNNs and RNNs",2025-08-12,{{user}},public
+4,Liniar Algebra,Mathematics,/static/notes/Linear_Algebra_for_Data_Science.pdf,/static/img/Linear_algebra_for_data_science.PNG,"Basics of linear algebra, including vectors, matrices, and operations",2025-08-12,{{user}},public
+5,Slam,Robotics,/static/notes/Lec16-SLAM.pdf,/static/img/Slam_in_robotics.PNG,"Introduction to SLAM (Simultaneous Localization and Mapping) in robotics",2025-08-12,{{user}},public
+6,Computer Vision,Computer Vision,/static/notes/CV_DIGITAL_NOTES.pdf,/static/img/cv-notes.PNG,"Overview of computer vision techniques, including image processing and feature extraction",2025-08-12,{{user}},public
+7,Reinforcement Learning,Reinforcement Learning,/static/notes/Reinforcement-learning.pdf,/static/img/Reinforcement learning.PNG,"Introduction to reinforcement learning, including Markov decision processes and Q-learning",2025-08-12,{{user}},public
+8,Data Science,Data Science,/static/notes/Data scientist notes.pdf,/static/img/Data-science-intro.PNG,"Fundamentals of data science, including data analysis, visualization, and machine learning",2025-08-12,{{user}},public
+9,Statistics for Data Science,Statistics,/static/notes/Statistics handwritten notes.pdf,/static/img/statistic-data.PNG,"Statistical concepts and methods used in data science, including hypothesis testing and regression",2025-08-12,{{user}},public
+10,Python for Data Science,Programming,/static/notes/Python Classes Handwritten Notes.pdf,/static/img/python-data-scince.PNG,"Using Python for data science tasks, including libraries like Pandas and NumPy",2025-08-12,{{user}},public

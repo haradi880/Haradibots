@@ -1,0 +1,10 @@
+gunicorn
+Flask==2.0.1
+numpy==1.21.2
+scikit-learn==0.24.2
+python-dotenv==0.19.0
+urllib3 
+chardet 
+charset-normalizer 
+requests
+jsonify
