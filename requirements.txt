@@ -9,5 +9,4 @@ torch
 charset-normalizer 
 requests
 flask_cors
-smtplib
 jsonify
