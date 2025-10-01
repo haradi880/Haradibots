@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haradi-Bots Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Ubuntu', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .brand a {
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .logo-badge {
+            color: #1e88e5;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #34495e;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: #1e88e5;
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        .nav-links a.active {
+            color: #1e88e5;
+            background: rgba(30, 136, 229, 0.15);
+        }
+
+        .user-container {
+            position: relative;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .user-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #1e88e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            width: 150px;
+            display: none;
+            z-index: 100;
+        }
+
+        .user-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: background 0.3s;
+        }
+
+        .user-menu a:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+
+        /* Projects Section */
+        .projects-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .projects-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .projects-header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .projects-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .project-card:hover .project-image img {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            padding: 25px;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .project-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tech-tag {
+            background: rgba(30, 136, 229, 0.1);
+            color: #1e88e5;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .project-btn {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .project-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #1e88e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976d2;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #7f8c8d;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger animation for cards */
+        .project-card:nth-child(1) { animation-delay: 0.1s; }
+        .project-card:nth-child(2) { animation-delay: 0.2s; }
+        .project-card:nth-child(3) { animation-delay: 0.3s; }
+        .project-card:nth-child(4) { animation-delay: 0.4s; }
+        .project-card:nth-child(5) { animation-delay: 0.5s; }
+        .project-card:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Responsive design */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 20px;
+                border-radius: 0 0 12px 12px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                z-index: 100;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                padding: 15px;
+            }
+            
+            .projects-header h1 {
+                font-size: 2rem;
+            }
+            
+            .username {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <nav>
+                <div class="brand">
+                    <a href="/dashboard" class="logo">
+                        Haradi<span class="logo-badge">Bots</span>
+                    </a>
+                </div>
+
+                <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="/dashboard">Home</a></li>
+                    <li><a href="/notes">Notes</a></li>
+                    <li><a href="/codes">Codes</a></li>
+                    <li><a href="/datasets">Datasets</a></li>
+                    <li><a href="/Haradi">Chatbot</a></li>
+                    <li><a href="/projects" class="active">Projects</a></li>
+                    <li><a href="/info">Info</a></li>
+                    <li><a href="/setting">Settings</a></li>
+                </ul>
+
+                <div class="user-container">
+                    <button class="user-btn" id="userBtn">
+                        <div class="user-avatar">U</div>
+                        <span class="username">{{ user }}</span>
+                        <i class="fas fa-chevron-down dropdown-icon" id="dropdownIcon"></i>
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <a href="/profile"><i class="fas fa-user"></i> Profile</a>
+                        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="projects-container">
+        <div class="projects-header">
+            <h1>Our Projects</h1>
+            <p>Explore our innovative solutions and cutting-edge developments in AI and automation</p>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="AI Assistant Project">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Smart AI Assistant</h3>
+                    <p class="project-description">An intelligent assistant that can handle complex queries, automate tasks, and provide insightful responses using advanced NLP techniques.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">NLP</span>
+                    </div>
+                    <div class="project-actions">
+                        <button class="project-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> View Demo
+                        </button>
+                        <button class="project-btn btn-secondary">
+                            <i class="fab fa-github"></i> Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Data Visualization Tool">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Data Visualization Platform</h3>
+                    <p class="project-description">A powerful tool for transforming complex datasets into interactive visualizations, helping businesses gain insights from their data.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">D3.js</span>
+                        <span class="tech-tag">React</span>
+                    </div>
+                    <div class="project-actions">
+                        <button class="project-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Live Preview
+                        </button>
+                        <button class="project-btn btn-secondary">
+                            <i class="fab fa-github"></i> Source
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80" alt="Automation Framework">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Automation Framework</h3>
+                    <p class="project-description">A robust framework for automating repetitive tasks across various platforms, saving time and reducing human error.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Selenium</span>
+                        <span class="tech-tag">API Integration</span>
+                    </div>
+                    <div class="project-actions">
+                        <button class="project-btn btn-primary">
+                            <i class="fas fa-book"></i> Documentation
+                        </button>
+                        <button class="project-btn btn-secondary">
+                            <i class="fab fa-github"></i> Repository
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80" alt="Image Recognition System">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Image Recognition System</h3>
+                    <p class="project-description">Advanced computer vision system that can identify objects, people, and scenes with high accuracy in real-time.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">OpenCV</span>
+                        <span class="tech-tag">CNN</span>
+                    </div>
+                    <div class="project-actions">
+                        <button class="project-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Try It
+                        </button>
+                        <button class="project-btn btn-secondary">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 5 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Chatbot Platform">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Chatbot Development Platform</h3>
+                    <p class="project-description">A comprehensive platform for building, training, and deploying intelligent chatbots across multiple channels.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Dialogflow</span>
+                        <span class="tech-tag">Webhooks</span>
+                    </div>
+                    <div class="project-actions">
+                        <button class="project-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> Demo
+                        </button>
+                        <button class="project-btn btn-secondary">
+                            <i class="fab fa-github"></i> Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 6 -->
+            <div class="project-card">
+                <div class="project-image">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1115&q=80" alt="Analytics Dashboard">
+                </div>
+                <div class="project-content">
+                    <h3 class="project-title">Real-time Analytics Dashboard</h3>
+                    <p class="project-description">A customizable dashboard that provides real-time insights and analytics for business metrics and KPIs.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">WebSockets</span>
+                        <span class="tech-tag">Chart.js</span>
+                    </div>
+                    <div class="project-actions">
+                        <button class="project-btn btn-primary">
+                            <i class="fas fa-external-link-alt"></i> View Live
+                        </button>
+                        <button class="project-btn btn-secondary">
+                            <i class="fas fa-book-open"></i> Docs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Toggle mobile menu
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Toggle user menu
+        document.getElementById('userBtn').addEventListener('click', function() {
+            document.getElementById('userMenu').style.display = 
+                document.getElementById('userMenu').style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close menus when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('#navLinks') && !event.target.closest('#menuToggle')) {
+                document.getElementById('navLinks').classList.remove('active');
+            }
+            
+            if (!event.target.closest('.user-container')) {
+                document.getElementById('userMenu').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

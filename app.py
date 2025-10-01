@@ -243,7 +243,7 @@ def forgot():
         token = secrets.token_urlsafe(32)
         update_user("token", token, email)
         send_email(email, "Reset Password",
-                   f"Click to reset: http://127.0.0.1:5000/reset/{token}")
+                   f"Click to reset: https://haradibots.onrender.com/reset/{token}")
         flash("Reset link sent to your email.", "success")
         return redirect("/login")
     return render_template("forgot.html")
@@ -612,6 +612,117 @@ def delete_note(note_id):
         flash(f"Error deleting note: {str(e)}", "error")
         return redirect("/notes")
 
+@app.route('/view_note/<int:note_id>')
+def view_note(note_id):
+    if "user" not in session:
+        flash("Please log in to view notes.", "error")
+        return redirect("/login")
+    
+    csv_path = os.path.join('data', 'notes_data.csv')
+    note = None
+    try:
+        with open(csv_path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if int(row['note_id']) == note_id:
+                    if row['visibility'] == 'public' or row['author'] == session["user"]:
+                        note = row
+                    break
+    except Exception as e:
+        flash(f"Error loading note: {str(e)}", "error")
+    
+    if not note:
+        flash("Note not found or not authorized", "error")
+        return redirect("/notes")
+    
+    return render_template("view_note.html", note=note)
+@app.route('/edit_note/<int:note_id>', methods=['GET', 'POST'])
+def edit_note(note_id):
+    if "user" not in session:
+        flash("You must be logged in to edit notes.", "error")
+        return redirect("/login")
+
+    username = session["user"]
+    csv_path = os.path.join('data', 'notes_data.csv')
+
+    if request.method == 'POST':
+        new_title = request.form.get('title')
+        new_desc = request.form.get('description')
+        new_tag = request.form.get('tag')
+
+        notes = []
+        updated = False
+
+        with open(csv_path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            fieldnames = reader.fieldnames
+            for row in reader:
+                if int(row['note_id']) == note_id and row['author'] == username:
+                    row['title'] = new_title
+                    row['about_text'] = new_desc
+                    row['tag'] = new_tag
+                    updated = True
+                notes.append(row)
+
+        if updated:
+            with open(csv_path, mode='w', newline='', encoding='utf-8') as file:
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(notes)
+            flash("Note updated successfully!", "success")
+        else:
+            flash("Note not found or not authorized", "error")
+
+        return redirect("/notes")
+
+    # For GET request
+    note = None
+    with open(csv_path, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if int(row['note_id']) == note_id and row['author'] == username:
+                note = row
+                break
+
+    if not note:
+        flash("Note not found or not authorized", "error")
+        return redirect("/notes")
+
+    return render_template("edit_note.html", note=note)
+
+
+@app.route('/search_notes')
+def search_notes():
+    query = request.args.get('q', '').lower()
+    username = session.get("user", None)
+
+    results = []
+    csv_path = os.path.join('data', 'notes_data.csv')
+
+    try:
+        with open(csv_path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if (row['visibility'] == 'public' or row['author'] == username) and \
+                   (query in row['title'].lower() or query in row['about_text'].lower()):
+                    results.append(row)
+    except:
+        return jsonify([])
+
+    return jsonify(results)
+
+@app.route('/api/notes')
+def api_notes():
+    csv_path = os.path.join('data', 'notes_data.csv')
+    notes = []
+    try:
+        with open(csv_path, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            notes = list(reader)
+    except:
+        pass
+    return jsonify(notes)
+
 
 @app.route('/profile')
 def profile():
@@ -974,8 +1085,16 @@ def delete_code(code_id):
     except Exception as e:
         flash(f"Error deleting code: {str(e)}", "error")
         return redirect("/codes")
-    
 
+# projects route
+@app.route('/projects')
+def projects():
+    if "user" not in session:
+        flash("You must be logged in to access the page.", "error")
+        return redirect("/login")
+    
+    username = session["user"]
+    return render_template("models.html", user=username)
 
 @app.errorhandler(404)
 def page_not_found(e):
