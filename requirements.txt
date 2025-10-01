@@ -1,8 +1,8 @@
 gunicorn
-Flask==2.0.1
-numpy==1.21.2
-scikit-learn==0.24.2
-python-dotenv==0.19.0
+Flask
+numpy
+scikit-learn
+python-dotenv
 urllib3 
 chardet 
 charset-normalizer 
