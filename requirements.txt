@@ -5,6 +5,7 @@ scikit-learn
 python-dotenv
 urllib3 
 chardet 
+torch
 charset-normalizer 
 requests
 jsonify
