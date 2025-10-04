@@ -29,10 +29,16 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 CORS(app)
 
+config = {
+    "EMAIL": "llaka2937@gmail.com",
+    "PASSWORD": "hqim uqwh qlkb jpde"
+}
+
+
 # Secure session config
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SECURE=False  # Set to True with HTTPS
+    SESSION_COOKIE_SECURE=True  # Set to True with HTTPS
 )
 
 
