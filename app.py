@@ -1100,13 +1100,18 @@ def projects():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404  
+    
 
 if __name__ == "__main__":
+    try:
+        with open("secrets.json") as f:
+            config = json.load(f)
+    except Exception as e:
+        print("Warning: No email config found. Using default credentials.")
         config = {
-    "EMAIL": "llaka2937@gmail.com",
-    "PASSWORD": "hqim uqwh qlkb jpde"
-}
-
-        print("Warning: No email config found. Email features will be disabled.")
+            "EMAIL": "llaka2937@gmail.com",
+            "PASSWORD": "hqim uqwh qlkb jpde"
+        }
 
     app.run()
+
