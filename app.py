@@ -29,11 +29,6 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 CORS(app)
 
-config = {
-    "EMAIL": "llaka2937@gmail.com",
-    "PASSWORD": "hqim uqwh qlkb jpde"
-}
-
 
 # Secure session config
 app.config.update(
@@ -1111,7 +1106,11 @@ if __name__ == "__main__":
         with open("secrets.json") as f:
             config = json.load(f)
     except:
-        config = {"EMAIL": "", "PASSWORD": ""}
+        config = {
+    "EMAIL": "llaka2937@gmail.com",
+    "PASSWORD": "hqim uqwh qlkb jpde"
+}
+
         print("Warning: No email config found. Email features will be disabled.")
 
-    app.run(debug=True)
+    app.run()
