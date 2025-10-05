@@ -1102,10 +1102,6 @@ def page_not_found(e):
     return render_template("404.html"), 404  
 
 if __name__ == "__main__":
-    try:
-        with open("secrets.json") as f:
-            config = json.load(f)
-    except:
         config = {
     "EMAIL": "llaka2937@gmail.com",
     "PASSWORD": "hqim uqwh qlkb jpde"
