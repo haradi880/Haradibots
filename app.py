@@ -35,7 +35,10 @@ app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SECURE=True  # Set to True with HTTPS
 )
-
+config = {
+    "EMAIL": "llaka2937@gmail.com",
+    "PASSWORD": "hqim uqwh qlkb jpde"
+}
 
 # User Management Functions
 def ensure_files_exist():
