@@ -37,7 +37,7 @@ app.config.update(
 )
 config = {
     "EMAIL": "llaka2937@gmail.com",
-    "PASSWORD": "hqim uqwh qlkb jpde"
+    "PASSWORD": "nahi bata raha jao"
 }
 
 # User Management Functions
@@ -1113,7 +1113,7 @@ if __name__ == "__main__":
         print("Warning: No email config found. Using default credentials.")
         config = {
             "EMAIL": "llaka2937@gmail.com",
-            "PASSWORD": "hqim uqwh qlkb jpde"
+            "PASSWORD": "nahi bata raha jao"
         }
 
     app.run()
